@@ -1,0 +1,13 @@
+language: android
+jdk: oraclejdk7
+
+android:
+  components:
+  - android-21
+  - build-tools-21.1.2
+
+script:
+ - ./gradlew clean test assemble --stacktrace
+
+notifications:
+  email: change
