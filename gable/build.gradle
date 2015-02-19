@@ -10,6 +10,10 @@ android {
     minSdkVersion 14
     targetSdkVersion 21
   }
+
+  testOptions {
+    unitTests.returnDefaultValues = true
+  }
 }
 
 dependencies {

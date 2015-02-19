@@ -1,9 +1,7 @@
 package com.nhaarman.gable.presenter;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import com.nhaarman.gable.container.RelativeLayoutContainer;
-import org.jetbrains.annotations.NotNull;
+import com.nhaarman.gable.TestRelativeLayoutContainer;
+import com.nhaarman.gable.TestPresenter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +29,7 @@ public class PresenterTest {
   @Test
   public void afterAcquiringContainer_theContainerIsNotNull() {
     /* Given */
-    TestContainer container = mock(TestContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
 
     /* When */
     mPresenter.acquire(container);
@@ -43,7 +41,7 @@ public class PresenterTest {
   @Test
   public void afterReleasingContainer_theContainerIsNull() {
     /* Given */
-    TestContainer container = mock(TestContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
     mPresenter.acquire(container);
 
     /* When */
@@ -56,7 +54,7 @@ public class PresenterTest {
   @Test
   public void afterAcquiringContainer_onControlGainedIsCalled() {
     /* Given */
-    TestContainer container = mock(TestContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
 
     /* When */
     mPresenter.acquire(container);
@@ -69,7 +67,7 @@ public class PresenterTest {
   @Test
   public void afterReleasingContainer_onControlLostIsCalled() {
     /* Given */
-    TestContainer container = mock(TestContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
     mPresenter.acquire(container);
     mPresenter.onControlGainedCalled = false;
 
@@ -79,36 +77,5 @@ public class PresenterTest {
     /* Then */
     assertThat(mPresenter.onControlLostCalled, is(true));
     assertThat(mPresenter.onControlGainedCalled, is(false));
-  }
-
-  private static class TestPresenter extends Presenter<TestPresenter, TestContainer> {
-
-    private boolean onControlGainedCalled;
-    private boolean onControlLostCalled;
-
-    @Override
-    protected void onControlGained(@NotNull final TestContainer container) {
-      onControlGainedCalled = true;
-    }
-
-    @Override
-    protected void onControlLost() {
-      onControlLostCalled = true;
-    }
-  }
-
-  private static class TestContainer extends RelativeLayoutContainer<TestPresenter, TestContainer> {
-
-    protected TestContainer(final Context context) {
-      super(context);
-    }
-
-    protected TestContainer(final Context context, final AttributeSet attrs) {
-      super(context, attrs);
-    }
-
-    protected TestContainer(final Context context, final AttributeSet attrs, final int defStyle) {
-      super(context, attrs, defStyle);
-    }
   }
 }

@@ -32,6 +32,10 @@ public class MainView extends RelativeLayoutContainer<MainPresenter, MainContain
     super(context, attrs, defStyleAttr);
   }
 
+  public MainView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+  }
+
   @Override
   public void setViewModel(@NotNull final MainViewModel viewModel) {
     viewModel.addObserver(this);

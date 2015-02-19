@@ -5,6 +5,9 @@ import com.nhaarman.sample.MainComponent;
 import com.nhaarman.sample.R;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A screen with one simple counter in portrait mode, and two counters in landscape mode.
+ */
 public class MainScreen extends Screen<MainPresenter, MainContainer, MainComponent> {
 
   @Override
