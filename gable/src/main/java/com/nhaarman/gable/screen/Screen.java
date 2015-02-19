@@ -14,7 +14,8 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
 
   protected abstract int getLayoutResId();
 
-  protected abstract P createPresenter(@NotNull final M component);
+  @NotNull
+  protected abstract P createPresenter(@NotNull final M m);
 
   @NotNull
   public final C createView(@NotNull final ViewGroup parent) {

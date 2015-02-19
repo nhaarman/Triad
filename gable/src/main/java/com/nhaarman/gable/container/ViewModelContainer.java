@@ -3,8 +3,8 @@ package com.nhaarman.gable.container;
 import java.util.Observable;
 import org.jetbrains.annotations.NotNull;
 
-public interface ViewModelContainer<O extends Observable> {
+public interface ViewModelContainer<M extends Observable> {
 
-  void setViewModel(@NotNull O viewModel);
+  void setViewModel(@NotNull M viewModel);
 
 }

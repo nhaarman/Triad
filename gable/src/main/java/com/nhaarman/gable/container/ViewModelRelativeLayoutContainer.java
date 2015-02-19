@@ -6,12 +6,14 @@ import com.nhaarman.gable.presenter.Presenter;
 import java.util.Observable;
 import java.util.Observer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class ViewModelRelativeLayoutContainer<P extends Presenter<P, C>, C extends Container<P, C>, M extends Observable>
     extends RelativeLayoutContainer<P, C>
     implements ViewModelContainer<M>,
                Observer {
 
+  @Nullable
   private M mViewModel;
 
   protected ViewModelRelativeLayoutContainer(final Context context) {
@@ -30,14 +32,24 @@ public abstract class ViewModelRelativeLayoutContainer<P extends Presenter<P, C>
   public void setViewModel(@NotNull final M viewModel) {
     mViewModel = viewModel;
     mViewModel.addObserver(this);
+    update(mViewModel, null);
   }
 
   @Override
   public final void update(final Observable observable, final Object data) {
-    if (observable == mViewModel) {
+    //noinspection ObjectEquality
+    if (mViewModel != null && observable == mViewModel) {
       updateViewModel(mViewModel, data);
     }
   }
 
-  protected abstract void updateViewModel(@NotNull final M viewModel, final Object data);
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    if (mViewModel != null) {
+      mViewModel.deleteObserver(this);
+    }
+  }
+
+  protected abstract void updateViewModel(@NotNull final M m, final Object data);
 }
