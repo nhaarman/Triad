@@ -1,9 +1,12 @@
 package com.nhaarman.sample.main;
 
-import com.nhaarman.gable.presenter.ViewModelScreenPresenter;
+import com.nhaarman.gable.presenter.ScreenPresenter;
 import org.jetbrains.annotations.NotNull;
 
-class MainPresenter extends ViewModelScreenPresenter<MainPresenter, MainContainer, MainViewModel> {
+class MainPresenter extends ScreenPresenter<MainPresenter, MainContainer> {
+
+  @NotNull
+  private final MainViewModel mViewModel;
 
   private int mCounter;
   private int mSecondCounter;
@@ -11,29 +14,28 @@ class MainPresenter extends ViewModelScreenPresenter<MainPresenter, MainContaine
   MainPresenter() {
     mCounter = 0;
     mSecondCounter = 0;
+    mViewModel = new MainViewModel();
   }
 
-  @NotNull
   @Override
-  protected MainViewModel createViewModel() {
-    MainViewModel mainViewModel = new MainViewModel();
-    updateViewModel(mainViewModel);
-    return mainViewModel;
+  protected void onControlGained(@NotNull final MainContainer container) {
+    container.setViewModel(mViewModel);
+    updateViewModel();
   }
 
   public void onIncrementButtonClicked() {
     mCounter++;
-    updateViewModel(getViewModel());
+    updateViewModel();
   }
 
   public void onSecondIncrementButtonClicked() {
     mSecondCounter++;
-    updateViewModel(getViewModel());
+    updateViewModel();
   }
 
-  private void updateViewModel(@NotNull final MainViewModel mainViewModel) {
-    mainViewModel.setCounterText(String.valueOf(mCounter));
-    mainViewModel.setSecondCounterText(String.valueOf(mSecondCounter));
-    mainViewModel.notifyObservers();
+  private void updateViewModel() {
+    mViewModel.setCounterText(String.valueOf(mCounter));
+    mViewModel.setSecondCounterText(String.valueOf(mSecondCounter));
+    mViewModel.notifyObservers();
   }
 }

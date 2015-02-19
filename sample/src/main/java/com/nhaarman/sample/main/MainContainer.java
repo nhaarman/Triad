@@ -1,7 +1,9 @@
 package com.nhaarman.sample.main;
 
 import com.nhaarman.gable.container.ScreenContainer;
-import com.nhaarman.gable.container.ViewModelContainer;
+import org.jetbrains.annotations.NotNull;
 
-interface MainContainer extends ScreenContainer<MainPresenter, MainContainer>, ViewModelContainer<MainViewModel> {
+interface MainContainer extends ScreenContainer<MainPresenter, MainContainer> {
+
+  void setViewModel(@NotNull final MainViewModel viewModel);
 }

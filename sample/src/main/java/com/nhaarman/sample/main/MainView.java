@@ -6,12 +6,14 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.Optional;
-import com.nhaarman.gable.container.ViewModelRelativeLayoutContainer;
+import com.nhaarman.gable.container.RelativeLayoutContainer;
 import com.nhaarman.sample.R;
+import java.util.Observable;
+import java.util.Observer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MainView extends ViewModelRelativeLayoutContainer<MainPresenter, MainContainer, MainViewModel> implements MainContainer {
+public class MainView extends RelativeLayoutContainer<MainPresenter, MainContainer> implements MainContainer, Observer {
 
   @NotNull
   @InjectView(R.id.view_main_countertv)
@@ -30,6 +32,11 @@ public class MainView extends ViewModelRelativeLayoutContainer<MainPresenter, Ma
     super(context, attrs, defStyleAttr);
   }
 
+  @Override
+  public void setViewModel(@NotNull final MainViewModel viewModel) {
+    viewModel.addObserver(this);
+  }
+
   @OnClick(R.id.view_main_incrementbutton)
   public void onIncrementButtonClicked() {
     getPresenter().onIncrementButtonClicked();
@@ -42,7 +49,9 @@ public class MainView extends ViewModelRelativeLayoutContainer<MainPresenter, Ma
   }
 
   @Override
-  protected void updateViewModel(@NotNull final MainViewModel mainViewModel, final Object data) {
+  public void update(final Observable observable, final Object data) {
+    MainViewModel mainViewModel = (MainViewModel) observable;
+
     mCounterTV.setText(mainViewModel.getCounterText());
 
     if (mSecondCounterTV != null) {
