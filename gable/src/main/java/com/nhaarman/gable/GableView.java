@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A {@link View}, {@link GableContainer} which hosts all {@code View}s belonging to {@link Screen}s in the application.
+ * A {@link View}, {@link GableContainer}, which hosts all {@link View}s belonging to {@link Screen}s in the application.
  *
  * @param <M> The main module in the application. See {@link GablePresenter}.
  */
@@ -34,9 +34,9 @@ class GableView<M> extends RelativeLayoutContainer<GablePresenter<M>, GableConta
 
   /**
    * Executes an exit animation for given {@link View},
-   * after which the {@code View} will be removed from its parent.
+   * after which the {@link View} will be removed from its parent.
    *
-   * @param view The {@code View} to animate and remove.
+   * @param view The {@link View} to animate and remove.
    */
   private void animateViewExit(@NotNull final View view) {
     ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, 0);
@@ -73,8 +73,8 @@ class GableView<M> extends RelativeLayoutContainer<GablePresenter<M>, GableConta
     }
 
     /**
-     * Executes an exit animation for the old {@link View}, and an entering animation for the new {@code View}.
-     * The old {@code View} will be removed from its parent after the animation.
+     * Executes an exit animation for the old {@link View}, and an entering animation for the new {@link View}.
+     * The old {@link View} will be removed from its parent after the animation.
      */
     private void animateViewReplacing() {
       if (mOldView != null) {

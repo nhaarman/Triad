@@ -14,10 +14,10 @@ interface GableContainer<M> extends Container<GablePresenter<M>, GableContainer<
 
   /**
    * Transitions from {@code oldView} to {@code newView}.
-   * If both {@link View}s are @code null}, nothing happens.
+   * If both {@link View}s are @link null}, nothing happens.
    *
-   * @param oldView The old {@code View} to display an exit animation for.
-   * @param newView The new {@code View} to display an entering animation for.
+   * @param oldView The old {@link View} to display an exit animation for.
+   * @param newView The new {@link View} to display an entering animation for.
    */
   void transition(@Nullable View oldView, @Nullable View newView);
 }

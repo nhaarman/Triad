@@ -12,14 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * The {@link Presenter} which handles the showing of the {@link Screen}s in the application.
- * For each {@code Screen} that is to be shown, it sets up the {@link ScreenContainer} and {@link ScreenPresenter}
- * for that {@code Screen}, and performs the proper {@link View} adding and removal.
+ * For each {@link Screen} that is to be shown, it sets up the {@link ScreenContainer} and {@link ScreenPresenter}
+ * for that {@link Screen}, and performs the proper {@link View} adding and removal.
  *
- * Since the creation of a {@link Presenter} may need additional dependencies, a {@code main component} is supplied
- * when requesting the {@code Presenter} instance. This {@code main component} should contain all dependencies necessary
- * for the {@code Presenter}, and is to be supplied by the implementer.
- *
- * @param <M> The {@code main component} to use for {@code Presenter} creation.
+ * @param <M> The {@code main component} to use for {@link Presenter} creation. See {@link GableActivity}.
  */
 class GablePresenter<M> extends Presenter<GablePresenter<M>, GableContainer<M>> {
 
@@ -57,7 +53,7 @@ class GablePresenter<M> extends Presenter<GablePresenter<M>, GableContainer<M>> 
   /**
    * Performs the proper transitions to show given {@link Screen}.
    *
-   * @param screen The {@code Screen} to show.
+   * @param screen The {@link Screen} to show.
    * @param <P> The {@link ScreenPresenter} type.
    * @param <C> The {@link ScreenContainer} type.
    */
