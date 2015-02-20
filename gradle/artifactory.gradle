@@ -12,8 +12,8 @@ artifactory {
   publish {
     repository {
       repoKey = 'oss-snapshot-local'
-      username = bintray_user
-      password = bintray_key
+      username = hasProperty('bintray_user') ? bintray_user : System.getenv('BINTRAY_USER')
+      password = hasProperty('bintray_key') ? bintray_key : System.getenv('BINTRAY_KEY')
     }
     defaults {
       publishConfigs('archives', 'published')
@@ -26,7 +26,6 @@ artifactory {
       repoKey = 'libs-release'
     }
   }
-
 }
 
 artifactoryPublish {
