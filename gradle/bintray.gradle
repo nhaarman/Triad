@@ -7,10 +7,10 @@ bintray {
   user = bintray_user
   key = bintray_key
   configurations = ['archives', 'published']
+  publish = false
   pkg {
     repo = 'maven'
     name = 'Triad'
     desc = 'A Model-View-Presenter library for Android'
-    publish = false
   }
 }

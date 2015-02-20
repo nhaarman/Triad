@@ -1,1 +1,2 @@
-include ':triad', ':sample'
+include ':triad'
+include ':triad-sample'
