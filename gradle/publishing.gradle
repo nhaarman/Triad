@@ -7,6 +7,8 @@ artifacts {
   archives javadocJar
 }
 
+version = ext.tagName
+
 configure(install.repositories.mavenInstaller) {
   pom.project {
 

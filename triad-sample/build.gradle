@@ -19,6 +19,7 @@ android {
   }
 }
 
+apply from: '../gradle/tagging.gradle'
 apply from: '../gradle/compile.gradle'
 apply from: '../gradle/publishing.gradle'
 apply from: '../gradle/bintray.gradle'

@@ -10,7 +10,7 @@ script:
  - ./gradlew clean build assemble --stacktrace
 
 after_success:
- - ./gradlew uploadArchives -PNEXUS_USERNAME=$NEXUS_USERNAME -PNEXUS_PASSWORD=$NEXUS_PASSWORD
+ - ./gradlew artifactoryPublish
 
 notifications:
   email: change
