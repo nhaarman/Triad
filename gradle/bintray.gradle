@@ -4,8 +4,8 @@ apply plugin: 'com.jfrog.bintray'
 
 bintray {
 
-  user = bintray_user
-  key = bintray_key
+  user = hasProperty('bintray_user') ? bintray_user : System.getenv('BINTRAY_USER')
+  key = hasProperty('bintray_key') ? bintray_key : System.getenv('BINTRAY_KEY')
   configurations = ['archives', 'published']
   publish = false
   pkg {
