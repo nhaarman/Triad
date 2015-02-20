@@ -58,9 +58,10 @@ public abstract class TriadActivity<M> extends Activity {
    * Initializes the {@link TriadView}.
    */
   private void initializeView() {
-    TriadView<M> flowView = new TriadView(this);
-    flowView.setPresenter(mTriadPresenter);
-    setContentView(flowView);
+    setContentView(R.layout.view_triad);
+    TriadView<M> triadView = (TriadView<M>) findViewById(R.id.view_triad);
+    triadView.setPresenter(mTriadPresenter);
+    setContentView(triadView);
   }
 
   /**
@@ -110,7 +111,7 @@ public abstract class TriadActivity<M> extends Activity {
       //noinspection rawtypes
       Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> screen =
           (Screen<? extends ScreenPresenter, ? extends ScreenContainer, M>) nextBackstack.current().getScreen();
-      mTriadPresenter.showScreen(screen);
+      mTriadPresenter.showScreen(screen, direction);
       callback.onComplete();
     }
   }

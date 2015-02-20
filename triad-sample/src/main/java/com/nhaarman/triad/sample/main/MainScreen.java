@@ -18,6 +18,6 @@ public class MainScreen extends Screen<MainPresenter, MainContainer, MainCompone
   @Override
   @NotNull
   protected MainPresenter createPresenter(@NotNull final MainComponent mainComponent) {
-    return new MainPresenter();
+    return new MainPresenter(mainComponent.flow());
   }
 }

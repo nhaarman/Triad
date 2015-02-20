@@ -7,7 +7,7 @@ public class TestScreen extends Screen<TestPresenter, TestRelativeLayoutContaine
 
   @Override
   protected int getLayoutResId() {
-    throw new UnsupportedOperationException("Not yet implemented"); // TODO: Implement getLayoutResId.
+    return 0;
   }
 
   @NotNull

@@ -1,10 +1,11 @@
 package com.nhaarman.triad;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewManager;
+import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import com.nhaarman.triad.container.RelativeLayoutContainer;
 import com.nhaarman.triad.screen.Screen;
@@ -16,20 +17,107 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <M> The main module in the application. See {@link TriadPresenter}.
  */
-class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, TriadContainer<M>> implements TriadContainer<M> {
+@SuppressWarnings("AnonymousInnerClass")
+public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, TriadContainer<M>> implements TriadContainer<M> {
 
-  TriadView(final Context context) {
-    super(context);
+  private static final float DIMMED_ALPHA_VALUE = .5f;
+
+  private final long mTransitionAnimationDurationMs;
+
+  @NotNull
+  private ViewGroup mScreenHolder;
+
+  @NotNull
+  private ViewStub mDimmerViewStub;
+
+  @Nullable
+  private View mDimmerView;
+
+  @NotNull
+  private ViewGroup mDialogHolder;
+
+  public TriadView(final Context context, final AttributeSet attrs) {
+    this(context, attrs, 0);
+  }
+
+  public TriadView(final Context context, final AttributeSet attrs, final int defStyle) {
+    this(context, attrs, defStyle, 0);
+  }
+
+  public TriadView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+
+    mTransitionAnimationDurationMs = getResources().getInteger(android.R.integer.config_shortAnimTime);
+  }
+
+  @Override
+  protected void onFinishInflate() {
+    super.onFinishInflate();
+
+    mScreenHolder = (ViewGroup) findViewById(R.id.view_triad_screenholder);
+    mDimmerViewStub = (ViewStub) findViewById(R.id.view_triad_dimmerviewstub);
+    mDialogHolder = (ViewGroup) findViewById(R.id.view_triad_dialogholder);
+  }
+
+  @NotNull
+  private View getDimmerView() {
+    if (mDimmerView == null) {
+      mDimmerView = mDimmerViewStub.inflate();
+
+      assert mDimmerView != null;
+      mDimmerView.setOnClickListener(new DimmerViewOnCLickListener());
+      mDimmerView.setClickable(false);
+    }
+
+    return mDimmerView;
   }
 
   @Override
   public void transition(@Nullable final View oldView, @Nullable final View newView) {
     if (newView != null) {
-      addView(newView);
+      mScreenHolder.addView(newView);
       newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView));
     } else if (oldView != null) {
       animateViewExit(oldView);
     }
+  }
+
+  @Override
+  public void showDialog(@NotNull final View dialogView) {
+    getDimmerView()
+        .animate()
+        .alpha(DIMMED_ALPHA_VALUE)
+        .setDuration(mTransitionAnimationDurationMs)
+        .withEndAction(new Runnable() {
+          @Override
+          public void run() {
+            getDimmerView().setClickable(true);
+          }
+        });
+
+    mDialogHolder.addView(dialogView);
+    dialogView.getViewTreeObserver().addOnPreDrawListener(new DialogPreDrawListener(dialogView));
+  }
+
+  @Override
+  public void dismissDialog(@NotNull final View dialogView) {
+    dialogView.animate()
+        .alpha(0f)
+        .scaleX(0f)
+        .scaleY(0f)
+        .setDuration(mTransitionAnimationDurationMs)
+        .withEndAction(new Runnable() {
+          @Override
+          public void run() {
+            mDialogHolder.removeView(dialogView);
+            if (mDialogHolder.getChildCount() == 0) {
+              getDimmerView()
+                  .animate()
+                  .alpha(0f);
+              getDimmerView().setClickable(false);
+            }
+          }
+        });
   }
 
   /**
@@ -39,10 +127,15 @@ class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, TriadConta
    * @param view The {@link View} to animate and remove.
    */
   private void animateViewExit(@NotNull final View view) {
-    ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, 0);
-    alphaAnimator.addListener(new TransitionAnimatorListener(view));
-    alphaAnimator.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
-    alphaAnimator.start();
+    view.animate()
+        .alpha(0)
+        .setDuration(mTransitionAnimationDurationMs)
+        .withEndAction(new Runnable() {
+          @Override
+          public void run() {
+            ((ViewManager) view.getParent()).removeView(view);
+          }
+        });
   }
 
   /**
@@ -78,34 +171,55 @@ class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, TriadConta
      */
     private void animateViewReplacing() {
       if (mOldView != null) {
-        mOldView.animate().alpha(0).setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime)).start();
+        mOldView.animate()
+            .alpha(0)
+            .setDuration(mTransitionAnimationDurationMs);
       }
 
       mNewView.setAlpha(0);
-      ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(mNewView, View.ALPHA, 1);
-      alphaAnimator.addListener(new TransitionAnimatorListener(mOldView));
-      alphaAnimator.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
-      alphaAnimator.start();
+      mNewView.animate()
+          .alpha(1f)
+          .setDuration(mTransitionAnimationDurationMs)
+          .withEndAction(new Runnable() {
+            @Override
+            public void run() {
+              if (mOldView != null) {
+                ((ViewManager) mOldView.getParent()).removeView(mOldView);
+              }
+            }
+          });
     }
   }
 
-  /**
-   * An {@link Animator.AnimatorListener} which removes the old {@link View} from its parent when finished.
-   */
-  private class TransitionAnimatorListener extends AnimatorListenerAdapter {
+  private class DimmerViewOnCLickListener implements OnClickListener {
 
-    @Nullable
-    private final View mOldView;
+    @Override
+    public void onClick(final View v) {
+      getPresenter().onDimmerClicked();
+    }
+  }
 
-    private TransitionAnimatorListener(@Nullable final View oldView) {
-      mOldView = oldView;
+  private class DialogPreDrawListener implements ViewTreeObserver.OnPreDrawListener {
+    private final View mDialogView;
+
+    public DialogPreDrawListener(final View dialogView) {
+      mDialogView = dialogView;
     }
 
     @Override
-    public void onAnimationEnd(final Animator animation) {
-      if (mOldView != null) {
-        removeView(mOldView);
-      }
+    public boolean onPreDraw() {
+      mDialogView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+      mDialogView.setScaleX(0);
+      mDialogView.setScaleY(0);
+      mDialogView.setAlpha(0f);
+      mDialogView.animate()
+          .alpha(1f)
+          .scaleX(1f)
+          .scaleY(1f)
+          .setDuration(mTransitionAnimationDurationMs);
+
+      return true;
     }
   }
 }
