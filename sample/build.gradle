@@ -1,13 +1,11 @@
 apply plugin: 'com.android.application'
 
-apply from: '../gradle/scripts/uploadArchives.gradle'
-
 android {
   compileSdkVersion 21
   buildToolsVersion "21.1.2"
 
   defaultConfig {
-    applicationId "com.nhaarman.sample"
+    applicationId "com.nhaarman.triad.sample"
     minSdkVersion 21
     targetSdkVersion 21
     versionCode 1
@@ -21,13 +19,19 @@ android {
   }
 }
 
+apply from: '../gradle/compile.gradle'
+apply from: '../gradle/publishing.gradle'
+apply from: '../gradle/bintray.gradle'
+apply from: '../gradle/artifactory.gradle'
+
 repositories {
-  maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  //maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
 }
 
 dependencies {
-  compile project(':gable')
-  //compile 'com.nhaarman:gable:0.0.1-SNAPSHOT'
+  compile project(':triad')
+  //compile 'com.nhaarman:triad:0.0.1-SNAPSHOT'
 
   /* Annotations library */
   provided 'org.jetbrains:annotations:13.0'

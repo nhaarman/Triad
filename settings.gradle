@@ -1,1 +1,1 @@
-include ':gable', ':sample'
+include ':triad', ':sample'

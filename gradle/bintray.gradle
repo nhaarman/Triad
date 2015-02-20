@@ -1,0 +1,16 @@
+// Handles publication of distributions to Bintray
+
+apply plugin: 'com.jfrog.bintray'
+
+bintray {
+
+  user = bintray_user
+  key = bintray_key
+  configurations = ['archives', 'published']
+  pkg {
+    repo = 'maven'
+    name = 'Triad'
+    desc = 'A Model-View-Presenter library for Android'
+    publish = false
+  }
+}

@@ -1,0 +1,40 @@
+// configuration of the Maven artifacts
+apply plugin: 'android-maven'
+
+// add javadoc/source jar tasks as artifacts
+artifacts {
+  archives sourceJar
+  archives javadocJar
+}
+
+configure(install.repositories.mavenInstaller) {
+  pom.project {
+
+    artifactId POM_ARTIFACT_ID
+    name POM_NAME
+    packaging POM_PACKAGING
+    description POM_DESCRIPTION
+    url POM_URL
+
+    scm {
+      url POM_SCM_URL
+      connection POM_SCM_CONNECTION
+      developerConnection POM_SCM_DEV_CONNECTION
+    }
+
+    developers {
+      developer {
+        id POM_DEVELOPER_ID
+        name POM_DEVELOPER_NAME
+      }
+    }
+
+    licenses {
+      license {
+        name 'The Apache Software License, Version 2.0'
+        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        distribution 'repo'
+      }
+    }
+  }
+}

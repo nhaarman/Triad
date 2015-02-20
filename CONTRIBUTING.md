@@ -19,7 +19,7 @@ I'm happy to view and accept pull requests. However, it is important to follow t
 
 ## General steps
 
-* [Fork](https://github.com/nhaarman/gable/fork) the repository.
+* [Fork](https://github.com/nhaarman/triad/fork) the repository.
 * Create a local clone of the repository.
 * Create a local branch, **based on the `dev` branch** (see the *Rules* section)
 * Commit your code, and push the changes to your own repository.

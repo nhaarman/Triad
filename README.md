@@ -1,8 +1,8 @@
-Gable
+Triad
 =====
-[![Build Status](https://travis-ci.org/nhaarman/Gable.svg?branch=master)](https://travis-ci.org/nhaarman/Gable)
+[![Build Status](https://travis-ci.org/nhaarman/Triad.svg?branch=master)](https://travis-ci.org/nhaarman/Triad)
 
-Gable is an Android library which enables use of the Model-View-Presenter pattern in an easy way.
+Triad is an Android library which enables use of the Model-View-Presenter pattern in an easy way.
 
 (More to follow)
 
