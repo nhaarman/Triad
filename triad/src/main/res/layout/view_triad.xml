@@ -10,12 +10,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 
-  <ViewStub
-    android:id="@+id/view_triad_dimmerviewstub"
+  <View
+    android:id="@+id/view_triad_dimmerview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:inflatedId="@+id/view_triad_dimmerview"
-    android:layout="@layout/view_triad_dimmer" />
+    android:alpha="0"
+    android:background="#000" />
 
   <RelativeLayout
     android:id="@+id/view_triad_dialogholder"

@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
-import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import com.nhaarman.triad.container.RelativeLayoutContainer;
 import com.nhaarman.triad.screen.Screen;
@@ -28,9 +27,6 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
   private ViewGroup mScreenHolder;
 
   @NotNull
-  private ViewStub mDimmerViewStub;
-
-  @Nullable
   private View mDimmerView;
 
   @NotNull
@@ -55,21 +51,11 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
     super.onFinishInflate();
 
     mScreenHolder = (ViewGroup) findViewById(R.id.view_triad_screenholder);
-    mDimmerViewStub = (ViewStub) findViewById(R.id.view_triad_dimmerviewstub);
     mDialogHolder = (ViewGroup) findViewById(R.id.view_triad_dialogholder);
-  }
 
-  @NotNull
-  private View getDimmerView() {
-    if (mDimmerView == null) {
-      mDimmerView = mDimmerViewStub.inflate();
-
-      assert mDimmerView != null;
-      mDimmerView.setOnClickListener(new DimmerViewOnCLickListener());
-      mDimmerView.setClickable(false);
-    }
-
-    return mDimmerView;
+    mDimmerView = findViewById(R.id.view_triad_dimmerview);
+    mDimmerView.setOnClickListener(new DimmerViewOnCLickListener());
+    mDimmerView.setClickable(false);
   }
 
   @Override
@@ -84,14 +70,14 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
 
   @Override
   public void showDialog(@NotNull final View dialogView) {
-    getDimmerView()
+    mDimmerView
         .animate()
         .alpha(DIMMED_ALPHA_VALUE)
         .setDuration(mTransitionAnimationDurationMs)
         .withEndAction(new Runnable() {
           @Override
           public void run() {
-            getDimmerView().setClickable(true);
+            mDimmerView.setClickable(true);
           }
         });
 
@@ -111,10 +97,10 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
           public void run() {
             mDialogHolder.removeView(dialogView);
             if (mDialogHolder.getChildCount() == 0) {
-              getDimmerView()
+              mDimmerView
                   .animate()
                   .alpha(0f);
-              getDimmerView().setClickable(false);
+              mDimmerView.setClickable(false);
             }
           }
         });
@@ -200,9 +186,11 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
   }
 
   private class DialogPreDrawListener implements ViewTreeObserver.OnPreDrawListener {
+
+    @NotNull
     private final View mDialogView;
 
-    public DialogPreDrawListener(final View dialogView) {
+    DialogPreDrawListener(@NotNull final View dialogView) {
       mDialogView = dialogView;
     }
 

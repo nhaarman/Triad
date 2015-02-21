@@ -49,7 +49,7 @@ class FlowManager {
   /**
    * Sets the {@link Flow.Listener} that should be notified of pending screen transitions.
    */
-  public void setFlowListener(@Nullable final Flow.Listener flowListener) {
+  void setFlowListener(@Nullable final Flow.Listener flowListener) {
     mFlowListener = flowListener;
   }
 
@@ -60,11 +60,15 @@ class FlowManager {
    *
    * @param backstack The initial {@link Backstack} to use.
    */
-  public static synchronized FlowManager getInstance(@NotNull final Backstack backstack) {
+  static synchronized FlowManager getInstance(@NotNull final Backstack backstack) {
     if (sFlowManager == null) {
       sFlowManager = new FlowManager(backstack);
     }
     return sFlowManager;
+  }
+
+  static synchronized void destroyInstance() {
+    sFlowManager = null;
   }
 
   private class MyFlowListener implements Flow.Listener {
