@@ -1,6 +1,7 @@
 Triad
 =====
 [![Build Status](https://travis-ci.org/nhaarman/Triad.svg?branch=master)](https://travis-ci.org/nhaarman/Triad)
+[ ![Download](https://api.bintray.com/packages/nhaarman/maven/Triad/images/download.svg) ](https://bintray.com/nhaarman/maven/Triad/_latestVersion)
 
 Triad is an Android library which enables use of the Model-View-Presenter pattern in an easy way.
 
