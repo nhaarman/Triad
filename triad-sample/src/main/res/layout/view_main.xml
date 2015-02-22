@@ -3,24 +3,38 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:gravity="center">
+  android:padding="20dp">
 
-  <TextView
-    android:id="@+id/view_main_countertv"
+  <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:textSize="40sp"
-    tools:text="23" />
+    android:layout_centerInParent="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/view_main_countertv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="40sp"
+      tools:text="23" />
+
+    <Button
+      android:id="@+id/view_main_incrementbutton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="@string/view_main_increment"
+      android:textSize="25sp" />
+  </LinearLayout>
 
   <Button
-    android:id="@+id/view_main_incrementbutton"
+    android:id="@+id/view_main_newscreenbutton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@id/view_main_countertv"
+    android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
-    android:layout_marginTop="8dp"
-    android:text="@string/view_main_increment"
+    android:text="New screen"
     android:textSize="25sp" />
 
 </com.nhaarman.triad.sample.main.MainView>

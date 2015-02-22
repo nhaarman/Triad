@@ -3,6 +3,7 @@ package com.nhaarman.triad;
 import android.view.View;
 import com.nhaarman.triad.container.Container;
 import com.nhaarman.triad.screen.Screen;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -20,4 +21,13 @@ interface TriadContainer<M> extends Container<TriadPresenter<M>, TriadContainer<
    * @param newView The new {@link View} to display an entering animation for.
    */
   void transition(@Nullable View oldView, @Nullable View newView);
+
+  /**
+   * Adds given {@link View} as a dialog.
+   *
+   * @param dialogView The {@link View} to show.
+   */
+  void showDialog(@NotNull View dialogView);
+
+  void dismissDialog(@NotNull View dialogView);
 }

@@ -10,7 +10,7 @@ public class MainActivity extends TriadActivity<MainComponent> {
   @Override
   @NotNull
   protected MainComponent createMainComponent() {
-    return new MainComponent();
+    return new MainComponent(getFlow());
   }
 
   @NotNull

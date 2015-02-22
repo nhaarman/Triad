@@ -52,6 +52,12 @@ public class MainView extends RelativeLayoutContainer<MainPresenter, MainContain
     getPresenter().onSecondIncrementButtonClicked();
   }
 
+  @Optional
+  @OnClick(R.id.view_main_newscreenbutton)
+  public void onNewScreenButtonClicked() {
+    getPresenter().onNewScreenButtonClicked();
+  }
+
   @Override
   public void update(final Observable observable, final Object data) {
     MainViewModel mainViewModel = (MainViewModel) observable;

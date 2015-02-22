@@ -7,8 +7,8 @@ import com.nhaarman.triad.presenter.Presenter;
 import com.nhaarman.triad.presenter.ScreenPresenter;
 import com.nhaarman.triad.screen.Screen;
 import flow.Flow;
+import java.util.Stack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The {@link Presenter} which handles the showing of the {@link Screen}s in the application.
@@ -25,12 +25,18 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
   @NotNull
   private final Flow mFlow;
 
-  @SuppressWarnings("rawtypes")
-  @Nullable
-  private Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> mCurrentScreen;
+  @NotNull
+  private final Stack<Screen<?, ?, M>> mScreens;
 
-  @Nullable
-  private View mCurrentView;
+  @NotNull
+  private final Stack<ScreenContainer<?, ?>> mScreenContainers;
+
+  //@SuppressWarnings("rawtypes")
+  //@Nullable
+  //private Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> mCurrentScreen;
+
+  //@Nullable
+  //private View mCurrentView;
 
   /**
    * Creates a new {@code TriadPresenter}.
@@ -41,12 +47,19 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
   TriadPresenter(@NotNull final M mainComponent, @NotNull final Flow flow) {
     mMainComponent = mainComponent;
     mFlow = flow;
+
+    mScreens = new Stack<>();
+    mScreenContainers = new Stack<>();
   }
 
   @Override
   protected void onControlGained(@NotNull final TriadContainer<M> container) {
-    if (mCurrentScreen != null) {
-      showScreen(mCurrentScreen);
+    Screen<? extends ScreenPresenter, ? extends ScreenContainer, M>[] screens = new Screen[mScreens.size()];
+    mScreens.copyInto(screens);
+    mScreens.clear();
+
+    for (int i = 0; i < screens.length; i++) {
+      showScreen(screens[i]);
     }
   }
 
@@ -54,13 +67,18 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
    * Performs the proper transitions to show given {@link Screen}.
    *
    * @param screen The {@link Screen} to show.
-   * @param <P> The {@link ScreenPresenter} type.
-   * @param <C> The {@link ScreenContainer} type.
    */
-  public <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void showScreen(@NotNull final Screen<P, C, M> screen) {
-    mCurrentScreen = screen;
+  public <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void showScreen(@NotNull final Screen<P, C, M> screen, final Flow.Direction direction) {
+    if (direction == Flow.Direction.BACKWARD && mScreens.peek().isDialog()) {
+      popDialog();
+    } else {
+      showScreen(screen);
+    }
+  }
 
+  private <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void showScreen(final Screen<P, C, M> screen) {
     if (getContainer() == null) {
+      mScreens.push(screen);
       return;
     }
 
@@ -68,9 +86,30 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     P presenter = screen.getPresenter(mMainComponent);
     container.setPresenter(presenter);
 
-    getContainer().transition(mCurrentView, (View) container);
+    boolean isDialog = screen.isDialog();
+    if (isDialog) {
+      getContainer().showDialog((View) container);
+    } else {
+      ScreenContainer<?, ?> previousContainer = null;
+      if (!mScreens.empty()) {
+        mScreens.pop();
+        previousContainer = mScreenContainers.pop();
+      }
+      getContainer().transition((View) previousContainer, (View) container);
+    }
 
-    mCurrentView = (View) container;
+    mScreens.push(screen);
+    mScreenContainers.push(container);
+  }
+
+  private void popDialog() {
+    if (getContainer() == null) {
+      return;
+    }
+
+    mScreens.pop();
+    ScreenContainer<?, ?> container = mScreenContainers.pop();
+    getContainer().dismissDialog((View) container);
   }
 
   /**
@@ -79,7 +118,16 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
    * @return true if the event has been handled, false otherwise.
    */
   public boolean onBackPressed() {
-    return mCurrentScreen != null && mCurrentScreen.getPresenter(mMainComponent).onBackPressed() || mFlow.goBack();
+    if (mScreens.empty()) {
+      return false;
+    }
+
+    Screen<?, ?, M> screen = mScreens.peek();
+    return screen.getPresenter(mMainComponent).onBackPressed() || mFlow.goBack();
+  }
+
+  public void onDimmerClicked() {
+    onBackPressed();
   }
 }
 

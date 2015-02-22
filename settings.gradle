@@ -1,2 +1,4 @@
 include ':triad'
 include ':triad-sample'
+
+include ':triad-tests'
