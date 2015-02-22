@@ -5,7 +5,103 @@ Triad
 
 Triad is an Android library which enables use of the Model-View-Presenter pattern in an easy way.
 
-(More to follow)
+An application that uses Triad consists of a single `Activity` that extends `TriadActivity` and hosts all screens in the app. Using Square's [Flow](https://github.com/square/flow/), Jake Wharton's [Butter Knife](https://github.com/JakeWharton/butterknife), and optionally [Dagger 2.0](https://github.com/google/dagger), creating an Android application has never been easier.
+
+## Setup
+
+Add the following to your dependencies in your `build.gradle` file:
+
+```groovy
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile 'com.nhaarman:triad:x.x.x'
+}
+```
+
+## Classes
+
+A screen in an Android application that uses Triad consists of four classes: a `Screen` which defines the `View` and `Presenter`, a `Presenter` which handles logic formats data for the view, a `Container` which acts as an interface between the `Presenter` and the `View`, and the `View` class which displays data to the user.
+
+### Screen
+
+```java
+public class MyScreen extends Screen<MyPresenter, MyContainer, MainComponent> {
+
+  @Override
+  protected int getLayoutResId() {
+    return R.layout.view_my;
+  }
+
+  @Override
+  protected MyPresenter createPresenter(MainComponent mainComponent) {
+    return new MyPresenter();
+  }
+}
+```
+### View
+
+```java
+public class MyView extends RelativeLayoutContainer<MyPresenter, MyContainer> implements MyContainer {
+
+  @InjectView(R.id.view_my_textview)
+  protected TextView mTextView;
+
+  public MyView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
+
+  public MyView(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+  }
+
+  @Override
+  public void setText(String text) {
+    mTextView.setText(text);
+  }
+}
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.MyView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <TextView
+    android:id="@+id/view_my_textview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true" />
+
+</com.example.MyView>
+```
+
+### Container
+
+```java
+interface MyContainer extends ScreenContainer<MyPresenter, MyContainer> {
+
+  void setText(String text);
+}
+```
+
+### Presenter
+
+```java
+class MyPresenter extends ScreenPresenter<MyPresenter, MyContainer> {
+
+  @Override
+  public void onControlGained(MyContainer container) {
+    container.setText("Hello world!");
+  }
+}
+```
+
+For more information, see the [Wiki](https://github.com/nhaarman/Triad/wiki).
+
 
 License
 =======
