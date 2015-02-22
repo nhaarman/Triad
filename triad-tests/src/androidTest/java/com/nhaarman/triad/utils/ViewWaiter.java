@@ -1,4 +1,4 @@
-package com.nhaarman.triad.tests.utils;
+package com.nhaarman.triad.utils;
 
 import android.view.View;
 import android.view.ViewGroup;

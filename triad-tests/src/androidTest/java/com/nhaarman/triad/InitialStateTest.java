@@ -1,6 +1,4 @@
-package com.nhaarman.triad.tests;
-
-import com.nhaarman.triad.TestActivityInstrumentationTestCase;
+package com.nhaarman.triad;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,7 +29,7 @@ public class InitialStateTest extends TestActivityInstrumentationTestCase {
   }
 
   public void test_initially_screenHolderContainsFirstScreen() {
-    assertThat(mScreenHolder.findViewById(R.id.view_screen_first), is(not(nullValue())));
+    assertThat(mScreenHolder.findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(not(nullValue())));
   }
 
   public void test_initially_dialogHolderContainsNoChildren() {

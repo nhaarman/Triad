@@ -1,13 +1,11 @@
-package com.nhaarman.triad.tests;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.TestActivityInstrumentationTestCase;
 import com.nhaarman.triad.tests.firstdialog.FirstDialogScreen;
 import com.nhaarman.triad.tests.seconddialog.SecondDialogScreen;
 
-import static com.nhaarman.triad.tests.utils.ViewWaiter.viewHasAlpha;
-import static com.nhaarman.triad.tests.utils.ViewWaiter.viewNotPresent;
-import static com.nhaarman.triad.tests.utils.ViewWaiter.viewVisible;
-import static com.nhaarman.triad.tests.utils.ViewWaiter.waitUntil;
+import static com.nhaarman.triad.utils.ViewWaiter.viewNotPresent;
+import static com.nhaarman.triad.utils.ViewWaiter.viewVisible;
+import static com.nhaarman.triad.utils.ViewWaiter.waitUntil;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -27,7 +25,7 @@ public class BackwardSecondDialogTransitionTest extends TestActivityInstrumentat
       }
     });
 
-    waitUntil(viewVisible(mDialogHolder, R.id.view_dialog_second));
+    waitUntil(viewVisible(mDialogHolder, com.nhaarman.triad.tests.R.id.view_dialog_second));
 
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
@@ -36,19 +34,19 @@ public class BackwardSecondDialogTransitionTest extends TestActivityInstrumentat
       }
     });
 
-    waitUntil(viewNotPresent(mDialogHolder, R.id.view_dialog_second));
+    waitUntil(viewNotPresent(mDialogHolder, com.nhaarman.triad.tests.R.id.view_dialog_second));
   }
 
   public void test_afterTransition_secondDialogIsNotPresent() {
-    assertThat(mDialogHolder.findViewById(R.id.view_dialog_second), is(nullValue()));
+    assertThat(mDialogHolder.findViewById(com.nhaarman.triad.tests.R.id.view_dialog_second), is(nullValue()));
   }
 
   public void test_afterTransition_firstDialogIsPresent() {
-    assertThat(mDialogHolder.findViewById(R.id.view_dialog_first), is(not(nullValue())));
+    assertThat(mDialogHolder.findViewById(com.nhaarman.triad.tests.R.id.view_dialog_first), is(not(nullValue())));
   }
 
   public void test_afterTransition_originalScreenIsPresent() {
-    assertThat(mScreenHolder.findViewById(R.id.view_screen_first), is(not(nullValue())));
+    assertThat(mScreenHolder.findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(not(nullValue())));
   }
 
   public void test_afterTransition_dimmerView_isVisible() {

@@ -8,6 +8,9 @@ import com.nhaarman.triad.presenter.ScreenPresenter;
 import com.nhaarman.triad.screen.Screen;
 import flow.Backstack;
 import flow.Flow;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -80,10 +83,25 @@ public abstract class TriadActivity<M> extends Activity {
   @NotNull
   protected abstract Screen<?, ?, M> createInitialScreen();
 
+  @SuppressWarnings("rawtypes")
   @Override
   protected void onStart() {
     super.onStart();
-    mFlow.resetTo(mFlow.getBackstack().current().getScreen());
+    Backstack backstack = mFlow.getBackstack();
+    AbstractList<Screen> screens = new ArrayList<>();
+
+    for (Iterator<Backstack.Entry> iterator1 = backstack.reverseIterator(); iterator1.hasNext(); ) {
+      Screen screen = (Screen) iterator1.next().getScreen();
+      if (!screen.isDialog()) {
+        screens.clear();
+      }
+
+      screens.add(screen);
+    }
+
+    for (Screen screen : screens) {
+      mTriadPresenter.showScreen(screen, Flow.Direction.FORWARD);
+    }
   }
 
   @Override
