@@ -15,10 +15,6 @@ allprojects {
     jcenter()
   }
 
-  project.ext.POM_ARTIFACT_ID = project.name
-  project.ext.POM_NAME = project.name
-  project.ext.POM_PACKAGING = 'aar'
-
   project.apply from: rootProject.projectDir.absolutePath + '/gradle/tagging.gradle';
 
   afterEvaluate { project ->
@@ -28,11 +24,6 @@ allprojects {
       project.android.buildToolsVersion "21.1.2"
       project.android.defaultConfig.minSdkVersion 16;
       project.android.defaultConfig.targetSdkVersion 21;
-
-      project.apply from: rootProject.projectDir.absolutePath + '/gradle/compile.gradle';
-      project.apply from: rootProject.projectDir.absolutePath + '/gradle/publishing.gradle'
-      project.apply from: rootProject.projectDir.absolutePath + '/gradle/bintray.gradle'
-      project.apply from: rootProject.projectDir.absolutePath + '/gradle/artifactory.gradle'
     }
   }
 }

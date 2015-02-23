@@ -6,6 +6,12 @@ android {
   }
 }
 
+
+apply from: rootProject.projectDir.absolutePath + '/gradle/compile.gradle';
+apply from: rootProject.projectDir.absolutePath + '/gradle/publishing.gradle'
+apply from: rootProject.projectDir.absolutePath + '/gradle/bintray.gradle'
+apply from: rootProject.projectDir.absolutePath + '/gradle/artifactory.gradle'
+
 dependencies {
   /* Flow */
   compile 'com.squareup.flow:flow:0.8'
