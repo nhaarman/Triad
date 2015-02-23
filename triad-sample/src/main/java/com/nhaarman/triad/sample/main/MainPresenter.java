@@ -26,6 +26,9 @@ class MainPresenter extends ScreenPresenter<MainPresenter, MainContainer> {
 
   @Override
   protected void onControlGained(@NotNull final MainContainer container) {
+    if (getContainer() == null) {
+      return;
+    }
     container.setViewModel(mViewModel);
     updateViewModel();
   }
