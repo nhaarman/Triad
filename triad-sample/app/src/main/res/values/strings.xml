@@ -1,0 +1,11 @@
+<resources>
+  <string name="app_name">Triad Sample</string>
+
+  <string name="create_note">Create note</string>
+
+  <string name="title">Title</string>
+  <string name="contents">Contents</string>
+  <string name="save">Save</string>
+  <string name="error_title">Please enter a valid title</string>
+  <string name="error_contents">Please enter a valid note</string>
+</resources>

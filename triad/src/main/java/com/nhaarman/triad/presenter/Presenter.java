@@ -62,4 +62,13 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
   public C getContainer() {
     return mContainer;
   }
+
+  @Nullable
+  protected final String getString(final int resId) {
+    if (mContainer == null) {
+      return null;
+    }
+
+    return mContainer.getContext().getString(resId);
+  }
 }

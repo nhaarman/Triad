@@ -1,0 +1,11 @@
+apply plugin: 'com.android.library'
+
+dependencies {
+  /* Annotations library */
+  provided 'org.jetbrains:annotations:13.0'
+
+  /* Tests */
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.hamcrest:hamcrest-all:1.3'
+  testCompile 'org.mockito:mockito-core:1.9.5'
+}

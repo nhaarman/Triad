@@ -14,13 +14,11 @@ new ByteArrayOutputStream().withStream { os ->
     lastTag = scanner.next();
   }
 
-  ext.tagName = lastTag;
+  ext.versionName = lastTag;
 
   if (isRelease == 'false') {
-    int lastNumber = Integer.parseInt(tagName.substring(tagName.size() - 1))
-    ext.tagName = tagName.substring(0, tagName.size() - 1) + (lastNumber + 1) + "-SNAPSHOT";
+    int lastNumber = Integer.parseInt(versionName.substring(versionName.size() - 1))
+    ext.versionName = versionName.substring(0, versionName.size() - 1) + (lastNumber + 1) + "-SNAPSHOT";
   }
-
-  println 'Version ' + ext.tagName;
 }
 
