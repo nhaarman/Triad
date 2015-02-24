@@ -78,7 +78,7 @@ public class ViewWaiter {
 
       return childView != null
           && childView.getVisibility() == View.VISIBLE
-          && childView.getAlpha() > .99f;
+          && childView.getAlpha() > .999f;
     }
 
     @Override

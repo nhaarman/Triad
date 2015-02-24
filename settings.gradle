@@ -1,5 +1,7 @@
 include ':triad'
 include ':triad-tests'
 
+include ':triad-sample:business'
 include ':triad-sample:app'
+
 

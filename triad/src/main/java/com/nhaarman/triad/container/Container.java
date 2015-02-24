@@ -1,5 +1,6 @@
 package com.nhaarman.triad.container;
 
+import android.content.Context;
 import com.nhaarman.triad.presenter.Presenter;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,4 +20,13 @@ public interface Container<P extends Presenter<P, C>, C extends Container<P, C>>
    * @param presenter The {@link Presenter} instance.
    */
   void setPresenter(@NotNull P presenter);
+
+  /**
+   * Returns the context the container is running in, through which it can
+   * access the current theme, resources, etc.
+   *
+   * @return The container's Context.
+   */
+  @NotNull
+  Context getContext();
 }

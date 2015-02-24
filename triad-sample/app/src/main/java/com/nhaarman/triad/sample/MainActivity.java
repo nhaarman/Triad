@@ -1,8 +1,8 @@
 package com.nhaarman.triad.sample;
 
 import com.nhaarman.triad.TriadActivity;
+import com.nhaarman.triad.sample.notes.NotesScreen;
 import com.nhaarman.triad.screen.Screen;
-import com.nhaarman.triad.sample.main.MainScreen;
 import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends TriadActivity<MainComponent> {
@@ -16,6 +16,6 @@ public class MainActivity extends TriadActivity<MainComponent> {
   @NotNull
   @Override
   protected Screen<?, ?, MainComponent> createInitialScreen() {
-    return new MainScreen();
+    return new NotesScreen();
   }
 }
