@@ -5,8 +5,9 @@ task sourceJar(type: Jar) {
 }
 
 task javadoc(type: Javadoc) {
-  //source = android.sourceSets.main.java.srcDirs
-  //classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+  source = android.sourceSets.main.java.srcDirs
+  ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+  classpath += files(ext.androidJar)
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {

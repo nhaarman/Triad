@@ -14,4 +14,19 @@ allprojects {
   repositories {
     jcenter()
   }
+
+  project.apply from: rootProject.projectDir.absolutePath + '/gradle/tagging.gradle';
+
+  afterEvaluate { project ->
+    if(project.hasProperty('android')) {
+
+      project.android.compileSdkVersion 21;
+      project.android.buildToolsVersion "21.1.2"
+      project.android.defaultConfig.minSdkVersion 16;
+      project.android.defaultConfig.targetSdkVersion 21;
+    }
+  }
 }
+
+println ext.versionName
+
