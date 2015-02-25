@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +16,7 @@ public class MemoryNoteRepository implements NoteRepository {
 
   private long mLastId;
 
+  @Inject
   public MemoryNoteRepository() {
     mNotes = new HashMap<>(16);
     mLastId = 0;

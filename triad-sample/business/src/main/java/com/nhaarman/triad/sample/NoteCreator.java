@@ -1,5 +1,6 @@
 package com.nhaarman.triad.sample;
 
+import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
 public class NoteCreator {
@@ -7,6 +8,7 @@ public class NoteCreator {
   @NotNull
   private final NoteRepository mNoteRepository;
 
+  @Inject
   public NoteCreator(@NotNull final NoteRepository noteRepository) {
     mNoteRepository = noteRepository;
   }

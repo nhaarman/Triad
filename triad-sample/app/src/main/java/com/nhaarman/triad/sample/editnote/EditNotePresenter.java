@@ -7,6 +7,7 @@ import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
 import flow.Flow;
+import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +28,7 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
   @NotNull
   private final Flow mFlow;
 
+  @Inject
   public EditNotePresenter(@Nullable final Note note,
                            @NotNull final NoteValidator noteValidator,
                            @NotNull final NoteCreator noteCreatorMock,

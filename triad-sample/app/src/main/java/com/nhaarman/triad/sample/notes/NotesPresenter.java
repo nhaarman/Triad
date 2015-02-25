@@ -5,6 +5,7 @@ import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 import flow.Flow;
+import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
 class NotesPresenter extends ScreenPresenter<NotesPresenter, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
@@ -15,6 +16,7 @@ class NotesPresenter extends ScreenPresenter<NotesPresenter, NotesContainer> imp
   @NotNull
   private final NotesListPresenter mNotesListPresenter;
 
+  @Inject
   NotesPresenter(@NotNull final Flow flow,
                  @NotNull final NotesListPresenter notesListPresenter) {
     mFlow = flow;

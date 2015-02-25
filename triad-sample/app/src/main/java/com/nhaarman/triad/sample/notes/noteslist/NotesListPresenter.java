@@ -4,6 +4,7 @@ import com.nhaarman.triad.presenter.Presenter;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteRepository;
 import java.util.List;
+import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +19,7 @@ public class NotesListPresenter extends Presenter<NotesListPresenter, NotesListC
   @Nullable
   private OnNoteClickedListener mListener;
 
+  @Inject
   public NotesListPresenter(@NotNull final NoteRepository noteRepository) {
     mNoteRepository = noteRepository;
   }
