@@ -1,6 +1,10 @@
 apply plugin: 'com.android.library'
 
 dependencies {
+  /* Javax annotations */
+  provided 'javax.annotation:jsr250-api:1.0'
+  provided 'javax.inject:javax.inject:1@jar'
+
   /* Annotations library */
   provided 'org.jetbrains:annotations:13.0'
 
