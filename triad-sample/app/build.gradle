@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
+  productFlavors {
+    plain
+  }
+
   defaultConfig {
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
   }
