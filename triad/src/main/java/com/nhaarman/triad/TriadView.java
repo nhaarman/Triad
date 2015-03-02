@@ -37,13 +37,19 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
   }
 
   public TriadView(final Context context, final AttributeSet attrs, final int defStyle) {
-    this(context, attrs, defStyle, 0);
+    super(context, attrs, defStyle);
+
+    mTransitionAnimationDurationMs = retrieveTransitionAnimationDurationMs();
   }
 
   public TriadView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
 
-    mTransitionAnimationDurationMs = getResources().getInteger(android.R.integer.config_shortAnimTime);
+    mTransitionAnimationDurationMs = retrieveTransitionAnimationDurationMs();
+  }
+
+  private long retrieveTransitionAnimationDurationMs() {
+    return getResources().getInteger(android.R.integer.config_shortAnimTime);
   }
 
   @Override
