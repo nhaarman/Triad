@@ -1,6 +1,6 @@
 package com.nhaarman.triad.sample.notes;
 
-import com.nhaarman.triad.TraidActivityInstrumentationTestCase;
+import com.nhaarman.triad.TriadActivityInstrumentationTestCase;
 import com.nhaarman.triad.sample.MainActivity;
 import com.nhaarman.triad.sample.R;
 
@@ -11,7 +11,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class NotesScreenTest extends TraidActivityInstrumentationTestCase<MainActivity> {
+public class NotesScreenTest extends TriadActivityInstrumentationTestCase<MainActivity> {
 
   private static final String TITLE = "Some title";
   private static final String CONTENTS = "Some contents";
@@ -56,5 +56,17 @@ public class NotesScreenTest extends TraidActivityInstrumentationTestCase<MainAc
 
     /* Then */
     onView(withId(R.id.view_editnote)).check(matches(isDisplayed()));
+  }
+
+  public void test_afterCreatingANoteAndRotating_theCreatedNoteStillAppearsOnScreen() throws InterruptedException {
+    /* Given */
+    createNote(TITLE, CONTENTS);
+
+    /* When */
+    rotate();
+
+    /* Then */
+    onView(withText(TITLE)).check(matches(isDisplayed()));
+    onView(withText(CONTENTS)).check(matches(isDisplayed()));
   }
 }

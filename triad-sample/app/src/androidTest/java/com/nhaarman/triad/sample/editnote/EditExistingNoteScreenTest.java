@@ -1,20 +1,19 @@
 package com.nhaarman.triad.sample.editnote;
 
-import com.nhaarman.triad.TraidActivityInstrumentationTestCase;
+import com.nhaarman.triad.TriadActivityInstrumentationTestCase;
 import com.nhaarman.triad.sample.MainActivity;
 import com.nhaarman.triad.sample.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class EditExistingNoteScreenTest extends TraidActivityInstrumentationTestCase<MainActivity> {
+public class EditExistingNoteScreenTest extends TriadActivityInstrumentationTestCase<MainActivity> {
 
   private static final String TITLE = "Some title";
   private static final String CONTENTS = "Some contents";
