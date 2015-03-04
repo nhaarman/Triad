@@ -40,7 +40,7 @@ public class RotationDialogTransitionTest extends TestActivityInstrumentationTes
         mFlow.goBack();
       }
     });
-    waitUntil(viewNotPresent(mScreenHolder, com.nhaarman.triad.tests.R.id.view_dialog_first));
+    waitUntil(viewNotPresent(mDialogHolder, com.nhaarman.triad.tests.R.id.view_dialog_first));
 
     assertThat(mScreenHolder.findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(not(nullValue())));
     assertThat(mDialogHolder.findViewById(com.nhaarman.triad.tests.R.id.view_dialog_first), is(nullValue()));
