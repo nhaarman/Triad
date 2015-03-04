@@ -4,6 +4,8 @@ import com.nhaarman.triad.sample.Note;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.core.Is.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -29,7 +31,7 @@ public class NotePresenterTest {
   }
 
   @Test
-  public void settingANode_setsTitleToContainer() {
+  public void settingANote_setsTitleToContainer() {
     /* When */
     mNotePresenter.setNote(mNote);
 
@@ -38,9 +40,47 @@ public class NotePresenterTest {
   }
 
   @Test
-  public void settingANode_setsContentsToContainer() {
+  public void settingANote_setsContentsToContainer() {
     /* When */
     mNotePresenter.setNote(mNote);
+
+    /* Then */
+    verify(mNoteContainerMock).setContents(CONTENTS);
+  }
+
+  @Test
+  public void settingANoteBeforeAcquiringContainer_doesNotCrash() {
+    /* Given */
+    NotePresenter notePresenter = new NotePresenter();
+
+    /* When */
+    notePresenter.setNote(mNote);
+
+    /* Then */
+    assertThat(true, is(true));
+  }
+
+  @Test
+  public void settingANote_andThenAcquiringTheContainer_setsTitleToContainer() {
+    /* Given */
+    NotePresenter notePresenter = new NotePresenter();
+    notePresenter.setNote(mNote);
+
+    /* When */
+    notePresenter.acquire(mNoteContainerMock);
+
+    /* Then */
+    verify(mNoteContainerMock).setTitle(TITLE);
+  }
+
+  @Test
+  public void settingANote_andThenAcquiringTheContainer_setsContentsToContainer() {
+    /* Given */
+    NotePresenter notePresenter = new NotePresenter();
+    notePresenter.setNote(mNote);
+
+    /* When */
+    notePresenter.acquire(mNoteContainerMock);
 
     /* Then */
     verify(mNoteContainerMock).setContents(CONTENTS);

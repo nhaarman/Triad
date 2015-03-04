@@ -1,6 +1,6 @@
 package com.nhaarman.triad.sample.editnote;
 
-import com.nhaarman.triad.TraidActivityInstrumentationTestCase;
+import com.nhaarman.triad.TriadActivityInstrumentationTestCase;
 import com.nhaarman.triad.sample.MainActivity;
 import com.nhaarman.triad.sample.R;
 
@@ -13,7 +13,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class EditNewNoteScreenTest extends TraidActivityInstrumentationTestCase<MainActivity> {
+public class EditNewNoteScreenTest extends TriadActivityInstrumentationTestCase<MainActivity> {
 
   private static final String TITLE = "Some title";
   private static final String CONTENTS = "Some contents";
