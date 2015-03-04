@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.hamcrest.number.IsCloseTo.closeTo;
 
 public class ForwardScreenTransitionTest extends TestActivityInstrumentationTestCase {
 
@@ -35,7 +36,7 @@ public class ForwardScreenTransitionTest extends TestActivityInstrumentationTest
   }
 
   public void test_afterTransition_dimmerView_isFullyTranslucent() {
-    assertThat(mDimmerView).hasAlpha(0f);
+    assertThat((double) mDimmerView.getAlpha(), is(closeTo(0, .0001)));
   }
 
   public void test_afterTransition_dimmerView_isNotClickable() {
