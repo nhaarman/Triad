@@ -83,15 +83,14 @@ public abstract class TriadActivity<M> extends Activity {
   @NotNull
   protected abstract Screen<?, ?, M> createInitialScreen();
 
-  @SuppressWarnings("rawtypes")
   @Override
-  protected void onStart() {
-    super.onStart();
+  protected void onPostCreate(final Bundle savedInstanceState) {
+    super.onPostCreate(savedInstanceState);
     Backstack backstack = mFlow.getBackstack();
-    AbstractList<Screen> screens = new ArrayList<>();
+    AbstractList<Screen<?, ?, M>> screens = new ArrayList<>();
 
     for (Iterator<Backstack.Entry> iterator1 = backstack.reverseIterator(); iterator1.hasNext(); ) {
-      Screen screen = (Screen) iterator1.next().getScreen();
+      Screen<?, ?, M> screen = (Screen<?, ?, M>) iterator1.next().getScreen();
       if (!screen.isDialog()) {
         screens.clear();
       }
@@ -99,6 +98,7 @@ public abstract class TriadActivity<M> extends Activity {
       screens.add(screen);
     }
 
+    //noinspection rawtypes
     for (Screen screen : screens) {
       mTriadPresenter.showScreen(screen, Flow.Direction.FORWARD);
     }
