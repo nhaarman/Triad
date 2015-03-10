@@ -25,6 +25,14 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * @param container The {@link C} to gain control over.
    */
   public final void acquire(@NotNull final C container) {
+    if (container.equals(mContainer)) {
+      return;
+    }
+
+    if (mContainer != null) {
+      onControlLost();
+    }
+
     mContainer = container;
     onControlGained(container);
   }
