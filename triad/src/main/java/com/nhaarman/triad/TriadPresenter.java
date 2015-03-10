@@ -7,6 +7,7 @@ import com.nhaarman.triad.presenter.Presenter;
 import com.nhaarman.triad.presenter.ScreenPresenter;
 import com.nhaarman.triad.screen.Screen;
 import flow.Flow;
+import flow.Flow.Direction;
 import java.util.Stack;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,13 +32,6 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
   @NotNull
   private final Stack<ScreenContainer<?, ?>> mScreenContainers;
 
-  //@SuppressWarnings("rawtypes")
-  //@Nullable
-  //private Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> mCurrentScreen;
-
-  //@Nullable
-  //private View mCurrentView;
-
   /**
    * Creates a new {@code TriadPresenter}.
    *
@@ -52,14 +46,15 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     mScreenContainers = new Stack<>();
   }
 
+  @SuppressWarnings("rawtypes")
   @Override
   protected void onControlGained(@NotNull final TriadContainer<M> container) {
     Screen<? extends ScreenPresenter, ? extends ScreenContainer, M>[] screens = new Screen[mScreens.size()];
     mScreens.copyInto(screens);
     mScreens.clear();
 
-    for (int i = 0; i < screens.length; i++) {
-      showScreen(screens[i]);
+    for (Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> screen : screens) {
+      showScreen(screen);
     }
   }
 
@@ -68,8 +63,8 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
    *
    * @param screen The {@link Screen} to show.
    */
-  public <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void showScreen(@NotNull final Screen<P, C, M> screen, final Flow.Direction direction) {
-    if (direction == Flow.Direction.BACKWARD && mScreens.peek().isDialog()) {
+  public <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void showScreen(@NotNull final Screen<P, C, M> screen, final Direction direction) {
+    if (direction == Direction.BACKWARD && mScreens.peek().isDialog()) {
       popDialog();
     } else {
       showScreen(screen);

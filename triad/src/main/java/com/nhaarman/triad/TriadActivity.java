@@ -2,12 +2,18 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.os.Bundle;
+import com.nhaarman.triad.R.id;
+import com.nhaarman.triad.R.layout;
 import com.nhaarman.triad.container.ScreenContainer;
 import com.nhaarman.triad.presenter.Presenter;
 import com.nhaarman.triad.presenter.ScreenPresenter;
 import com.nhaarman.triad.screen.Screen;
 import flow.Backstack;
+import flow.Backstack.Entry;
 import flow.Flow;
+import flow.Flow.Callback;
+import flow.Flow.Direction;
+import flow.Flow.Listener;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -61,8 +67,8 @@ public abstract class TriadActivity<M> extends Activity {
    * Initializes the {@link TriadView}.
    */
   private void initializeView() {
-    setContentView(R.layout.view_triad);
-    TriadView<M> triadView = (TriadView<M>) findViewById(R.id.view_triad);
+    setContentView(layout.view_triad);
+    TriadView<M> triadView = (TriadView<M>) findViewById(id.view_triad);
     triadView.setPresenter(mTriadPresenter);
     setContentView(triadView);
   }
@@ -89,7 +95,7 @@ public abstract class TriadActivity<M> extends Activity {
     Backstack backstack = mFlow.getBackstack();
     AbstractList<Screen<?, ?, M>> screens = new ArrayList<>();
 
-    for (Iterator<Backstack.Entry> iterator1 = backstack.reverseIterator(); iterator1.hasNext(); ) {
+    for (Iterator<Entry> iterator1 = backstack.reverseIterator(); iterator1.hasNext(); ) {
       Screen<?, ?, M> screen = (Screen<?, ?, M>) iterator1.next().getScreen();
       if (!screen.isDialog()) {
         screens.clear();
@@ -100,7 +106,7 @@ public abstract class TriadActivity<M> extends Activity {
 
     //noinspection rawtypes
     for (Screen screen : screens) {
-      mTriadPresenter.showScreen(screen, Flow.Direction.FORWARD);
+      mTriadPresenter.showScreen(screen, Direction.FORWARD);
     }
   }
 
@@ -120,15 +126,15 @@ public abstract class TriadActivity<M> extends Activity {
   }
 
   /**
-   * A {@link Flow.Listener} that delegates {@link Screen} transitions to the {@link TriadPresenter}.
+   * A {@link Listener} that delegates {@link Screen} transitions to the {@link TriadPresenter}.
    */
-  private class MyFlowListener implements Flow.Listener {
+  private class MyFlowListener implements Listener {
 
     @Override
-    public void go(final Backstack nextBackstack, final Flow.Direction direction, final Flow.Callback callback) {
+    public void go(final Backstack backstack, final Direction direction, final Callback callback) {
       //noinspection rawtypes
       Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> screen =
-          (Screen<? extends ScreenPresenter, ? extends ScreenContainer, M>) nextBackstack.current().getScreen();
+          (Screen<? extends ScreenPresenter, ? extends ScreenContainer, M>) backstack.current().getScreen();
       mTriadPresenter.showScreen(screen, direction);
       callback.onComplete();
     }
