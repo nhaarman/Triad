@@ -1,5 +1,9 @@
 package com.nhaarman.triad;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -76,16 +80,16 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
 
   @Override
   public void showDialog(@NotNull final View dialogView) {
-    mDimmerView
-        .animate()
-        .alpha(DIMMED_ALPHA_VALUE)
-        .setDuration(mTransitionAnimationDurationMs)
-        .withEndAction(new Runnable() {
-          @Override
-          public void run() {
-            mDimmerView.setClickable(true);
-          }
-        });
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mDimmerView, ALPHA, DIMMED_ALPHA_VALUE);
+    animator.setDuration(mTransitionAnimationDurationMs);
+    animator.addListener(new AnimatorListenerAdapter() {
+
+      @Override
+      public void onAnimationEnd(final Animator animation) {
+        mDimmerView.setClickable(true);
+      }
+    });
+    animator.start();
 
     mDialogHolder.addView(dialogView);
     dialogView.getViewTreeObserver().addOnPreDrawListener(new DialogPreDrawListener(dialogView));
@@ -93,23 +97,26 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
 
   @Override
   public void dismissDialog(@NotNull final View dialogView) {
-    dialogView.animate()
-        .alpha(0f)
-        .scaleX(0f)
-        .scaleY(0f)
-        .setDuration(mTransitionAnimationDurationMs)
-        .withEndAction(new Runnable() {
-          @Override
-          public void run() {
-            mDialogHolder.removeView(dialogView);
-            if (mDialogHolder.getChildCount() == 0) {
-              mDimmerView
-                  .animate()
-                  .alpha(0f);
-              mDimmerView.setClickable(false);
-            }
-          }
-        });
+    ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(dialogView, ALPHA, 0f);
+    ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(dialogView, SCALE_X, 0f);
+    ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(dialogView, SCALE_Y, 0f);
+
+    AnimatorSet animatorSet = new AnimatorSet();
+    animatorSet.playTogether(alphaAnimator, scaleXAnimator, scaleYAnimator);
+    animatorSet.setDuration(mTransitionAnimationDurationMs);
+    animatorSet.addListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(final Animator animation) {
+        mDialogHolder.removeView(dialogView);
+        if (mDialogHolder.getChildCount() == 0) {
+          mDimmerView
+              .animate()
+              .alpha(0f);
+          mDimmerView.setClickable(false);
+        }
+      }
+    });
+    animatorSet.start();
   }
 
   /**
@@ -119,15 +126,14 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
    * @param view The {@link View} to animate and remove.
    */
   private void animateViewExit(@NotNull final View view) {
-    view.animate()
-        .alpha(0)
-        .setDuration(mTransitionAnimationDurationMs)
-        .withEndAction(new Runnable() {
-          @Override
-          public void run() {
-            ((ViewManager) view.getParent()).removeView(view);
-          }
-        });
+    ObjectAnimator animator = ObjectAnimator.ofFloat(view, ALPHA, 0f);
+    animator.addListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(final Animator animation) {
+        ((ViewManager) view.getParent()).removeView(view);
+      }
+    });
+    animator.start();
   }
 
   /**
@@ -169,17 +175,18 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
       }
 
       mNewView.setAlpha(0);
-      mNewView.animate()
-          .alpha(1f)
-          .setDuration(mTransitionAnimationDurationMs)
-          .withEndAction(new Runnable() {
-            @Override
-            public void run() {
-              if (mOldView != null) {
-                ((ViewManager) mOldView.getParent()).removeView(mOldView);
-              }
-            }
-          });
+
+      ObjectAnimator animator = ObjectAnimator.ofFloat(mNewView, ALPHA, 1f);
+      animator.setDuration(mTransitionAnimationDurationMs);
+      animator.addListener(new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(final Animator animation) {
+          if (mOldView != null) {
+            ((ViewManager) mOldView.getParent()).removeView(mOldView);
+          }
+        }
+      });
+      animator.start();
     }
   }
 
