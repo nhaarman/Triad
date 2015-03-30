@@ -22,7 +22,7 @@ allprojects {
 
       project.android.compileSdkVersion 21;
       project.android.buildToolsVersion "21.1.2"
-      project.android.defaultConfig.minSdkVersion 16;
+      project.android.defaultConfig.minSdkVersion 14;
       project.android.defaultConfig.targetSdkVersion 21;
     }
   }
