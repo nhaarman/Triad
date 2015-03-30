@@ -104,9 +104,14 @@ public abstract class TriadActivity<M> extends Activity {
       screens.add(screen);
     }
 
+    Screen lastScreen = null;
     //noinspection rawtypes
     for (Screen screen : screens) {
       mTriadPresenter.showScreen(screen, Flow.Direction.FORWARD);
+      lastScreen = screen;
+    }
+    if(lastScreen != null) {
+      onScreenChanged(lastScreen);
     }
   }
 
@@ -131,6 +136,9 @@ public abstract class TriadActivity<M> extends Activity {
     return mFlow;
   }
 
+  @SuppressWarnings("rawtypes")
+  protected void onScreenChanged(@NotNull final Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> screen){}
+
   /**
    * A {@link Flow.Listener} that delegates {@link Screen} transitions to the {@link TriadPresenter}.
    */
@@ -143,6 +151,8 @@ public abstract class TriadActivity<M> extends Activity {
           (Screen<? extends ScreenPresenter, ? extends ScreenContainer, M>) nextBackstack.current().getScreen();
       mTriadPresenter.showScreen(screen, direction);
       callback.onComplete();
+
+      onScreenChanged(screen);
     }
   }
 }
