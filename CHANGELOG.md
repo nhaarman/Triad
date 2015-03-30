@@ -1,5 +1,11 @@
 # Changelog
 
+Version 0.2.2 *(2015-03-30)*
+-----------------------------------
+
+ * Support API 14
+ * Presenters will now receive a call to onControlLost when the Activity's onStop method is called
+
 Version 0.2.1 *(2015-03-04)*
 -----------------------------------
 
