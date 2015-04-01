@@ -2,7 +2,6 @@ package com.nhaarman.triad;
 
 import android.view.View;
 import android.view.ViewGroup;
-import com.nhaarman.triad.container.Container;
 import com.nhaarman.triad.container.ScreenContainer;
 import com.nhaarman.triad.presenter.Presenter;
 import com.nhaarman.triad.presenter.ScreenPresenter;
@@ -31,13 +30,6 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
 
   @NotNull
   private final Stack<ScreenContainer<?, ?>> mScreenContainers;
-
-  //@SuppressWarnings("rawtypes")
-  //@Nullable
-  //private Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> mCurrentScreen;
-
-  //@Nullable
-  //private View mCurrentView;
 
   /**
    * Creates a new {@code TriadPresenter}.
@@ -84,7 +76,7 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     }
 
     C container = screen.createView((ViewGroup) getContainer());
-    P presenter = screen.getPresenter(mMainComponent);
+    P presenter = screen.getPresenter(mMainComponent, mFlow);
     container.setPresenter(presenter);
 
     boolean isDialog = screen.isDialog();
@@ -124,7 +116,7 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     }
 
     Screen<?, ?, M> screen = mScreens.peek();
-    return screen.getPresenter(mMainComponent).onBackPressed() || mFlow.goBack();
+    return screen.getPresenter(mMainComponent, mFlow).onBackPressed() || mFlow.goBack();
   }
 
   public void onDimmerClicked() {
@@ -137,7 +129,7 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     }
 
     Screen<P, C, M> screen = (Screen<P, C, M>) mScreens.peek();
-    P presenter = screen.getPresenter(mMainComponent);
+    P presenter = screen.getPresenter(mMainComponent, mFlow);
     C container = (C) mScreenContainers.peek();
     presenter.acquire(container);
   }
@@ -148,7 +140,7 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     }
 
     Screen<?, ?, M> screen = mScreens.peek();
-    ScreenPresenter<?, ?> presenter = screen.getPresenter(mMainComponent);
+    ScreenPresenter<?, ?> presenter = screen.getPresenter(mMainComponent, mFlow);
     presenter.releaseContainer();
   }
 }
