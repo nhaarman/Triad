@@ -2,6 +2,9 @@ package com.nhaarman.triad;
 
 import flow.Backstack;
 import flow.Flow;
+import flow.Flow.Callback;
+import flow.Flow.Direction;
+import flow.Flow.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,10 +27,10 @@ class FlowManager {
   private final Flow mFlow;
 
   /**
-   * The {@link Flow.Listener} that is used to notify of screen transitions.
+   * The {@link Listener} that is used to notify of screen transitions.
    */
   @Nullable
-  private Flow.Listener mFlowListener;
+  private Listener mFlowListener;
 
   /**
    * Creates a new {@code FlowManager} with given initial {@link Backstack}.
@@ -47,9 +50,9 @@ class FlowManager {
   }
 
   /**
-   * Sets the {@link Flow.Listener} that should be notified of pending screen transitions.
+   * Sets the {@link Listener} that should be notified of pending screen transitions.
    */
-  void setFlowListener(@Nullable final Flow.Listener flowListener) {
+  void setFlowListener(@Nullable final Listener flowListener) {
     mFlowListener = flowListener;
   }
 
@@ -71,10 +74,10 @@ class FlowManager {
     sFlowManager = null;
   }
 
-  private class MyFlowListener implements Flow.Listener {
+  private class MyFlowListener implements Listener {
 
     @Override
-    public void go(final Backstack nextBackstack, final Flow.Direction direction, final Flow.Callback callback) {
+    public void go(final Backstack nextBackstack, final Direction direction, final Callback callback) {
       if (mFlowListener == null) {
         throw new NullPointerException("Set a listener!");
       }
