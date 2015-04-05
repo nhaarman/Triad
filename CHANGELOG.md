@@ -1,5 +1,12 @@
 # Changelog
 
+Version 0.3.0 *(2015-04-05)*
+-----------------------------------
+
+ * Provided `Flow` instance to `ScreenPresenters`
+ * Added `OnScreenChangedListener`
+ * Added `triad-appcompat-v7` which includes `TriadActionBarActivity`
+
 Version 0.2.1 *(2015-03-04)*
 -----------------------------------
 
