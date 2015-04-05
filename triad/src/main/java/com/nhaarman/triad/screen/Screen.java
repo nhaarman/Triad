@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import com.nhaarman.triad.container.ScreenContainer;
 import com.nhaarman.triad.presenter.Presenter;
 import com.nhaarman.triad.presenter.ScreenPresenter;
+import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,13 +71,15 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    * This instance is lazily instantiated.
    *
    * @param component The {@code main component} to retrieve dependencies from.
+   * @param flow The Flow instance of the application.
    *
    * @return The {@link P}.
    */
   @NotNull
-  public final P getPresenter(@NotNull final M component) {
+  public final P getPresenter(@NotNull final M component, @NotNull final Flow flow) {
     if (mPresenter == null) {
       mPresenter = createPresenter(component);
+      mPresenter.setFlow(flow);
     }
     return mPresenter;
   }

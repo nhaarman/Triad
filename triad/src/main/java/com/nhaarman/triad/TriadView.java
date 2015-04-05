@@ -1,5 +1,6 @@
 package com.nhaarman.triad;
 
+import android.R.integer;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -9,7 +10,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
-import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnPreDrawListener;
+import com.nhaarman.triad.R.id;
 import com.nhaarman.triad.container.RelativeLayoutContainer;
 import com.nhaarman.triad.screen.Screen;
 import org.jetbrains.annotations.NotNull;
@@ -20,20 +22,19 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <M> The main module in the application. See {@link TriadPresenter}.
  */
-@SuppressWarnings("AnonymousInnerClass")
 public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, TriadContainer<M>> implements TriadContainer<M> {
 
   private static final float DIMMED_ALPHA_VALUE = .5f;
 
   private final long mTransitionAnimationDurationMs;
 
-  @NotNull
+  @Nullable
   private ViewGroup mScreenHolder;
 
-  @NotNull
+  @Nullable
   private View mDimmerView;
 
-  @NotNull
+  @Nullable
   private ViewGroup mDialogHolder;
 
   public TriadView(final Context context, final AttributeSet attrs) {
@@ -53,23 +54,28 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
   }
 
   private long retrieveTransitionAnimationDurationMs() {
-    return getResources().getInteger(android.R.integer.config_shortAnimTime);
+    return getResources().getInteger(integer.config_shortAnimTime);
   }
 
   @Override
   protected void onFinishInflate() {
     super.onFinishInflate();
 
-    mScreenHolder = (ViewGroup) findViewById(R.id.view_triad_screenholder);
-    mDialogHolder = (ViewGroup) findViewById(R.id.view_triad_dialogholder);
+    mScreenHolder = (ViewGroup) findViewById(id.view_triad_screenholder);
+    mDialogHolder = (ViewGroup) findViewById(id.view_triad_dialogholder);
 
-    mDimmerView = findViewById(R.id.view_triad_dimmerview);
+    mDimmerView = findViewById(id.view_triad_dimmerview);
+    assert mDimmerView != null;
     mDimmerView.setOnClickListener(new DimmerViewOnCLickListener());
     mDimmerView.setClickable(false);
   }
 
   @Override
   public void transition(@Nullable final View oldView, @Nullable final View newView) {
+    if (mScreenHolder == null) {
+      throw new NullPointerException("Calling transition(View, View) before onFinishInflate() was called.");
+    }
+
     if (newView != null) {
       mScreenHolder.addView(newView);
       newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView));
@@ -80,6 +86,10 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
 
   @Override
   public void showDialog(@NotNull final View dialogView) {
+    if (mDimmerView == null || mDialogHolder == null) {
+      throw new NullPointerException("Calling showDialog(View) before onFinishInflate() was called.");
+    }
+
     ObjectAnimator animator = ObjectAnimator.ofFloat(mDimmerView, ALPHA, DIMMED_ALPHA_VALUE);
     animator.setDuration(mTransitionAnimationDurationMs);
     animator.addListener(new AnimatorListenerAdapter() {
@@ -97,6 +107,10 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
 
   @Override
   public void dismissDialog(@NotNull final View dialogView) {
+    if (mDimmerView == null || mDialogHolder == null) {
+      throw new NullPointerException("Calling dismissDialog(View) before onFinishInflate() was called.");
+    }
+    
     ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(dialogView, ALPHA, 0f);
     ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(dialogView, SCALE_X, 0f);
     ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(dialogView, SCALE_Y, 0f);
@@ -139,7 +153,7 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
   /**
    * Observes when the new {@link View} is about to be drawn, so a replacement animation can be executed.
    */
-  private class TransitionPreDrawListener implements ViewTreeObserver.OnPreDrawListener {
+  private class TransitionPreDrawListener implements OnPreDrawListener {
 
     @Nullable
     private final View mOldView;
@@ -198,7 +212,7 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
     }
   }
 
-  private class DialogPreDrawListener implements ViewTreeObserver.OnPreDrawListener {
+  private class DialogPreDrawListener implements OnPreDrawListener {
 
     @NotNull
     private final View mDialogView;
