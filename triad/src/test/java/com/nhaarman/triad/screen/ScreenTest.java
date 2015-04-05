@@ -30,4 +30,16 @@ public class ScreenTest {
     /* Then */
     assertThat(firstPresenter, is(secondPresenter));
   }
+
+  @Test
+  public void getPresenter_returnsInstanceWithFlowSet() {
+    /* Given */
+    Flow flow = new Flow(null, null);
+
+    /* When */
+    TestPresenter presenter = mTestScreen.getPresenter(new TestComponent(), flow);
+
+    /* Then */
+    assertThat(presenter.getFlow(), is(flow));
+  }
 }
