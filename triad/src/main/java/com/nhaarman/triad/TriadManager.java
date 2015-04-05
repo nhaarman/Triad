@@ -32,6 +32,9 @@ class TriadManager<M> {
   @Nullable
   private TriadPresenter<M> mTriadPresenter;
 
+  @Nullable
+  private OnScreenChangedListener<M> mOnScreenChangedListener;
+
   TriadManager(@NotNull final Activity activity) {
     mActivity = activity;
   }
@@ -136,8 +139,14 @@ class TriadManager<M> {
     return mFlow;
   }
 
-  private void onScreenChanged(@NotNull final Screen<?, ?, M> screen) {
+  public void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {
+    mOnScreenChangedListener = onScreenChangedListener;
+  }
 
+  private void onScreenChanged(@NotNull final Screen<?, ?, M> screen) {
+    if (mOnScreenChangedListener != null) {
+      mOnScreenChangedListener.onScreenChanged(screen);
+    }
   }
 
   /**
