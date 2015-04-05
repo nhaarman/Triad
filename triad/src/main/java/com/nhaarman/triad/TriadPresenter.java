@@ -78,7 +78,7 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     }
 
     C container = screen.createView((ViewGroup) getContainer());
-    P presenter = screen.getPresenter(mMainComponent);
+    P presenter = screen.getPresenter(mMainComponent, mFlow);
     container.setPresenter(presenter);
 
     boolean isDialog = screen.isDialog();
@@ -118,11 +118,32 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     }
 
     Screen<?, ?, M> screen = mScreens.peek();
-    return screen.getPresenter(mMainComponent).onBackPressed() || mFlow.goBack();
+    return screen.getPresenter(mMainComponent, mFlow).onBackPressed() || mFlow.goBack();
   }
 
   public void onDimmerClicked() {
     onBackPressed();
+  }
+
+  public <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void onStart() {
+    if (mScreens.empty()) {
+      return;
+    }
+
+    Screen<P, C, M> screen = (Screen<P, C, M>) mScreens.peek();
+    P presenter = screen.getPresenter(mMainComponent, mFlow);
+    C container = (C) mScreenContainers.peek();
+    presenter.acquire(container);
+  }
+
+  public void onStop() {
+    if (mScreens.empty()) {
+      return;
+    }
+
+    Screen<?, ?, M> screen = mScreens.peek();
+    ScreenPresenter<?, ?> presenter = screen.getPresenter(mMainComponent, mFlow);
+    presenter.releaseContainer();
   }
 }
 

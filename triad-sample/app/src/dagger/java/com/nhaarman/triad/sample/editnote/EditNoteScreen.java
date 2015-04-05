@@ -29,6 +29,11 @@ public class EditNoteScreen extends Screen<EditNotePresenter, EditNoteContainer,
   }
 
   @Override
+  public boolean isDialog() {
+    return true;
+  }
+
+  @Override
   protected int getLayoutResId() {
     return R.layout.view_editnote;
   }

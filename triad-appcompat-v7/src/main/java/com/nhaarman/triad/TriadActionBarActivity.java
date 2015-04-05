@@ -2,6 +2,7 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import com.nhaarman.triad.presenter.Presenter;
 import com.nhaarman.triad.screen.Screen;
 import flow.Flow;
@@ -12,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <M> The {@code main component} to use for {@link Presenter} creation.
  */
-public abstract class TriadActivity<M> extends Activity {
+public abstract class TriadActionBarActivity<M> extends ActionBarActivity {
 
   @NotNull
   private final TriadManager<M> mTriadManager;
 
-  public TriadActivity() {
+  public TriadActionBarActivity() {
     mTriadManager = new TriadManager<>(this);
   }
 

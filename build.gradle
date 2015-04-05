@@ -20,10 +20,10 @@ allprojects {
   afterEvaluate { project ->
     if(project.hasProperty('android')) {
 
-      project.android.compileSdkVersion 21;
-      project.android.buildToolsVersion "21.1.2"
-      project.android.defaultConfig.minSdkVersion 16;
-      project.android.defaultConfig.targetSdkVersion 21;
+      project.android.compileSdkVersion 22;
+      project.android.buildToolsVersion "22.0.1"
+      project.android.defaultConfig.minSdkVersion 14;
+      project.android.defaultConfig.targetSdkVersion 22;
     }
   }
 }
