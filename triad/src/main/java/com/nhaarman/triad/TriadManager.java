@@ -32,6 +32,9 @@ class TriadManager<M> {
   @Nullable
   private TriadPresenter<M> mTriadPresenter;
 
+  @Nullable
+  private OnScreenChangedListener<M> mOnScreenChangedListener;
+
   TriadManager(@NotNull final Activity activity) {
     mActivity = activity;
   }
@@ -57,7 +60,7 @@ class TriadManager<M> {
    */
   private void initializePresenter(@NotNull final M mainComponent) {
     assert mFlow != null;
-    
+
     mTriadPresenter = new TriadPresenter(mainComponent, mFlow);
   }
 
@@ -101,9 +104,13 @@ class TriadManager<M> {
       screens.add(screen);
     }
 
-    //noinspection rawtypes
+    Screen lastScreen = null;
     for (Screen screen : screens) {
       mTriadPresenter.showScreen(screen, Flow.Direction.FORWARD);
+      lastScreen = null;
+    }
+    if (lastScreen != null) {
+      onScreenChanged(lastScreen);
     }
   }
 
@@ -132,6 +139,16 @@ class TriadManager<M> {
     return mFlow;
   }
 
+  public void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {
+    mOnScreenChangedListener = onScreenChangedListener;
+  }
+
+  private void onScreenChanged(@NotNull final Screen<?, ?, M> screen) {
+    if (mOnScreenChangedListener != null) {
+      mOnScreenChangedListener.onScreenChanged(screen);
+    }
+  }
+
   /**
    * A {@link Flow.Listener} that delegates {@link Screen} transitions to the {@link TriadPresenter}.
    */
@@ -148,6 +165,8 @@ class TriadManager<M> {
           (Screen<? extends ScreenPresenter, ? extends ScreenContainer, M>) nextBackstack.current().getScreen();
       mTriadPresenter.showScreen(screen, direction);
       callback.onComplete();
+
+      onScreenChanged(screen);
     }
   }
 }

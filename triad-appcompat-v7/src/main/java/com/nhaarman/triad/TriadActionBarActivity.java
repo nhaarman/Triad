@@ -7,6 +7,7 @@ import com.nhaarman.triad.presenter.Presenter;
 import com.nhaarman.triad.screen.Screen;
 import flow.Flow;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An {@link Activity} which is the root of an application that uses Triad.
@@ -76,5 +77,9 @@ public abstract class TriadActionBarActivity<M> extends ActionBarActivity {
   @NotNull
   protected Flow getFlow() {
     return mTriadManager.getFlow();
+  }
+
+  protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {
+    mTriadManager.setOnScreenChangedListener(onScreenChangedListener);
   }
 }
