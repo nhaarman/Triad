@@ -3,6 +3,10 @@
   package="com.nhaarman.triad.tests"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <instrumentation
+    android:name="android.test.InstrumentationTestRunner"
+    android:targetPackage="com.nhaarman.triad" />
+
   <application>
     <activity
       android:name=".TestActivity"

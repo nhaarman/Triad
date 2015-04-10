@@ -48,7 +48,8 @@ public class EditExistingNotePresenterTest {
 
     createFlow();
 
-    mEditNotePresenter = new EditNotePresenter(mNote, mNoteValidator, mock(NoteCreator.class), mNoteRepository, mFlow);
+    mEditNotePresenter = new EditNotePresenter(mNote, mNoteValidator, mock(NoteCreator.class), mNoteRepository);
+    mEditNotePresenter.setFlow(mFlow);
 
     mEditNoteContainerMock = mock(EditNoteContainer.class);
     when(mEditNoteContainerMock.getContext()).thenReturn(mock(Context.class));

@@ -26,11 +26,6 @@ public class EditNoteScreen extends Screen<EditNotePresenter, EditNoteContainer,
   }
 
   @Override
-  public boolean isDialog() {
-    return true;
-  }
-
-  @Override
   protected int getLayoutResId() {
     return R.layout.view_editnote;
   }
@@ -41,8 +36,7 @@ public class EditNoteScreen extends Screen<EditNotePresenter, EditNoteContainer,
     return new EditNotePresenter(mNote,
         mainComponent.noteValidator(),
         mainComponent.noteCreator(),
-        mainComponent.noteRepository(),
-        mainComponent.flow()
+        mainComponent.noteRepository()
     );
   }
 }

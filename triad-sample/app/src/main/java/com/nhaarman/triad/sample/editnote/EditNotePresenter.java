@@ -6,8 +6,6 @@ import com.nhaarman.triad.sample.NoteCreator;
 import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
-import flow.Flow;
-import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,20 +23,15 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
   @NotNull
   private final NoteRepository mNoteRepository;
 
-  @NotNull
-  private final Flow mFlow;
 
-  @Inject
   public EditNotePresenter(@Nullable final Note note,
                            @NotNull final NoteValidator noteValidator,
                            @NotNull final NoteCreator noteCreatorMock,
-                           @NotNull final NoteRepository noteRepository,
-                           @NotNull final Flow flow) {
+                           @NotNull final NoteRepository noteRepository) {
     mNote = note;
     mNoteValidator = noteValidator;
     mNoteCreatorMock = noteCreatorMock;
     mNoteRepository = noteRepository;
-    mFlow = flow;
   }
 
   @Override
@@ -79,6 +72,6 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
       mNoteRepository.update(mNote);
     }
 
-    mFlow.goBack();
+    getFlow().goBack();
   }
 }
