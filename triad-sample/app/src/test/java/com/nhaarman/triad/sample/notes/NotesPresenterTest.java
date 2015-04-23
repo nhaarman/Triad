@@ -32,7 +32,8 @@ public class NotesPresenterTest {
     Flow flow = new Flow(Backstack.single(new Object()), mFlowListener);
 
     mNotesListPresenterMock = mock(NotesListPresenter.class);
-    mNotesPresenter = new NotesPresenter(flow, mNotesListPresenterMock);
+    mNotesPresenter = new NotesPresenter( mNotesListPresenterMock);
+    mNotesPresenter.setFlow(flow);
   }
 
   @Test

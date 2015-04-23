@@ -8,7 +8,7 @@ Triad
 
 Triad is an Android library which enables use of the Model-View-Presenter pattern in an easy way.
 
-An application that uses Triad consists of a single `Activity` that extends `TriadActivity` or `TriadActionBarActivity` and hosts all screens in the app. Using Square's [Flow](https://github.com/square/flow/), Jake Wharton's [Butter Knife](https://github.com/JakeWharton/butterknife), and optionally [Dagger 2.0](https://github.com/google/dagger), creating an Android application has never been easier.
+An application that uses Triad consists of a single `Activity` that extends `TriadActivity` or `TriadAppCompatActivity` and hosts all screens in the app. Using Square's [Flow](https://github.com/square/flow/), Jake Wharton's [Butter Knife](https://github.com/JakeWharton/butterknife), and optionally [Dagger 2.0](https://github.com/google/dagger), creating an Android application has never been easier.
 
 ## Setup
 

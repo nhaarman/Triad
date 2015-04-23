@@ -26,20 +26,20 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
   @Nullable
   private P mPresenter;
 
-  protected RelativeLayoutContainer(final Context context) {
+  public RelativeLayoutContainer(final Context context) {
     super(context);
   }
 
-  protected RelativeLayoutContainer(final Context context, final AttributeSet attrs) {
+  public RelativeLayoutContainer(final Context context, final AttributeSet attrs) {
     super(context, attrs);
   }
 
-  protected RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
+  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
   }
 
   @TargetApi(21)
-  protected RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
+  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
   }
 

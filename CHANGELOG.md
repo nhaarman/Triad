@@ -1,5 +1,11 @@
 # Changelog
 
+Version 0.4.0 *(2014-04-23)*
+-----------------------------------
+
+ * Use the new `AppCompatActivity` instead of `ActionBarActivity`;
+ * Made `RelativeLayoutContainer` constructors public.
+
 Version 0.3.0 *(2015-04-05)*
 -----------------------------------
 
