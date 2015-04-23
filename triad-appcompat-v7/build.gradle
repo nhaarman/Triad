@@ -16,7 +16,7 @@ dependencies {
   compile project(':triad')
 
   /*  AppCompat v7 */
-  compile 'com.android.support:appcompat-v7:22.0.0'
+  compile 'com.android.support:appcompat-v7:22.1.0'
 
   /* Annotations library */
   provided 'org.jetbrains:annotations:13.0'
