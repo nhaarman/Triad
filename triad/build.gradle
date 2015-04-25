@@ -13,6 +13,7 @@ apply from: rootProject.projectDir.absolutePath + '/gradle/bintray.gradle'
 apply from: rootProject.projectDir.absolutePath + '/gradle/artifactory.gradle'
 
 dependencies {
+
   /* Flow */
   compile 'com.squareup.flow:flow:0.8'
 
