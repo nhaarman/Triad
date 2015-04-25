@@ -16,17 +16,17 @@ import org.jetbrains.annotations.Nullable;
 public abstract class TriadActivity<M> extends Activity {
 
   @NotNull
-  private final TriadManager<M> mTriadManager;
+  private final TriadDelegate<M> mDelegate;
 
   public TriadActivity() {
-    mTriadManager = new TriadManager<>(this);
+    mDelegate = new TriadDelegate<>(this);
   }
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mTriadManager.onCreate(createInitialScreen(), createMainComponent());
+    mDelegate.onCreate(createInitialScreen(), createMainComponent());
   }
 
   /**
@@ -48,24 +48,24 @@ public abstract class TriadActivity<M> extends Activity {
   @Override
   protected void onStart() {
     super.onStart();
-    mTriadManager.onStart();
+    mDelegate.onStart();
   }
 
   @Override
   protected void onPostCreate(final Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
-    mTriadManager.onPostCreate();
+    mDelegate.onPostCreate();
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    mTriadManager.onStop();
+    mDelegate.onStop();
   }
 
   @Override
   public void onBackPressed() {
-    if (!mTriadManager.onBackPressed()) {
+    if (!mDelegate.onBackPressed()) {
       super.onBackPressed();
     }
   }
@@ -75,10 +75,10 @@ public abstract class TriadActivity<M> extends Activity {
    */
   @NotNull
   protected Flow getFlow() {
-    return mTriadManager.getFlow();
+    return mDelegate.getFlow();
   }
 
   protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {
-    mTriadManager.setOnScreenChangedListener(onScreenChangedListener);
+    mDelegate.setOnScreenChangedListener(onScreenChangedListener);
   }
 }
