@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListView;

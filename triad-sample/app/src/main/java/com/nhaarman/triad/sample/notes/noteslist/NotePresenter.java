@@ -1,6 +1,6 @@
 package com.nhaarman.triad.sample.notes.noteslist;
 
-import com.nhaarman.triad.presenter.Presenter;
+import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.Note;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

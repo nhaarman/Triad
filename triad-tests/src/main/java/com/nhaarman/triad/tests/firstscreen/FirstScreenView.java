@@ -4,8 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 import butterknife.OnClick;
-import com.nhaarman.triad.R;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 
 public class FirstScreenView extends RelativeLayoutContainer<FirstScreenPresenter, FirstScreenContainer> implements FirstScreenContainer {
 

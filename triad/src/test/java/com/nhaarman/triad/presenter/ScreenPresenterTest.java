@@ -1,5 +1,6 @@
 package com.nhaarman.triad.presenter;
 
+import com.nhaarman.triad.ScreenPresenter;
 import flow.Flow;
 import org.junit.Before;
 import org.junit.Test;

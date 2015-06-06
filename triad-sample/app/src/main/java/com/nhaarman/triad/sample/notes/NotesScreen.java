@@ -3,7 +3,7 @@ package com.nhaarman.triad.sample.notes;
 import com.nhaarman.triad.sample.MainComponent;
 import com.nhaarman.triad.sample.R;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
-import com.nhaarman.triad.screen.Screen;
+import com.nhaarman.triad.Screen;
 import org.jetbrains.annotations.NotNull;
 
 public class NotesScreen extends Screen<NotesPresenter, NotesContainer, MainComponent> {

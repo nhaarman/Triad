@@ -1,7 +1,6 @@
-package com.nhaarman.triad.container;
+package com.nhaarman.triad;
 
 import android.content.Context;
-import com.nhaarman.triad.presenter.Presenter;
 import org.jetbrains.annotations.NotNull;
 
 /**

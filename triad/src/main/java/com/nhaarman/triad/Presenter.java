@@ -1,6 +1,5 @@
-package com.nhaarman.triad.presenter;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.container.Container;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

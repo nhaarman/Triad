@@ -1,8 +1,5 @@
-package com.nhaarman.triad.presenter;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.container.Container;
-import com.nhaarman.triad.container.ScreenContainer;
-import com.nhaarman.triad.screen.Screen;
 import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

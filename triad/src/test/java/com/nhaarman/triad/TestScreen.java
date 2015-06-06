@@ -1,6 +1,5 @@
 package com.nhaarman.triad;
 
-import com.nhaarman.triad.screen.Screen;
 import org.jetbrains.annotations.NotNull;
 
 public class TestScreen extends Screen<TestPresenter, TestRelativeLayoutContainer, TestComponent> {

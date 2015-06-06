@@ -1,7 +1,4 @@
-package com.nhaarman.triad.container;
-
-import com.nhaarman.triad.presenter.ScreenPresenter;
-import com.nhaarman.triad.screen.Screen;
+package com.nhaarman.triad;
 
 /**
  * A {@link Container} interface that is used in combination with a {@link Screen} and a {@link ScreenPresenter}.

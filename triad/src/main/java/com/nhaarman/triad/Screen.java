@@ -1,11 +1,8 @@
-package com.nhaarman.triad.screen;
+package com.nhaarman.triad;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.nhaarman.triad.container.ScreenContainer;
-import com.nhaarman.triad.presenter.Presenter;
-import com.nhaarman.triad.presenter.ScreenPresenter;
 import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

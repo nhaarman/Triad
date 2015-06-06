@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 import butterknife.InjectView;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
 import org.jetbrains.annotations.NotNull;
 

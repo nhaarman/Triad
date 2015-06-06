@@ -1,6 +1,6 @@
 package com.nhaarman.triad.sample.notes.noteslist;
 
-import com.nhaarman.triad.container.Container;
+import com.nhaarman.triad.Container;
 import org.jetbrains.annotations.NotNull;
 
 public interface NoteContainer extends Container<NotePresenter, NoteContainer> {

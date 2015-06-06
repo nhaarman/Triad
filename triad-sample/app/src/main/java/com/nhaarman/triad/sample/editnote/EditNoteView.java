@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

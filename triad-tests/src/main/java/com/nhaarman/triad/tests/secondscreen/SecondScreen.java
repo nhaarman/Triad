@@ -1,6 +1,6 @@
 package com.nhaarman.triad.tests.secondscreen;
 
-import com.nhaarman.triad.screen.Screen;
+import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.tests.R;
 import com.nhaarman.triad.tests.TestComponent;
 import org.jetbrains.annotations.NotNull;

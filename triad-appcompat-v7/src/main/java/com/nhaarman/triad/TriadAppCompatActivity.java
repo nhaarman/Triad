@@ -3,8 +3,6 @@ package com.nhaarman.triad;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import com.nhaarman.triad.presenter.Presenter;
-import com.nhaarman.triad.screen.Screen;
 import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

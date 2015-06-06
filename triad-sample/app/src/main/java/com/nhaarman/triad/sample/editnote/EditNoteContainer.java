@@ -1,6 +1,6 @@
 package com.nhaarman.triad.sample.editnote;
 
-import com.nhaarman.triad.container.ScreenContainer;
+import com.nhaarman.triad.ScreenContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

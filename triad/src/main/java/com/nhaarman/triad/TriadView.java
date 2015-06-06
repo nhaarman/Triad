@@ -1,6 +1,5 @@
 package com.nhaarman.triad;
 
-import android.R.integer;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -10,9 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.view.ViewTreeObserver.OnPreDrawListener;
-import com.nhaarman.triad.R.id;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
-import com.nhaarman.triad.screen.Screen;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,14 +41,14 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
   }
 
   private long retrieveTransitionAnimationDurationMs() {
-    return getResources().getInteger(integer.config_shortAnimTime);
+    return getResources().getInteger(android.R.integer.config_shortAnimTime);
   }
 
   @Override
   protected void onFinishInflate() {
     super.onFinishInflate();
 
-    mScreenHolder = (ViewGroup) findViewById(id.view_triad_screenholder);
+    mScreenHolder = (ViewGroup) findViewById(R.id.view_triad_screenholder);
   }
 
   @Override

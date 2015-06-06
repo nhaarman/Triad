@@ -1,6 +1,5 @@
 package com.nhaarman.triad;
 
-import com.nhaarman.triad.presenter.ScreenPresenter;
 import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 

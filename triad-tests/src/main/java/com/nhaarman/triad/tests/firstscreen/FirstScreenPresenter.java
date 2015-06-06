@@ -1,6 +1,6 @@
 package com.nhaarman.triad.tests.firstscreen;
 
-import com.nhaarman.triad.presenter.ScreenPresenter;
+import com.nhaarman.triad.ScreenPresenter;
 import org.jetbrains.annotations.NotNull;
 
 public class FirstScreenPresenter extends ScreenPresenter<FirstScreenPresenter, FirstScreenContainer> {

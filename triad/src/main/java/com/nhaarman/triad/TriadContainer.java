@@ -1,9 +1,6 @@
 package com.nhaarman.triad;
 
 import android.view.View;
-import com.nhaarman.triad.container.Container;
-import com.nhaarman.triad.screen.Screen;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**

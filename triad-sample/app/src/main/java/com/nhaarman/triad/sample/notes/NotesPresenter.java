@@ -1,6 +1,6 @@
 package com.nhaarman.triad.sample.notes;
 
-import com.nhaarman.triad.presenter.ScreenPresenter;
+import com.nhaarman.triad.ScreenPresenter;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;

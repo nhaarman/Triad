@@ -2,8 +2,6 @@ package com.nhaarman.triad;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
-import com.nhaarman.triad.container.ScreenContainer;
 
 public class TestRelativeLayoutContainer extends RelativeLayoutContainer<TestPresenter, TestRelativeLayoutContainer>
     implements ScreenContainer<TestPresenter, TestRelativeLayoutContainer> {
