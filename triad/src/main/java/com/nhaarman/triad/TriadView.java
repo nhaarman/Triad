@@ -3,7 +3,6 @@ package com.nhaarman.triad;
 import android.R.integer;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -24,18 +23,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, TriadContainer<M>> implements TriadContainer<M> {
 
-  private static final float DIMMED_ALPHA_VALUE = .5f;
-
   private final long mTransitionAnimationDurationMs;
 
   @Nullable
   private ViewGroup mScreenHolder;
-
-  @Nullable
-  private View mDimmerView;
-
-  @Nullable
-  private ViewGroup mDialogHolder;
 
   public TriadView(final Context context, final AttributeSet attrs) {
     this(context, attrs, 0);
@@ -62,12 +53,6 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
     super.onFinishInflate();
 
     mScreenHolder = (ViewGroup) findViewById(id.view_triad_screenholder);
-    mDialogHolder = (ViewGroup) findViewById(id.view_triad_dialogholder);
-
-    mDimmerView = findViewById(id.view_triad_dimmerview);
-    assert mDimmerView != null;
-    mDimmerView.setOnClickListener(new DimmerViewOnCLickListener());
-    mDimmerView.setClickable(false);
   }
 
   @Override
@@ -82,55 +67,6 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
     } else if (oldView != null) {
       animateViewExit(oldView);
     }
-  }
-
-  @Override
-  public void showDialog(@NotNull final View dialogView) {
-    if (mDimmerView == null || mDialogHolder == null) {
-      throw new NullPointerException("Calling showDialog(View) before onFinishInflate() was called.");
-    }
-
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mDimmerView, ALPHA, DIMMED_ALPHA_VALUE);
-    animator.setDuration(mTransitionAnimationDurationMs);
-    animator.addListener(new AnimatorListenerAdapter() {
-
-      @Override
-      public void onAnimationEnd(final Animator animation) {
-        mDimmerView.setClickable(true);
-      }
-    });
-    animator.start();
-
-    mDialogHolder.addView(dialogView);
-    dialogView.getViewTreeObserver().addOnPreDrawListener(new DialogPreDrawListener(dialogView));
-  }
-
-  @Override
-  public void dismissDialog(@NotNull final View dialogView) {
-    if (mDimmerView == null || mDialogHolder == null) {
-      throw new NullPointerException("Calling dismissDialog(View) before onFinishInflate() was called.");
-    }
-    
-    ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(dialogView, ALPHA, 0f);
-    ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(dialogView, SCALE_X, 0f);
-    ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(dialogView, SCALE_Y, 0f);
-
-    AnimatorSet animatorSet = new AnimatorSet();
-    animatorSet.playTogether(alphaAnimator, scaleXAnimator, scaleYAnimator);
-    animatorSet.setDuration(mTransitionAnimationDurationMs);
-    animatorSet.addListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationEnd(final Animator animation) {
-        mDialogHolder.removeView(dialogView);
-        if (mDialogHolder.getChildCount() == 0) {
-          mDimmerView
-              .animate()
-              .alpha(0f);
-          mDimmerView.setClickable(false);
-        }
-      }
-    });
-    animatorSet.start();
   }
 
   /**
@@ -201,40 +137,6 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
         }
       });
       animator.start();
-    }
-  }
-
-  private class DimmerViewOnCLickListener implements OnClickListener {
-
-    @Override
-    public void onClick(final View v) {
-      getPresenter().onDimmerClicked();
-    }
-  }
-
-  private class DialogPreDrawListener implements OnPreDrawListener {
-
-    @NotNull
-    private final View mDialogView;
-
-    DialogPreDrawListener(@NotNull final View dialogView) {
-      mDialogView = dialogView;
-    }
-
-    @Override
-    public boolean onPreDraw() {
-      mDialogView.getViewTreeObserver().removeOnPreDrawListener(this);
-
-      mDialogView.setScaleX(0);
-      mDialogView.setScaleY(0);
-      mDialogView.setAlpha(0f);
-      mDialogView.animate()
-          .alpha(1f)
-          .scaleX(1f)
-          .scaleY(1f)
-          .setDuration(mTransitionAnimationDurationMs);
-
-      return true;
     }
   }
 }

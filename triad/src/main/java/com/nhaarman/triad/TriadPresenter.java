@@ -64,11 +64,7 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
    * @param screen The {@link Screen} to show.
    */
   public <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void showScreen(@NotNull final Screen<P, C, M> screen, final Direction direction) {
-    if (direction == Direction.BACKWARD && mScreens.peek().isDialog()) {
-      popDialog();
-    } else {
-      showScreen(screen);
-    }
+    showScreen(screen);
   }
 
   private <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void showScreen(final Screen<P, C, M> screen) {
@@ -81,30 +77,15 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     P presenter = screen.getPresenter(mMainComponent, mFlow);
     container.setPresenter(presenter);
 
-    boolean isDialog = screen.isDialog();
-    if (isDialog) {
-      getContainer().showDialog((View) container);
-    } else {
-      ScreenContainer<?, ?> previousContainer = null;
-      if (!mScreens.empty()) {
-        mScreens.pop();
-        previousContainer = mScreenContainers.pop();
-      }
-      getContainer().transition((View) previousContainer, (View) container);
+    ScreenContainer<?, ?> previousContainer = null;
+    if (!mScreens.empty()) {
+      mScreens.pop();
+      previousContainer = mScreenContainers.pop();
     }
+    getContainer().transition((View) previousContainer, (View) container);
 
     mScreens.push(screen);
     mScreenContainers.push(container);
-  }
-
-  private void popDialog() {
-    if (getContainer() == null) {
-      return;
-    }
-
-    mScreens.pop();
-    ScreenContainer<?, ?> container = mScreenContainers.pop();
-    getContainer().dismissDialog((View) container);
   }
 
   /**
@@ -119,10 +100,6 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
 
     Screen<?, ?, M> screen = mScreens.peek();
     return screen.getPresenter(mMainComponent, mFlow).onBackPressed() || mFlow.goBack();
-  }
-
-  public void onDimmerClicked() {
-    onBackPressed();
   }
 
   public <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void onStart() {

@@ -39,24 +39,4 @@ public class BackwardScreenTransitionTest extends TestActivityInstrumentationTes
     assertThat(mScreenHolder.findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(not(nullValue())));
     assertThat(mScreenHolder.findViewById(com.nhaarman.triad.tests.R.id.view_screen_second), is(nullValue()));
   }
-
-  public void test_afterTransition_dimmerView_isVisible() {
-    assertThat(mDimmerView).isVisible();
-  }
-
-  public void test_afterTransition_dimmerView_isFullyTranslucent() {
-    assertThat((double) mDimmerView.getAlpha(), is(closeTo(0, .0001)));
-  }
-
-  public void test_afterTransition_dimmerView_isNotClickable() {
-    assertThat(mDimmerView).isNotClickable();
-  }
-
-  public void test_afterTransition_dialogHolder_isVisible() {
-    assertThat(mDialogHolder).isVisible();
-  }
-
-  public void test_afterTransition_dialogHolderContainsNoChildren() {
-    assertThat(mDialogHolder).hasChildCount(0);
-  }
 }

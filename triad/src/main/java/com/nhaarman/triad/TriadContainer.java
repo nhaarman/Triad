@@ -22,12 +22,4 @@ interface TriadContainer<M> extends Container<TriadPresenter<M>, TriadContainer<
    */
   void transition(@Nullable View oldView, @Nullable View newView);
 
-  /**
-   * Adds given {@link View} as a dialog.
-   *
-   * @param dialogView The {@link View} to show.
-   */
-  void showDialog(@NotNull View dialogView);
-
-  void dismissDialog(@NotNull View dialogView);
 }

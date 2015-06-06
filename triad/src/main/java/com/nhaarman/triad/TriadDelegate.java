@@ -117,11 +117,8 @@ public class TriadDelegate<M> {
 
     for (Iterator<Backstack.Entry> iterator1 = backstack.reverseIterator(); iterator1.hasNext(); ) {
       Screen<?, ?, M> screen = (Screen<?, ?, M>) iterator1.next().getScreen();
-      if (!screen.isDialog()) {
-        screens.clear();
-      }
-
-      screens.add(screen);
+      screens.clear();
+      screens.add(screen); // TODO: This isn't very efficient, is it?
     }
 
     Screen lastScreen = null;

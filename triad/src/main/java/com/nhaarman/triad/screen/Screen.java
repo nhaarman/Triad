@@ -47,13 +47,6 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
   protected abstract P createPresenter(@NotNull final M m);
 
   /**
-   * Returns whether this screen should be presented as a dialog.
-   */
-  public boolean isDialog() {
-    return false;
-  }
-
-  /**
    * Inflates the layout resource id returned by {@link #getLayoutResId()}, and returns the {@link C} instance.
    * Does not attach the layout to {@code parent}.
    *
