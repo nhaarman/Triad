@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FirstScreenPresenter extends ScreenPresenter<FirstScreenPresenter, FirstScreenContainer> {
 
-  private int mCounter = 0;
+  private int mCounter;
 
   @Override
   protected void onControlGained(@NotNull final FirstScreenContainer container) {

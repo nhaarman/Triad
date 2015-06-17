@@ -1,8 +1,6 @@
-package com.nhaarman.triad.container;
+package com.nhaarman.triad;
 
 import android.content.Context;
-import com.nhaarman.triad.TestPresenter;
-import com.nhaarman.triad.TestRelativeLayoutContainer;
 import org.junit.Before;
 import org.junit.Test;
 
