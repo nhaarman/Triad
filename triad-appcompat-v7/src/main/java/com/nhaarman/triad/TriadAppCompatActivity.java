@@ -3,8 +3,6 @@ package com.nhaarman.triad;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import com.nhaarman.triad.presenter.Presenter;
-import com.nhaarman.triad.screen.Screen;
 import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,17 +15,17 @@ import org.jetbrains.annotations.Nullable;
 public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
 
   @NotNull
-  private final TriadManager<M> mTriadManager;
+  private final TriadDelegate<M> mTriadDelegate;
 
   public TriadAppCompatActivity() {
-    mTriadManager = new TriadManager<>(this);
+    mTriadDelegate = new TriadDelegate<>(this);
   }
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mTriadManager.onCreate(createInitialScreen(), createMainComponent());
+    mTriadDelegate.onCreate(createInitialScreen(), createMainComponent());
   }
 
   /**
@@ -49,24 +47,24 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
   @Override
   protected void onStart() {
     super.onStart();
-    mTriadManager.onStart();
+    mTriadDelegate.onStart();
   }
 
   @Override
   protected void onPostCreate(final Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
-    mTriadManager.onPostCreate();
+    mTriadDelegate.onPostCreate();
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    mTriadManager.onStop();
+    mTriadDelegate.onStop();
   }
 
   @Override
   public void onBackPressed() {
-    if (!mTriadManager.onBackPressed()) {
+    if (!mTriadDelegate.onBackPressed()) {
       super.onBackPressed();
     }
   }
@@ -76,10 +74,10 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
    */
   @NotNull
   protected Flow getFlow() {
-    return mTriadManager.getFlow();
+    return mTriadDelegate.getFlow();
   }
 
   protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {
-    mTriadManager.setOnScreenChangedListener(onScreenChangedListener);
+    mTriadDelegate.setOnScreenChangedListener(onScreenChangedListener);
   }
 }

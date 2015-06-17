@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.R;
 import java.util.List;

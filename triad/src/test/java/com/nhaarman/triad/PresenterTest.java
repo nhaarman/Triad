@@ -1,7 +1,5 @@
-package com.nhaarman.triad.presenter;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.TestRelativeLayoutContainer;
-import com.nhaarman.triad.TestPresenter;
 import org.junit.Before;
 import org.junit.Test;
 

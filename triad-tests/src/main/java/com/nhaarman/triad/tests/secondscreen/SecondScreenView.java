@@ -2,7 +2,7 @@ package com.nhaarman.triad.tests.secondscreen;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 
 public class SecondScreenView extends RelativeLayoutContainer<SecondScreenPresenter, SecondScreenContainer> implements SecondScreenContainer {
 

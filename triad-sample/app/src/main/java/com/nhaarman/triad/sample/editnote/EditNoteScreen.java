@@ -3,7 +3,7 @@ package com.nhaarman.triad.sample.editnote;
 import com.nhaarman.triad.sample.MainComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.R;
-import com.nhaarman.triad.screen.Screen;
+import com.nhaarman.triad.Screen;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,4 +1,4 @@
-package com.nhaarman.triad.presenter;
+package com.nhaarman.triad;
 
 import flow.Flow;
 import org.junit.Before;

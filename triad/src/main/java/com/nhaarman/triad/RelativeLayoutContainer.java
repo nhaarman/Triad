@@ -1,11 +1,10 @@
-package com.nhaarman.triad.container;
+package com.nhaarman.triad;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
-import com.nhaarman.triad.presenter.Presenter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

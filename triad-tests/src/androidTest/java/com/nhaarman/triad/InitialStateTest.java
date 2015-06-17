@@ -13,27 +13,7 @@ public class InitialStateTest extends TestActivityInstrumentationTestCase {
     assertThat(mScreenHolder).isVisible();
   }
 
-  public void test_initially_dimmerView_isVisible() {
-    assertThat(mDimmerView).isVisible();
-  }
-
-  public void test_initially_dimmerView_isFullyTranslucent() {
-    assertThat((double) mDimmerView.getAlpha(), is(closeTo(0, .0001)));
-  }
-
-  public void test_initially_dimmerView_isNotClickable() {
-    assertThat(mDimmerView).isNotClickable();
-  }
-
-  public void test_initially_dialogHolder_isVisible() {
-    assertThat(mDialogHolder).isVisible();
-  }
-
   public void test_initially_screenHolderContainsFirstScreen() {
     assertThat(mScreenHolder.findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(not(nullValue())));
-  }
-
-  public void test_initially_dialogHolderContainsNoChildren() {
-    assertThat(mDialogHolder).hasChildCount(0);
   }
 }

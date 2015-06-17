@@ -1,6 +1,5 @@
-package com.nhaarman.triad.presenter;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.container.Container;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +23,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    *
    * @param container The {@link C} to gain control over.
    */
-  public  void acquire(@NotNull final C container) {
+  public void acquire(@NotNull final C container) {
     if (container.equals(mContainer)) {
       return;
     }
@@ -41,7 +40,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * Releases the {@link C} this {@code Presenter} controls, and calls {@link #onControlLost()}
    * to notify implementers of this class that the {@link C} is no longer available.
    */
-  public  void releaseContainer() {
+  public void releaseContainer() {
     mContainer = null;
     onControlLost();
   }

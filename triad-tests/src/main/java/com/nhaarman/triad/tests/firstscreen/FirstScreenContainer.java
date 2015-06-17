@@ -1,6 +1,6 @@
 package com.nhaarman.triad.tests.firstscreen;
 
-import com.nhaarman.triad.container.ScreenContainer;
+import com.nhaarman.triad.ScreenContainer;
 
 public interface FirstScreenContainer extends ScreenContainer<FirstScreenPresenter, FirstScreenContainer> {
 

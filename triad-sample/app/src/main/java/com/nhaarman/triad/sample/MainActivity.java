@@ -2,7 +2,7 @@ package com.nhaarman.triad.sample;
 
 import com.nhaarman.triad.TriadActivity;
 import com.nhaarman.triad.sample.notes.NotesScreen;
-import com.nhaarman.triad.screen.Screen;
+import com.nhaarman.triad.Screen;
 import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends TriadActivity<MainComponent> {

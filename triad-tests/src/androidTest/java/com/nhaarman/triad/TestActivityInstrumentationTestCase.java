@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.support.test.internal.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
 import android.view.ViewGroup;
 import com.nhaarman.triad.tests.R;
 import com.nhaarman.triad.tests.TestActivity;
@@ -20,8 +19,6 @@ public abstract class TestActivityInstrumentationTestCase extends ActivityInstru
   protected TestActivity mActivity;
 
   protected ViewGroup mScreenHolder;
-  protected View mDimmerView;
-  protected ViewGroup mDialogHolder;
 
   protected Flow mFlow;
 
@@ -34,8 +31,6 @@ public abstract class TestActivityInstrumentationTestCase extends ActivityInstru
     super.setUp();
 
     mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad_screenholder);
-    mDimmerView = getActivity().findViewById(R.id.view_triad_dimmerview);
-    mDialogHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad_dialogholder);
 
     mFlow = getActivity().getFlow();
 
@@ -54,8 +49,6 @@ public abstract class TestActivityInstrumentationTestCase extends ActivityInstru
     getActivity();
 
     mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad_screenholder);
-    mDimmerView = getActivity().findViewById(R.id.view_triad_dimmerview);
-    mDialogHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad_dialogholder);
 
     mFlow = getActivity().getFlow();
   }

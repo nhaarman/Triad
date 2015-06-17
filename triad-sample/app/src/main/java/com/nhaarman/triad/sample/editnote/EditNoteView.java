@@ -6,18 +6,16 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.nhaarman.triad.container.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EditNoteView extends RelativeLayoutContainer<EditNotePresenter, EditNoteContainer> implements EditNoteContainer {
 
-  @NotNull
   @InjectView(R.id.view_editnote_titleet)
   protected EditText mTitleET;
 
-  @NotNull
   @InjectView(R.id.view_editnote_contentset)
   protected EditText mContentsET;
 

@@ -1,6 +1,5 @@
 package com.nhaarman.triad;
 
-import com.nhaarman.triad.screen.Screen;
 import org.jetbrains.annotations.NotNull;
 
 /**

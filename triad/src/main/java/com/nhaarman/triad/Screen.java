@@ -1,11 +1,8 @@
-package com.nhaarman.triad.screen;
+package com.nhaarman.triad;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.nhaarman.triad.container.ScreenContainer;
-import com.nhaarman.triad.presenter.Presenter;
-import com.nhaarman.triad.presenter.ScreenPresenter;
 import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,13 +42,6 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    */
   @NotNull
   protected abstract P createPresenter(@NotNull final M m);
-
-  /**
-   * Returns whether this screen should be presented as a dialog.
-   */
-  public boolean isDialog() {
-    return false;
-  }
 
   /**
    * Inflates the layout resource id returned by {@link #getLayoutResId()}, and returns the {@link C} instance.

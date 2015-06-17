@@ -1,8 +1,5 @@
-package com.nhaarman.triad.screen;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.TestComponent;
-import com.nhaarman.triad.TestPresenter;
-import com.nhaarman.triad.TestScreen;
 import flow.Flow;
 import org.junit.Before;
 import org.junit.Test;
