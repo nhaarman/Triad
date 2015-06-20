@@ -1,5 +1,10 @@
 # Changelog
 
+Version 0.5.1 *(2015-06-20)*
+-----------------------------------
+
+ * Made `FlowManager` public.
+ * Code cleanup and optimizations
 
 Version 0.5.0 *(2015-06-17)*
 -----------------------------------

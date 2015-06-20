@@ -3,9 +3,6 @@ package com.nhaarman.triad;
 import android.app.Activity;
 import flow.Backstack;
 import flow.Flow;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Iterator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -108,23 +105,7 @@ public class TriadDelegate<M> {
       throw new IllegalStateException("Flow is null. Make sure to call TriadDelegate.onCreate(Screen<?,?,M>, M).");
     }
 
-    Backstack backstack = mFlow.getBackstack();
-    AbstractList<Screen<?, ?, M>> screens = new ArrayList<>();
-
-    for (Iterator<Backstack.Entry> iterator1 = backstack.reverseIterator(); iterator1.hasNext(); ) {
-      Screen<?, ?, M> screen = (Screen<?, ?, M>) iterator1.next().getScreen();
-      screens.clear();
-      screens.add(screen); // TODO: This isn't very efficient, is it?
-    }
-
-    Screen lastScreen = null;
-    for (Screen screen : screens) {
-      mTriadPresenter.showScreen(screen, Flow.Direction.FORWARD);
-      lastScreen = screen;
-    }
-    if (lastScreen != null) {
-      onScreenChanged(lastScreen);
-    }
+    mFlow.resetTo(mFlow.getBackstack().current().getScreen());
   }
 
   public void onStop() {
