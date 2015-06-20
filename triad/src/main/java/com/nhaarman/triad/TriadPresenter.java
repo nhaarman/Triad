@@ -4,8 +4,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import flow.Flow;
 import flow.Flow.Direction;
-import java.util.Stack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The {@link Presenter} which handles the showing of the {@link Screen}s in the application.
@@ -22,11 +22,12 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
   @NotNull
   private final Flow mFlow;
 
-  @NotNull
-  private final Stack<Screen<?, ?, M>> mScreens;
+  @SuppressWarnings("rawtypes")
+  @Nullable
+  private Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> mCurrentScreen;
 
-  @NotNull
-  private final Stack<ScreenContainer<?, ?>> mScreenContainers;
+  @Nullable
+  private View mCurrentView;
 
   /**
    * Creates a new {@code TriadPresenter}.
@@ -37,20 +38,13 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
   TriadPresenter(@NotNull final M mainComponent, @NotNull final Flow flow) {
     mMainComponent = mainComponent;
     mFlow = flow;
-
-    mScreens = new Stack<>();
-    mScreenContainers = new Stack<>();
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   protected void onControlGained(@NotNull final TriadContainer<M> container) {
-    Screen<? extends ScreenPresenter, ? extends ScreenContainer, M>[] screens = new Screen[mScreens.size()];
-    mScreens.copyInto(screens);
-    mScreens.clear();
-
-    for (Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> screen : screens) {
-      showScreen(screen);
+    if (mCurrentScreen != null) {
+      showScreen(mCurrentScreen, Direction.FORWARD);
     }
   }
 
@@ -64,8 +58,9 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
   }
 
   private <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void showScreen(final Screen<P, C, M> screen) {
+    mCurrentScreen = screen;
+
     if (getContainer() == null) {
-      mScreens.push(screen);
       return;
     }
 
@@ -73,50 +68,36 @@ class TriadPresenter<M> extends Presenter<TriadPresenter<M>, TriadContainer<M>> 
     P presenter = screen.getPresenter(mMainComponent, mFlow);
     container.setPresenter(presenter);
 
-    ScreenContainer<?, ?> previousContainer = null;
-    if (!mScreens.empty()) {
-      mScreens.pop();
-      previousContainer = mScreenContainers.pop();
-    }
-    getContainer().transition((View) previousContainer, (View) container);
+    getContainer().transition(mCurrentView, (View) container);
 
-    mScreens.push(screen);
-    mScreenContainers.push(container);
+    mCurrentView = (View) container;
   }
 
   /**
-   * Called when the back button has been pressed.
+   * To be called when the back button has been pressed.
    *
    * @return true if the event has been handled, false otherwise.
    */
   public boolean onBackPressed() {
-    if (mScreens.empty()) {
-      return false;
-    }
-
-    Screen<?, ?, M> screen = mScreens.peek();
-    return screen.getPresenter(mMainComponent, mFlow).onBackPressed() || mFlow.goBack();
+    return mCurrentScreen != null && mCurrentScreen.getPresenter(mMainComponent, mFlow).onBackPressed() || mFlow.goBack();
   }
 
   public <P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>> void onStart() {
-    if (mScreens.empty()) {
+    if (mCurrentScreen == null || mCurrentView == null) {
       return;
     }
 
-    Screen<P, C, M> screen = (Screen<P, C, M>) mScreens.peek();
-    P presenter = screen.getPresenter(mMainComponent, mFlow);
-    C container = (C) mScreenContainers.peek();
+    P presenter = (P) mCurrentScreen.getPresenter(mMainComponent, mFlow);
+    C container = (C) mCurrentView;
     presenter.acquire(container);
   }
 
   public void onStop() {
-    if (mScreens.empty()) {
+    if (mCurrentScreen == null) {
       return;
     }
 
-    Screen<?, ?, M> screen = mScreens.peek();
-    ScreenPresenter<?, ?> presenter = screen.getPresenter(mMainComponent, mFlow);
-    presenter.releaseContainer();
+    mCurrentScreen.getPresenter(mMainComponent, mFlow).releaseContainer();
   }
 }
 

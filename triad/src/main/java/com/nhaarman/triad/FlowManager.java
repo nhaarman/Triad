@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * A singleton class which ensures only one {@link Flow} instance is used
  * throughout the lifetime of the application.
  */
-class FlowManager {
+public class FlowManager {
 
   /**
    * The singleton instance.
@@ -45,7 +45,7 @@ class FlowManager {
    * Returns the {@link Flow} instance.
    */
   @NotNull
-  public Flow getFlow() {
+  Flow getFlow() {
     return mFlow;
   }
 
@@ -70,7 +70,7 @@ class FlowManager {
     return sFlowManager;
   }
 
-  static synchronized void destroyInstance() {
+  public static synchronized void destroyInstance() {
     sFlowManager = null;
   }
 
