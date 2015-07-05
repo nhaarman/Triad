@@ -1,6 +1,5 @@
 package com.nhaarman.triad;
 
-import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,24 +12,24 @@ import org.jetbrains.annotations.Nullable;
 public abstract class ScreenPresenter<P extends Presenter<P, C>, C extends Container<P, C>> extends Presenter<P, C> {
 
   @Nullable
-  private Flow mFlow;
+  private Triad mTriad;
 
   /**
-   * Returns the {@link Flow} instance to be used to navigate between {@link Screen}s.
+   * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
   @NotNull
-  protected Flow getFlow() {
-    if (mFlow == null) {
-      throw new IllegalStateException("Flow is null. Make sure setFlow(Flow) has been called with a valid instance.");
+  protected Triad getTriad() {
+    if (mTriad == null) {
+      throw new IllegalStateException("Triad is null. Make sure setTriad(Triad) has been called with a valid instance.");
     }
-    return mFlow;
+    return mTriad;
   }
 
   /**
-   * Sets the {@link Flow} instance to be used to navigate between {@link Screen}s.
+   * Sets the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
-  public final void setFlow(@NotNull final Flow flow) {
-    mFlow = flow;
+  public final void setTriad(@NotNull final Triad triad) {
+    mTriad = triad;
   }
 
   /**

@@ -1,6 +1,7 @@
 package com.nhaarman.triad;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.pm.ActivityInfo;
 import android.support.test.internal.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
@@ -22,9 +23,9 @@ public class TriadActivityInstrumentationTestCase<T extends Activity> extends Ac
   }
 
   @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-    FlowManager.destroyInstance();
+  protected void setUp() throws Exception {
+    super.setUp();
+    getInstrumentation().callApplicationOnCreate((Application) getInstrumentation().getTargetContext().getApplicationContext());
   }
 
   protected void createNote(final String title, final String contents) throws InterruptedException {
@@ -33,20 +34,11 @@ public class TriadActivityInstrumentationTestCase<T extends Activity> extends Ac
     onView(withHint(com.nhaarman.triad.sample.R.string.contents)).perform(typeText(contents));
     onView(withText(com.nhaarman.triad.sample.R.string.save)).perform(click());
     getInstrumentation().waitForIdleSync();
-    Thread.sleep(500);
   }
 
   protected void rotate() throws InterruptedException {
     getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    getActivity();
-
-    //mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad_screenholder);
-    //mDimmerView = getActivity().findViewById(R.id.view_triad_dimmerview);
-    //mDialogHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad_dialogholder);
-
-    //mFlow = getActivity().getFlow();
-
-    Thread.sleep(500);
+    getInstrumentation().waitForIdleSync();
   }
 
   @Override

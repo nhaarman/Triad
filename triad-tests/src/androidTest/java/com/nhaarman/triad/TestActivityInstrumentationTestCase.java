@@ -1,6 +1,7 @@
 package com.nhaarman.triad;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.pm.ActivityInfo;
 import android.support.test.internal.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
@@ -8,7 +9,6 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.ViewGroup;
 import com.nhaarman.triad.tests.R;
 import com.nhaarman.triad.tests.TestActivity;
-import flow.Flow;
 import java.util.Collection;
 
 import static com.nhaarman.triad.utils.ViewWaiter.viewVisible;
@@ -20,7 +20,7 @@ public abstract class TestActivityInstrumentationTestCase extends ActivityInstru
 
   protected ViewGroup mScreenHolder;
 
-  protected Flow mFlow;
+  protected Triad mTriad;
 
   protected TestActivityInstrumentationTestCase() {
     super(TestActivity.class);
@@ -30,27 +30,23 @@ public abstract class TestActivityInstrumentationTestCase extends ActivityInstru
   protected void setUp() throws Exception {
     super.setUp();
 
-    mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad_screenholder);
+    getInstrumentation().callApplicationOnCreate((Application) getInstrumentation().getTargetContext().getApplicationContext());
 
-    mFlow = getActivity().getFlow();
+    mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad);
+
+    mTriad = getActivity().getTriad();
 
     getInstrumentation().waitForIdleSync();
     waitUntil(viewVisible(mScreenHolder, R.id.view_screen_first));
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-    FlowManager.destroyInstance();
   }
 
   protected void rotate() {
     mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     getActivity();
 
-    mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad_screenholder);
+    mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad);
 
-    mFlow = getActivity().getFlow();
+    mTriad = getActivity().getTriad();
   }
 
   @Override

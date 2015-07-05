@@ -17,7 +17,7 @@ public class RotationScreenTransitionTest extends TestActivityInstrumentationTes
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
       public void run() {
-        mFlow.goTo(new SecondScreen());
+        mTriad.goTo(new SecondScreen());
       }
     });
     waitUntil(viewNotPresent(mScreenHolder, com.nhaarman.triad.tests.R.id.view_screen_first));
@@ -33,7 +33,7 @@ public class RotationScreenTransitionTest extends TestActivityInstrumentationTes
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
       public void run() {
-        mFlow.goBack();
+        mTriad.goBack();
       }
     });
     waitUntil(viewNotPresent(mScreenHolder, com.nhaarman.triad.tests.R.id.view_screen_second));

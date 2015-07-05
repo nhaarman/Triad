@@ -72,6 +72,6 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
       mNoteRepository.update(mNote);
     }
 
-    getFlow().goBack();
+    getTriad().goBack();
   }
 }

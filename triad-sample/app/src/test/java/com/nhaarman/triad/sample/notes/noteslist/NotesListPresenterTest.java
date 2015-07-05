@@ -24,14 +24,12 @@ public class NotesListPresenterTest {
   private Note mNote2;
 
   @Before
-  public void setUp() throws InterruptedException {
+  public void setUp() {
     mNoteRepository = spy(new MemoryNoteRepository());
     mNotesListPresenter = new NotesListPresenter(mNoteRepository);
 
     mNote1 = new Note();
     mNoteRepository.create(mNote1);
-
-    Thread.sleep(10);
 
     mNote2 = new Note();
     mNoteRepository.create(mNote2);

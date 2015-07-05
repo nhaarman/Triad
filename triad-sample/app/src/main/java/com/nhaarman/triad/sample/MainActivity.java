@@ -1,21 +1,22 @@
 package com.nhaarman.triad.sample;
 
+import android.os.Bundle;
 import com.nhaarman.triad.TriadActivity;
 import com.nhaarman.triad.sample.notes.NotesScreen;
-import com.nhaarman.triad.Screen;
 import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends TriadActivity<MainComponent> {
 
   @Override
-  @NotNull
-  protected MainComponent createMainComponent() {
-    return new MainComponent();
+  public void onCreate(final Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    getTriad().startWith(new NotesScreen());
   }
 
-  @NotNull
   @Override
-  protected Screen<?, ?, MainComponent> createInitialScreen() {
-    return new NotesScreen();
+  @NotNull
+  protected MainComponent createActivityComponent() {
+    return new MainComponent();
   }
 }

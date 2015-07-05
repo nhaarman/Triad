@@ -1,12 +1,10 @@
 package com.nhaarman.triad.sample.notes;
 
-import com.nhaarman.triad.sample.MyFlowListener;
+import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
-import flow.Backstack;
-import flow.Flow;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,18 +20,18 @@ import static org.mockito.Mockito.when;
 public class NotesPresenterTest {
 
   private NotesPresenter mNotesPresenter;
-  private MyFlowListener mFlowListener;
 
   private NotesListPresenter mNotesListPresenterMock;
 
+  private Triad mTriad;
+
   @Before
   public void setUp() {
-    mFlowListener = new MyFlowListener();
-    Flow flow = new Flow(Backstack.single(new Object()), mFlowListener);
+    mTriad = mock(Triad.class);
 
     mNotesListPresenterMock = mock(NotesListPresenter.class);
-    mNotesPresenter = new NotesPresenter( mNotesListPresenterMock);
-    mNotesPresenter.setFlow(flow);
+    mNotesPresenter = new NotesPresenter(mNotesListPresenterMock);
+    mNotesPresenter.setTriad(mTriad);
   }
 
   @Test
@@ -61,8 +59,7 @@ public class NotesPresenterTest {
     mNotesPresenter.onCreateNoteClicked();
 
     /* Then */
-    assertThat(mFlowListener.lastScreen, is(instanceOf(EditNoteScreen.class)));
-    assertThat(((EditNoteScreen) mFlowListener.lastScreen).getNote(), is(nullValue()));
+    verify(mTriad).goTo(any(EditNoteScreen.class));
   }
 
   @Test
@@ -74,7 +71,6 @@ public class NotesPresenterTest {
     mNotesPresenter.onNoteClicked(note);
 
     /* Then */
-    assertThat(mFlowListener.lastScreen, is(instanceOf(EditNoteScreen.class)));
-    assertThat(((EditNoteScreen) mFlowListener.lastScreen).getNote(), is(note));
+    verify(mTriad).goTo(any(EditNoteScreen.class));
   }
 }

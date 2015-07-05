@@ -3,7 +3,6 @@ package com.nhaarman.triad;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +24,7 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mTriadDelegate.onCreate(createInitialScreen(), createMainComponent());
+    mTriadDelegate.onCreate(createMainComponent());
   }
 
   /**
@@ -70,11 +69,11 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
   }
 
   /**
-   * Returns the {@link Flow} instance to be used to navigate between {@link Screen}s.
+   * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
   @NotNull
-  protected Flow getFlow() {
-    return mTriadDelegate.getFlow();
+  protected Triad getFlow() {
+    return mTriadDelegate.getTriad();
   }
 
   protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {

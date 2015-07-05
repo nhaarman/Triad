@@ -2,7 +2,6 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.os.Bundle;
-import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +15,9 @@ public abstract class TriadActivity<M> extends Activity {
   @NotNull
   private final TriadDelegate<M> mDelegate;
 
+  @Nullable
+  private M mActivityComponent;
+
   public TriadActivity() {
     mDelegate = new TriadDelegate<>(this);
   }
@@ -23,8 +25,16 @@ public abstract class TriadActivity<M> extends Activity {
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mDelegate.onCreate(getActivityComponent());
+  }
 
-    mDelegate.onCreate(createInitialScreen(), createMainComponent());
+  @NotNull
+  protected synchronized M getActivityComponent() {
+    if (mActivityComponent == null) {
+      mActivityComponent = createActivityComponent();
+    }
+
+    return mActivityComponent;
   }
 
   /**
@@ -33,15 +43,7 @@ public abstract class TriadActivity<M> extends Activity {
    * @return The created main component.
    */
   @NotNull
-  protected abstract M createMainComponent();
-
-  /**
-   * Creates the {@link Screen} that is to be shown when the application starts.
-   *
-   * @return The created {@link Screen}.
-   */
-  @NotNull
-  protected abstract Screen<?, ?, M> createInitialScreen();
+  protected abstract M createActivityComponent();
 
   @Override
   protected void onStart() {
@@ -69,11 +71,11 @@ public abstract class TriadActivity<M> extends Activity {
   }
 
   /**
-   * Returns the {@link Flow} instance to be used to navigate between {@link Screen}s.
+   * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
   @NotNull
-  protected Flow getFlow() {
-    return mDelegate.getFlow();
+  protected Triad getTriad() {
+    return mDelegate.getTriad();
   }
 
   protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {

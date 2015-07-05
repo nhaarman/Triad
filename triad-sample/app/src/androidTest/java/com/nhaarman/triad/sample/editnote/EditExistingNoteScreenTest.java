@@ -16,6 +16,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class EditExistingNoteScreenTest extends TriadActivityInstrumentationTestCase<MainActivity> {
 
   private static final String TITLE = "Some title";
+
   private static final String CONTENTS = "Some contents";
 
   public EditExistingNoteScreenTest() {
@@ -29,10 +30,9 @@ public class EditExistingNoteScreenTest extends TriadActivityInstrumentationTest
     createNote(TITLE, CONTENTS);
     onView(withText(TITLE)).perform(click());
     getInstrumentation().waitForIdleSync();
-    Thread.sleep(500);
   }
 
-  public void test_editNoteScreen_hasTitleEditText() throws InterruptedException {
+  public void test_editNoteScreen_hasTitleEditText() {
     onView(withHint(R.string.title)).check(matches(withText(TITLE)));
   }
 

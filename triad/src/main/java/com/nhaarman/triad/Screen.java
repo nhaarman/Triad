@@ -3,13 +3,12 @@ package com.nhaarman.triad;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * A class that creates the {@link ScreenContainer} and {@link ScreenPresenter} for a screen in the application.
- *
+ * <p/>
  * Since the creation of a {@link Presenter} may need additional dependencies, a {@code main component} is supplied
  * when requesting the {@link Presenter} instance. This {@code main component} should contain all dependencies necessary
  * for the {@link Presenter}, and is to be supplied by the implementer.
@@ -28,7 +27,7 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
 
   /**
    * Returns the layout resource id for this {@code Screen}.
-   *
+   * <p/>
    * The root of this resource should be an implementation of {@link C}.
    */
   protected abstract int getLayoutResId();
@@ -61,15 +60,15 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    * This instance is lazily instantiated.
    *
    * @param component The {@code main component} to retrieve dependencies from.
-   * @param flow The Flow instance of the application.
+   * @param triad The Triad instance of the application.
    *
    * @return The {@link P}.
    */
   @NotNull
-  public final P getPresenter(@NotNull final M component, @NotNull final Flow flow) {
+  public final P getPresenter(@NotNull final M component, @NotNull final Triad triad) {
     if (mPresenter == null) {
       mPresenter = createPresenter(component);
-      mPresenter.setFlow(flow);
+      mPresenter.setTriad(triad);
     }
     return mPresenter;
   }

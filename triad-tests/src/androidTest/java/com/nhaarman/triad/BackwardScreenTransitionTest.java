@@ -9,7 +9,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.hamcrest.number.IsCloseTo.closeTo;
 
 public class BackwardScreenTransitionTest extends TestActivityInstrumentationTestCase {
 
@@ -19,7 +18,7 @@ public class BackwardScreenTransitionTest extends TestActivityInstrumentationTes
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
       public void run() {
-        mFlow.goTo(new SecondScreen());
+        mTriad.goTo(new SecondScreen());
       }
     });
 
@@ -28,7 +27,7 @@ public class BackwardScreenTransitionTest extends TestActivityInstrumentationTes
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
       public void run() {
-        mFlow.goBack();
+        mTriad.goBack();
       }
     });
 

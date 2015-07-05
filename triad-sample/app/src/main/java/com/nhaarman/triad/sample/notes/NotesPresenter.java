@@ -22,11 +22,11 @@ class NotesPresenter extends ScreenPresenter<NotesPresenter, NotesContainer> imp
   }
 
   public void onCreateNoteClicked() {
-    getFlow().goTo(new EditNoteScreen());
+    getTriad().goTo(new EditNoteScreen());
   }
 
   @Override
   public void onNoteClicked(@NotNull final Note note) {
-    getFlow().goTo(new EditNoteScreen(note));
+    getTriad().goTo(new EditNoteScreen(note));
   }
 }

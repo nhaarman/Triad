@@ -123,12 +123,10 @@ public class MemoryNoteRepositoryTest {
   }
 
   @Test
-  public void findAllWithAMultipleNotes_returnsThoseNotes() throws InterruptedException {
+  public void findAllWithAMultipleNotes_returnsThoseNotes() {
     /* Given */
     Note note1 = new Note();
     mNoteRepository.create(note1);
-
-    Thread.sleep(10);
 
     Note note2 = new Note();
     mNoteRepository.create(note2);
