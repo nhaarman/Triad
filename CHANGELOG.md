@@ -1,5 +1,17 @@
 # Changelog
 
+Version 0.6.0 *(2015-07-06)*
+-----------------------------------
+
+ * Use a custom version of Flow (now called Triad)
+ * Code cleanup and optimizations
+ * Don't require to specify an initial screen on startup
+
+Version 0.5.1 *(2015-06-20)*
+-----------------------------------
+
+ * Made `FlowManager` public.
+ * Code cleanup and optimizations
 
 Version 0.5.0 *(2015-06-17)*
 -----------------------------------
