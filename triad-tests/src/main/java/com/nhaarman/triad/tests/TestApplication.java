@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.nhaarman.triad.sample.notes.noteslist;
+package com.nhaarman.triad.tests;
 
-import com.nhaarman.triad.Container;
-import com.nhaarman.triad.sample.Note;
-import java.util.List;
-import org.jetbrains.annotations.NotNull;
+import com.nhaarman.triad.TriadApplication;
 
-public interface NotesListContainer extends Container<NotesListPresenter, NotesListContainer> {
+public class TestApplication extends TriadApplication {
 
-  void setNotes(@NotNull List<Note> notes);
+  @Override
+  public void onCreate() {
+    super.onCreate();
+  }
 }

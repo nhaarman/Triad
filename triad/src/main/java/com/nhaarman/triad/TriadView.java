@@ -1,28 +1,41 @@
+/*
+ * Copyright 2015 Niek Haarman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nhaarman.triad;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.view.ViewTreeObserver.OnPreDrawListener;
+import android.widget.RelativeLayout;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * A {@link View}, {@link TriadContainer}, which hosts all {@link View}s belonging to {@link Screen}s in the application.
- *
- * @param <M> The main module in the application. See {@link TriadPresenter}.
  */
-public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, TriadContainer<M>> implements TriadContainer<M> {
+public class TriadView extends RelativeLayout {
 
   private final long mTransitionAnimationDurationMs;
-
-  @Nullable
-  private ViewGroup mScreenHolder;
 
   public TriadView(final Context context, final AttributeSet attrs) {
     this(context, attrs, 0);
@@ -34,6 +47,7 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
     mTransitionAnimationDurationMs = retrieveTransitionAnimationDurationMs();
   }
 
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   public TriadView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
 
@@ -44,22 +58,10 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
     return getResources().getInteger(android.R.integer.config_shortAnimTime);
   }
 
-  @Override
-  protected void onFinishInflate() {
-    super.onFinishInflate();
-
-    mScreenHolder = (ViewGroup) findViewById(R.id.view_triad_screenholder);
-  }
-
-  @Override
-  public void transition(@Nullable final View oldView, @Nullable final View newView) {
-    if (mScreenHolder == null) {
-      throw new NullPointerException("Calling transition(View, View) before onFinishInflate() was called.");
-    }
-
+  public void transition(@Nullable final View oldView, @Nullable final View newView, @NotNull final Triad.Callback callback) {
     if (newView != null) {
-      mScreenHolder.addView(newView);
-      newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView));
+      addView(newView);
+      newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView, callback));
     } else if (oldView != null) {
       animateViewExit(oldView);
     }
@@ -93,13 +95,19 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
     @NotNull
     private final View mNewView;
 
+    @NotNull
+    private final Triad.Callback mCallback;
+
     /**
      * @param oldView The {@link View} to execute an exit animation for.
      * @param newView The {@link View} to execute an entering animation for.
      */
-    TransitionPreDrawListener(@Nullable final View oldView, @NotNull final View newView) {
+    TransitionPreDrawListener(@Nullable final View oldView,
+                              @NotNull final View newView,
+                              @NotNull final Triad.Callback callback) {
       mOldView = oldView;
       mNewView = newView;
+      mCallback = callback;
     }
 
     @Override
@@ -130,6 +138,8 @@ public class TriadView<M> extends RelativeLayoutContainer<TriadPresenter<M>, Tri
           if (mOldView != null) {
             ((ViewManager) mOldView.getParent()).removeView(mOldView);
           }
+
+          mCallback.onComplete();
         }
       });
       animator.start();

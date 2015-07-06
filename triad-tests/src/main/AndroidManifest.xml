@@ -7,7 +7,7 @@
     android:name="android.test.InstrumentationTestRunner"
     android:targetPackage="com.nhaarman.triad" />
 
-  <application>
+  <application android:name=".TestApplication">
     <activity
       android:name=".TestActivity"
       android:theme="@style/AppTheme" />

@@ -1,24 +1,23 @@
 package com.nhaarman.triad.sample.editnote;
 
 import android.content.Context;
+import com.nhaarman.triad.Screen;
+import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.MemoryNoteRepository;
-import com.nhaarman.triad.sample.MyFlowListener;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteCreator;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.notes.NotesScreen;
-import flow.Backstack;
-import flow.Flow;
+import org.intellij.lang.annotations.Flow;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,17 +25,20 @@ import static org.mockito.Mockito.when;
 public class EditNewNotePresenterTest {
 
   private static final String TITLE = "title";
+
   private static final String CONTENTS = "contents";
 
   private EditNotePresenter mEditNotePresenter;
+
   private EditNoteContainer mEditNoteContainerMock;
 
   private NoteValidator mNoteValidator;
+
   private NoteCreator mNoteCreatorMock;
+
   private MemoryNoteRepository mNoteRepository;
 
-  private Flow mFlow;
-  private MyFlowListener mFlowListener;
+  private Triad mTriad;
 
   @Before
   public void setUp() {
@@ -44,18 +46,13 @@ public class EditNewNotePresenterTest {
     mNoteValidator = spy(new NoteValidator());
     mNoteCreatorMock = spy(new NoteCreator(mNoteRepository));
 
-    createFlow();
+    mTriad = mock(Triad.class);
 
     mEditNotePresenter = new EditNotePresenter(null, mNoteValidator, mNoteCreatorMock, mNoteRepository);
-    mEditNotePresenter.setFlow(mFlow);
+    mEditNotePresenter.setTriad(mTriad);
 
     mEditNoteContainerMock = mock(EditNoteContainer.class);
     when(mEditNoteContainerMock.getContext()).thenReturn(mock(Context.class));
-  }
-
-  private void createFlow() {
-    mFlowListener = new MyFlowListener();
-    mFlow = new Flow(Backstack.emptyBuilder().push(new NotesScreen()).push(new EditNoteScreen()).build(), mFlowListener);
   }
 
   @Test
@@ -154,8 +151,7 @@ public class EditNewNotePresenterTest {
     mEditNotePresenter.onSaveNoteClicked();
 
     /* Then */
-    assertThat(mFlowListener.lastDirection, is(nullValue()));
-    assertThat(mFlowListener.lastScreen, is(nullValue()));
+    verify(mTriad, never()).goTo(any(Screen.class));
   }
 
   @Test
@@ -215,7 +211,6 @@ public class EditNewNotePresenterTest {
     mEditNotePresenter.onSaveNoteClicked();
 
     /* Then */
-    assertThat(mFlowListener.lastScreen, is(instanceOf(NotesScreen.class)));
-    assertThat(mFlowListener.lastDirection, is(Flow.Direction.BACKWARD));
+    verify(mTriad).goBack();
   }
 }

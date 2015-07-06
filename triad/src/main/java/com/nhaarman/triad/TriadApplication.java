@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package com.nhaarman.triad.sample.notes.noteslist;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.Container;
-import com.nhaarman.triad.sample.Note;
-import java.util.List;
+import android.app.Application;
 import org.jetbrains.annotations.NotNull;
 
-public interface NotesListContainer extends Container<NotesListPresenter, NotesListContainer> {
+public class TriadApplication extends Application implements TriadProvider {
 
-  void setNotes(@NotNull List<Note> notes);
+  private Triad mTriad;
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    mTriad = Triad.emptyInstance();
+  }
+
+  @Override
+  @NotNull
+  public Triad getTriad() {
+    return mTriad;
+  }
 }

@@ -1,15 +1,13 @@
 package com.nhaarman.triad.sample.editnote;
 
 import android.content.Context;
+import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.MemoryNoteRepository;
-import com.nhaarman.triad.sample.MyFlowListener;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteCreator;
 import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.notes.NotesScreen;
-import flow.Backstack;
-import flow.Flow;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,8 +32,7 @@ public class EditExistingNotePresenterTest {
   private NoteRepository mNoteRepository;
   private NoteValidator mNoteValidator;
 
-  private Flow mFlow;
-  private MyFlowListener mFlowListener;
+  private Triad mTriad;
 
   @Before
   public void setUp() {
@@ -46,18 +43,13 @@ public class EditExistingNotePresenterTest {
     mNoteValidator = spy(new NoteValidator());
     mNoteRepository = spy(new MemoryNoteRepository());
 
-    createFlow();
+    mTriad = mock(Triad.class);
 
     mEditNotePresenter = new EditNotePresenter(mNote, mNoteValidator, mock(NoteCreator.class), mNoteRepository);
-    mEditNotePresenter.setFlow(mFlow);
+    mEditNotePresenter.setTriad(mTriad);
 
     mEditNoteContainerMock = mock(EditNoteContainer.class);
     when(mEditNoteContainerMock.getContext()).thenReturn(mock(Context.class));
-  }
-
-  private void createFlow() {
-    mFlowListener = new MyFlowListener();
-    mFlow = new Flow(Backstack.emptyBuilder().push(new NotesScreen()).push(new EditNoteScreen()).build(), mFlowListener);
   }
 
   @Test
@@ -172,7 +164,6 @@ public class EditExistingNotePresenterTest {
     mEditNotePresenter.onSaveNoteClicked();
 
     /* Then */
-    assertThat(mFlowListener.lastScreen, is(instanceOf(NotesScreen.class)));
-    assertThat(mFlowListener.lastDirection, is(Flow.Direction.BACKWARD));
+    verify(mTriad).goBack();
   }
 }

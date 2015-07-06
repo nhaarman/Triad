@@ -1,6 +1,21 @@
+/*
+ * Copyright 2015 Niek Haarman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nhaarman.triad;
 
-import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,24 +28,24 @@ import org.jetbrains.annotations.Nullable;
 public abstract class ScreenPresenter<P extends Presenter<P, C>, C extends Container<P, C>> extends Presenter<P, C> {
 
   @Nullable
-  private Flow mFlow;
+  private Triad mTriad;
 
   /**
-   * Returns the {@link Flow} instance to be used to navigate between {@link Screen}s.
+   * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
   @NotNull
-  protected Flow getFlow() {
-    if (mFlow == null) {
-      throw new IllegalStateException("Flow is null. Make sure setFlow(Flow) has been called with a valid instance.");
+  protected Triad getTriad() {
+    if (mTriad == null) {
+      throw new IllegalStateException("Triad is null. Make sure setTriad(Triad) has been called with a valid instance.");
     }
-    return mFlow;
+    return mTriad;
   }
 
   /**
-   * Sets the {@link Flow} instance to be used to navigate between {@link Screen}s.
+   * Sets the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
-  public final void setFlow(@NotNull final Flow flow) {
-    mFlow = flow;
+  public final void setTriad(@NotNull final Triad triad) {
+    mTriad = triad;
   }
 
   /**

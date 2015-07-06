@@ -1,11 +1,11 @@
 package com.nhaarman.triad;
 
-import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 
 public class TestPresenter extends ScreenPresenter<TestPresenter, TestRelativeLayoutContainer> {
 
   public boolean onControlGainedCalled;
+
   public boolean onControlLostCalled;
 
   @Override
@@ -20,7 +20,7 @@ public class TestPresenter extends ScreenPresenter<TestPresenter, TestRelativeLa
 
   @NotNull
   @Override
-  public Flow getFlow() {
-    return super.getFlow();
+  public Triad getTriad() {
+    return super.getTriad();
   }
 }

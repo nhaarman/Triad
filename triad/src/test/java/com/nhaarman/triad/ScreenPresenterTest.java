@@ -1,6 +1,5 @@
 package com.nhaarman.triad;
 
-import flow.Flow;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,20 +19,19 @@ public class ScreenPresenterTest {
   @Test
   public void getFlow_returnsSettedFlow() {
     /* Given */
-    Flow flow = new Flow(null, null);
-    mScreenPresenter.setFlow(flow);
+    Triad triad = Triad.emptyInstance();
+    mScreenPresenter.setTriad(triad);
 
     /* When */
-    Flow result = mScreenPresenter.getFlow();
+    Triad result = mScreenPresenter.getTriad();
 
     /* Then */
-    assertThat(result, is(flow));
+    assertThat(result, is(triad));
   }
 
   @Test(expected = IllegalStateException.class)
   public void getFlow_withoutSettedFlow_throwsException() {
     /* When */
-    mScreenPresenter.getFlow();
+    mScreenPresenter.getTriad();
   }
-
 }

@@ -18,7 +18,7 @@ allprojects {
   project.apply from: rootProject.projectDir.absolutePath + '/gradle/tagging.gradle';
 
   afterEvaluate { project ->
-    if(project.hasProperty('android')) {
+    if (project.hasProperty('android')) {
 
       project.android.compileSdkVersion 22;
       project.android.buildToolsVersion '22.0.1'

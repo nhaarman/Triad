@@ -1,8 +1,23 @@
+/*
+ * Copyright 2015 Niek Haarman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.os.Bundle;
-import flow.Flow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +31,9 @@ public abstract class TriadActivity<M> extends Activity {
   @NotNull
   private final TriadDelegate<M> mDelegate;
 
+  @Nullable
+  private M mActivityComponent;
+
   public TriadActivity() {
     mDelegate = new TriadDelegate<>(this);
   }
@@ -23,8 +41,16 @@ public abstract class TriadActivity<M> extends Activity {
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mDelegate.onCreate(getActivityComponent());
+  }
 
-    mDelegate.onCreate(createInitialScreen(), createMainComponent());
+  @NotNull
+  protected synchronized M getActivityComponent() {
+    if (mActivityComponent == null) {
+      mActivityComponent = createActivityComponent();
+    }
+
+    return mActivityComponent;
   }
 
   /**
@@ -33,15 +59,7 @@ public abstract class TriadActivity<M> extends Activity {
    * @return The created main component.
    */
   @NotNull
-  protected abstract M createMainComponent();
-
-  /**
-   * Creates the {@link Screen} that is to be shown when the application starts.
-   *
-   * @return The created {@link Screen}.
-   */
-  @NotNull
-  protected abstract Screen<?, ?, M> createInitialScreen();
+  protected abstract M createActivityComponent();
 
   @Override
   protected void onStart() {
@@ -69,11 +87,11 @@ public abstract class TriadActivity<M> extends Activity {
   }
 
   /**
-   * Returns the {@link Flow} instance to be used to navigate between {@link Screen}s.
+   * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
   @NotNull
-  protected Flow getFlow() {
-    return mDelegate.getFlow();
+  protected Triad getTriad() {
+    return mDelegate.getTriad();
   }
 
   protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {

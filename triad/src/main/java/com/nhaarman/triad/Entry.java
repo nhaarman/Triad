@@ -14,14 +14,33 @@
  * limitations under the License.
  */
 
-package com.nhaarman.triad.sample.notes.noteslist;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.Container;
-import com.nhaarman.triad.sample.Note;
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-public interface NotesListContainer extends Container<NotesListPresenter, NotesListContainer> {
+public final class Entry {
 
-  void setNotes(@NotNull List<Note> notes);
+  private final long mId;
+
+  @NotNull
+  private final Screen<?, ?, ?> mScreen;
+
+  Entry(final long id, @NotNull final Screen<?, ?, ?> screen) {
+    mId = id;
+    mScreen = screen;
+  }
+
+  public long getId() {
+    return mId;
+  }
+
+  @NotNull
+  public Screen<?, ?, ?> getScreen() {
+    return mScreen;
+  }
+
+  @Override
+  public String toString() {
+    return "{" + mId + ", " + mScreen + '}';
+  }
 }
