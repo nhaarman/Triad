@@ -19,8 +19,8 @@ package com.nhaarman.triad;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * A class that creates the {@link ScreenContainer} and {@link ScreenPresenter} for a screen in the application.
@@ -55,8 +55,8 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    *
    * @return The created {@link P}.
    */
-  @NotNull
-  protected abstract P createPresenter(@NotNull final M m);
+  @NonNull
+  protected abstract P createPresenter(@NonNull final M m);
 
   /**
    * Inflates the layout resource id returned by {@link #getLayoutResId()}, and returns the {@link C} instance.
@@ -66,8 +66,8 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    *
    * @return The created {@link C}.
    */
-  @NotNull
-  public final C createView(@NotNull final ViewGroup parent) {
+  @NonNull
+  public final C createView(@NonNull final ViewGroup parent) {
     return (C) LayoutInflater.from(parent.getContext()).inflate(getLayoutResId(), parent, false);
   }
 
@@ -80,8 +80,8 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    *
    * @return The {@link P}.
    */
-  @NotNull
-  public final P getPresenter(@NotNull final M component, @NotNull final Triad triad) {
+  @NonNull
+  public final P getPresenter(@NonNull final M component, @NonNull final Triad triad) {
     if (mPresenter == null) {
       mPresenter = createPresenter(component);
       mPresenter.setTriad(triad);

@@ -27,8 +27,8 @@ import android.view.View;
 import android.view.ViewManager;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.RelativeLayout;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * A {@link View}, {@link TriadContainer}, which hosts all {@link View}s belonging to {@link Screen}s in the application.
@@ -58,7 +58,7 @@ public class TriadView extends RelativeLayout {
     return getResources().getInteger(android.R.integer.config_shortAnimTime);
   }
 
-  public void transition(@Nullable final View oldView, @Nullable final View newView, @NotNull final Triad.Callback callback) {
+  public void transition(@Nullable final View oldView, @Nullable final View newView, @NonNull final Triad.Callback callback) {
     if (newView != null) {
       addView(newView);
       newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView, callback));
@@ -73,7 +73,7 @@ public class TriadView extends RelativeLayout {
    *
    * @param view The {@link View} to animate and remove.
    */
-  private void animateViewExit(@NotNull final View view) {
+  private void animateViewExit(@NonNull final View view) {
     ObjectAnimator animator = ObjectAnimator.ofFloat(view, ALPHA, 0f);
     animator.addListener(new AnimatorListenerAdapter() {
       @Override
@@ -92,10 +92,10 @@ public class TriadView extends RelativeLayout {
     @Nullable
     private final View mOldView;
 
-    @NotNull
+    @NonNull
     private final View mNewView;
 
-    @NotNull
+    @NonNull
     private final Triad.Callback mCallback;
 
     /**
@@ -103,8 +103,8 @@ public class TriadView extends RelativeLayout {
      * @param newView The {@link View} to execute an entering animation for.
      */
     TransitionPreDrawListener(@Nullable final View oldView,
-                              @NotNull final View newView,
-                              @NotNull final Triad.Callback callback) {
+                              @NonNull final View newView,
+                              @NonNull final Triad.Callback callback) {
       mOldView = oldView;
       mNewView = newView;
       mCallback = callback;

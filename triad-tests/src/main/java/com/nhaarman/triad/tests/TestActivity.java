@@ -20,7 +20,7 @@ import android.os.Bundle;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.TriadActivity;
 import com.nhaarman.triad.tests.firstscreen.FirstScreen;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class TestActivity extends TriadActivity<TestComponent> {
 
@@ -30,13 +30,13 @@ public class TestActivity extends TriadActivity<TestComponent> {
     getTriad().startWith(new FirstScreen());
   }
 
-  @NotNull
+  @NonNull
   @Override
   protected TestComponent createActivityComponent() {
     return new TestComponent();
   }
 
-  @NotNull
+  @NonNull
   @Override
   public Triad getTriad() {
     return super.getTriad();

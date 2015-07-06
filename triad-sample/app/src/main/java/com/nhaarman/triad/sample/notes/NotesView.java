@@ -24,11 +24,11 @@ import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListView;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class NotesView extends RelativeLayoutContainer<NotesPresenter, NotesContainer> implements NotesContainer {
 
-  @NotNull
+  @NonNull
   @InjectView(R.id.view_notes_noteslistview)
   protected NotesListView mNotesListView;
 
@@ -45,7 +45,7 @@ public class NotesView extends RelativeLayoutContainer<NotesPresenter, NotesCont
   }
 
   @Override
-  @NotNull
+  @NonNull
   public NotesListContainer getNotesListContainer() {
     return mNotesListView;
   }

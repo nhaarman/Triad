@@ -17,19 +17,19 @@
 package com.nhaarman.triad.sample;
 
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public interface NoteRepository {
 
   @Nullable
-  Long create(@NotNull final Note note);
+  Long create(@NonNull final Note note);
 
   @Nullable
   Note find(@Nullable Long id);
 
-  @NotNull
+  @NonNull
   List<Note> findAll();
 
-  boolean update(@NotNull final Note note);
+  boolean update(@NonNull final Note note);
 }

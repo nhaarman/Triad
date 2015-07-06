@@ -8,7 +8,6 @@ import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteCreator;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.notes.NotesScreen;
-import org.intellij.lang.annotations.Flow;
 import org.junit.Before;
 import org.junit.Test;
 

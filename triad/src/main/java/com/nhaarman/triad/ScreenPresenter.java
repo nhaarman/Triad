@@ -16,8 +16,8 @@
 
 package com.nhaarman.triad;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * A {@link Presenter} class that is used in combination with a {@link Screen} and a {@link ScreenContainer}.
@@ -33,7 +33,7 @@ public abstract class ScreenPresenter<P extends Presenter<P, C>, C extends Conta
   /**
    * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
-  @NotNull
+  @NonNull
   protected Triad getTriad() {
     if (mTriad == null) {
       throw new IllegalStateException("Triad is null. Make sure setTriad(Triad) has been called with a valid instance.");
@@ -44,7 +44,7 @@ public abstract class ScreenPresenter<P extends Presenter<P, C>, C extends Conta
   /**
    * Sets the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
-  public final void setTriad(@NotNull final Triad triad) {
+  public final void setTriad(@NonNull final Triad triad) {
     mTriad = triad;
   }
 

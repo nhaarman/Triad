@@ -23,8 +23,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Describes the history of a {@link Triad} at a specific point in time.
@@ -87,26 +87,26 @@ public final class Backstack implements Iterable<Entry> {
 
   public static final class Builder {
 
-    @NotNull
+    @NonNull
     private final Deque<Entry> mBackstack;
 
     private long mHighestId;
 
-    Builder(final long highestId, @NotNull final Collection<Entry> backstack) {
+    Builder(final long highestId, @NonNull final Collection<Entry> backstack) {
       mHighestId = highestId;
       mBackstack = new ArrayDeque<>(backstack);
     }
 
-    @NotNull
-    public Builder push(@NotNull final Screen<?, ?, ?> screen) {
+    @NonNull
+    public Builder push(@NonNull final Screen<?, ?, ?> screen) {
       mHighestId++;
       mBackstack.push(new Entry(mHighestId, screen));
 
       return this;
     }
 
-    @NotNull
-    public Builder addAll(@NotNull final Collection<Screen<?, ?, ?>> screens) {
+    @NonNull
+    public Builder addAll(@NonNull final Collection<Screen<?, ?, ?>> screens) {
       for (Screen<?, ?, ?> screen : screens) {
         mHighestId++;
         mBackstack.push(new Entry(mHighestId, screen));
@@ -125,14 +125,14 @@ public final class Backstack implements Iterable<Entry> {
       return mBackstack.pop();
     }
 
-    @NotNull
+    @NonNull
     public Builder clear() {
       mBackstack.clear();
 
       return this;
     }
 
-    @NotNull
+    @NonNull
     public Backstack build() {
       return new Backstack(mHighestId, mBackstack);
     }
@@ -167,10 +167,10 @@ public final class Backstack implements Iterable<Entry> {
 
     private final long mId;
 
-    @NotNull
+    @NonNull
     private final Screen<?, ?, ?> mScreen;
 
-    private Entry(final long id, @NotNull final Screen<?, ?, ?> screen) {
+    private Entry(final long id, @NonNull final Screen<?, ?, ?> screen) {
       mId = id;
       mScreen = screen;
     }
@@ -179,7 +179,7 @@ public final class Backstack implements Iterable<Entry> {
       return mId;
     }
 
-    @NotNull
+    @NonNull
     public Screen<?, ?, ?> getScreen() {
       return mScreen;
     }

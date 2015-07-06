@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class MemoryNoteRepository implements NoteRepository {
 
-  @NotNull
+  @NonNull
   private final Map<Long, Note> mNotes;
 
   private long mLastId;
@@ -38,7 +38,7 @@ public class MemoryNoteRepository implements NoteRepository {
   }
 
   @Override
-  public Long create(@NotNull final Note note) {
+  public Long create(@NonNull final Note note) {
     mLastId++;
     note.setCreated(System.currentTimeMillis());
     mNotes.put(mLastId, note);
@@ -55,14 +55,14 @@ public class MemoryNoteRepository implements NoteRepository {
     return mNotes.get(id);
   }
 
-  @NotNull
+  @NonNull
   @Override
   public List<Note> findAll() {
     return new ArrayList<>(mNotes.values());
   }
 
   @Override
-  public boolean update(@NotNull final Note note) {
+  public boolean update(@NonNull final Note note) {
     return mNotes.values().contains(note);
   }
 }

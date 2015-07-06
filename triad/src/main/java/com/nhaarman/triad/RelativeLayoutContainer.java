@@ -21,8 +21,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * An abstract {@link Container} instance that handles {@link Presenter} management,
@@ -61,7 +61,7 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
   /**
    * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
    */
-  @NotNull
+  @NonNull
   public P getPresenter() {
     if (mPresenter == null) {
       throw new NullPointerException("Presenter has not been set.");
@@ -76,7 +76,7 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
    * @param presenter The {@link P} instance.
    */
   @Override
-  public final void setPresenter(@NotNull final P presenter) {
+  public final void setPresenter(@NonNull final P presenter) {
     mPresenter = presenter;
   }
 

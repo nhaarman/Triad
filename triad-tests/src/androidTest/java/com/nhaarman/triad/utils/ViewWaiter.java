@@ -18,15 +18,15 @@ package com.nhaarman.triad.utils;
 
 import android.view.View;
 import android.view.ViewGroup;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class ViewWaiter {
 
-  public static void waitUntil(@NotNull final Condition condition) throws InterruptedException {
+  public static void waitUntil(@NonNull final Condition condition) throws InterruptedException {
     waitUntil(condition, 1000);
   }
 
-  public static void waitUntil(@NotNull final Condition condition, final long timeoutMs) throws InterruptedException {
+  public static void waitUntil(@NonNull final Condition condition, final long timeoutMs) throws InterruptedException {
     long start = System.currentTimeMillis();
     do {
       Thread.sleep(25);
@@ -38,15 +38,15 @@ public class ViewWaiter {
     }
   }
 
-  public static Condition viewVisible(@NotNull final ViewGroup parent, final int viewResourceId) {
+  public static Condition viewVisible(@NonNull final ViewGroup parent, final int viewResourceId) {
     return new ViewVisibleCondition(parent, viewResourceId);
   }
 
-  public static Condition viewNotPresent(@NotNull final ViewGroup parent, final int viewResourceId) {
+  public static Condition viewNotPresent(@NonNull final ViewGroup parent, final int viewResourceId) {
     return new ViewNotPresentCondition(parent, viewResourceId);
   }
 
-  public static Condition viewHasAlpha(@NotNull final View view, final float alpha) {
+  public static Condition viewHasAlpha(@NonNull final View view, final float alpha) {
     return new ViewHasAlphaCondition(view, alpha);
   }
 
@@ -57,11 +57,11 @@ public class ViewWaiter {
   }
 
   public static class ViewHasAlphaCondition implements Condition {
-    @NotNull
+    @NonNull
     private final View mView;
     private final float mAlpha;
 
-    public ViewHasAlphaCondition(@NotNull final View view, final float alpha) {
+    public ViewHasAlphaCondition(@NonNull final View view, final float alpha) {
       mView = view;
       mAlpha = alpha;
     }
@@ -79,11 +79,11 @@ public class ViewWaiter {
 
   public static class ViewVisibleCondition implements Condition {
 
-    @NotNull
+    @NonNull
     private final ViewGroup mParent;
     private final int mViewResourceId;
 
-    public ViewVisibleCondition(@NotNull final ViewGroup parent, final int viewResourceId) {
+    public ViewVisibleCondition(@NonNull final ViewGroup parent, final int viewResourceId) {
       mParent = parent;
       mViewResourceId = viewResourceId;
     }
@@ -105,11 +105,11 @@ public class ViewWaiter {
 
   public static class ViewNotPresentCondition implements Condition {
 
-    @NotNull
+    @NonNull
     private final ViewGroup mParent;
     private final int mViewResourceId;
 
-    public ViewNotPresentCondition(@NotNull final ViewGroup parent, final int viewResourceId) {
+    public ViewNotPresentCondition(@NonNull final ViewGroup parent, final int viewResourceId) {
       mParent = parent;
       mViewResourceId = viewResourceId;
     }

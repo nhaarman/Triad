@@ -16,8 +16,8 @@
 
 package com.nhaarman.triad;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -41,7 +41,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    *
    * @param container The {@link C} to gain control over.
    */
-  public void acquire(@NotNull final C container) {
+  public void acquire(@NonNull final C container) {
     if (container.equals(mContainer)) {
       return;
     }
@@ -70,7 +70,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    *
    * @param container The {@link C} to gain control over.
    */
-  protected void onControlGained(@NotNull final C container) {
+  protected void onControlGained(@NonNull final C container) {
   }
 
   /**
@@ -83,7 +83,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
   /**
    * Returns the {@link C} instance this {@code Presenter} controls.
    */
-  @NotNull
+  @NonNull
   public Optional<C> getContainer() {
     return Optional.of(mContainer);
   }

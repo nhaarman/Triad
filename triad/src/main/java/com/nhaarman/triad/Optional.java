@@ -16,8 +16,8 @@
 
 package com.nhaarman.triad;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
 
@@ -31,12 +31,12 @@ public class Optional<T> {
     mValue = null;
   }
 
-  private Optional(@NotNull final T value) {
+  private Optional(@NonNull final T value) {
     checkNotNull(value, "value is null.");
     mValue = value;
   }
 
-  public void ifPresent(@NotNull final Consumer<? super T> consumer) {
+  public void ifPresent(@NonNull final Consumer<? super T> consumer) {
     if (mValue != null) {
       consumer.accept(mValue);
     }
@@ -56,6 +56,6 @@ public class Optional<T> {
 
   public interface Consumer<T> {
 
-    void accept(@NotNull T t);
+    void accept(@NonNull T t);
   }
 }

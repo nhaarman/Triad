@@ -18,9 +18,9 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.Nullable;
 
 /**
  * An {@link Activity} which is the root of an application that uses Triad.
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
 
-  @NotNull
+  @NonNull
   private final TriadDelegate<M> mTriadDelegate;
 
   public TriadAppCompatActivity() {
@@ -48,7 +48,7 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
    *
    * @return The created main component.
    */
-  @NotNull
+  @NonNull
   protected abstract M createMainComponent();
 
   /**
@@ -56,7 +56,7 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
    *
    * @return The created {@link Screen}.
    */
-  @NotNull
+  @NonNull
   protected abstract Screen<?, ?, M> createInitialScreen();
 
   @Override
@@ -87,7 +87,7 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
   /**
    * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
-  @NotNull
+  @NonNull
   protected Triad getFlow() {
     return mTriadDelegate.getTriad();
   }

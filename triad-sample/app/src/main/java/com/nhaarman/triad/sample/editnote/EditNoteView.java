@@ -24,8 +24,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class EditNoteView extends RelativeLayoutContainer<EditNotePresenter, EditNoteContainer> implements EditNoteContainer {
 
@@ -52,25 +52,25 @@ public class EditNoteView extends RelativeLayoutContainer<EditNotePresenter, Edi
     getPresenter().onSaveNoteClicked();
   }
 
-  @NotNull
+  @NonNull
   @Override
   public String getTitle() {
     return mTitleET.getText().toString();
   }
 
   @Override
-  public void setTitle(@NotNull final String title) {
+  public void setTitle(@NonNull final String title) {
     mTitleET.setText(title);
   }
 
-  @NotNull
+  @NonNull
   @Override
   public String getContents() {
     return mContentsET.getText().toString();
   }
 
   @Override
-  public void setContents(@NotNull final String contents) {
+  public void setContents(@NonNull final String contents) {
     mContentsET.setText(contents);
   }
 

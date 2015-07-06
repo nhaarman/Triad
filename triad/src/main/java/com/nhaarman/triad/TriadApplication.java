@@ -17,7 +17,7 @@
 package com.nhaarman.triad;
 
 import android.app.Application;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class TriadApplication extends Application implements TriadProvider {
 
@@ -30,7 +30,7 @@ public class TriadApplication extends Application implements TriadProvider {
   }
 
   @Override
-  @NotNull
+  @NonNull
   public Triad getTriad() {
     return mTriad;
   }

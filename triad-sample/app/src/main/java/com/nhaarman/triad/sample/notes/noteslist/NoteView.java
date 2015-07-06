@@ -22,15 +22,15 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class NoteView extends RelativeLayoutContainer<NotePresenter, NoteContainer> implements NoteContainer {
 
-  @NotNull
+  @NonNull
   @InjectView(R.id.view_note_titletv)
   protected TextView mTitleTV;
 
-  @NotNull
+  @NonNull
   @InjectView(R.id.view_note_contentstv)
   protected TextView mContentsTV;
 
@@ -43,12 +43,12 @@ public class NoteView extends RelativeLayoutContainer<NotePresenter, NoteContain
   }
 
   @Override
-  public void setTitle(@NotNull final String title) {
+  public void setTitle(@NonNull final String title) {
     mTitleTV.setText(title);
   }
 
   @Override
-  public void setContents(@NotNull final String contents) {
+  public void setContents(@NonNull final String contents) {
     mContentsTV.setText(contents);
   }
 }

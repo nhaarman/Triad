@@ -16,17 +16,17 @@
 
 package com.nhaarman.triad.sample;
 
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class MainComponent {
 
-  @NotNull
+  @NonNull
   private final NoteRepository mNoteRepository;
 
-  @NotNull
+  @NonNull
   private final NoteCreator mNoteCreator;
 
-  @NotNull
+  @NonNull
   private final NoteValidator mNoteValidator;
 
   public MainComponent() {
@@ -35,12 +35,12 @@ public class MainComponent {
     mNoteValidator = new NoteValidator();
   }
 
-  @NotNull
+  @NonNull
   public NoteRepository noteRepository() {
     return mNoteRepository;
   }
 
-  @NotNull
+  @NonNull
   public NoteCreator noteCreator() {
     return mNoteCreator;
   }

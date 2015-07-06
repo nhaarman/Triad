@@ -18,8 +18,8 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.os.Bundle;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * An {@link Activity} which is the root of an application that uses Triad.
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class TriadActivity<M> extends Activity {
 
-  @NotNull
+  @NonNull
   private final TriadDelegate<M> mDelegate;
 
   @Nullable
@@ -44,7 +44,7 @@ public abstract class TriadActivity<M> extends Activity {
     mDelegate.onCreate(getActivityComponent());
   }
 
-  @NotNull
+  @NonNull
   protected synchronized M getActivityComponent() {
     if (mActivityComponent == null) {
       mActivityComponent = createActivityComponent();
@@ -58,7 +58,7 @@ public abstract class TriadActivity<M> extends Activity {
    *
    * @return The created main component.
    */
-  @NotNull
+  @NonNull
   protected abstract M createActivityComponent();
 
   @Override
@@ -89,7 +89,7 @@ public abstract class TriadActivity<M> extends Activity {
   /**
    * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
-  @NotNull
+  @NonNull
   protected Triad getTriad() {
     return mDelegate.getTriad();
   }

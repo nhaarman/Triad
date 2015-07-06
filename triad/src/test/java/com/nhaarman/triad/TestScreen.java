@@ -1,6 +1,6 @@
 package com.nhaarman.triad;
 
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class TestScreen extends Screen<TestPresenter, TestRelativeLayoutContainer, TestComponent> {
 
@@ -9,9 +9,9 @@ public class TestScreen extends Screen<TestPresenter, TestRelativeLayoutContaine
     return 0;
   }
 
-  @NotNull
+  @NonNull
   @Override
-  protected TestPresenter createPresenter(@NotNull final TestComponent testComponent) {
+  protected TestPresenter createPresenter(@NonNull final TestComponent testComponent) {
     return new TestPresenter();
   }
 }
