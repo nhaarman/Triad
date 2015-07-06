@@ -16,8 +16,10 @@
 
 package com.nhaarman.triad;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -84,13 +86,23 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * Returns the {@link C} instance this {@code Presenter} controls.
    */
   @NonNull
-  public Optional<C> getContainer() {
+  protected Optional<C> getContainer() {
     return Optional.of(mContainer);
   }
 
-  protected final String getString(final int resId) {
+  /**
+   * Return a localized formatted string from the application's package's
+   * default string table, substituting the format arguments as defined in
+   * {@link java.util.Formatter} and {@link java.lang.String#format}.
+   *
+   * @param resId Resource id for the format string
+   * @param formatArgs The format arguments that will be used for substitution.
+   *
+   * @see {@link Context#getString(int, Object...)}.
+   */
+  protected final String getString(@StringRes final int resId, @Nullable final Object... formatArgs) {
     checkState(mContainer != null, "Presenter has no control over any Container.");
 
-    return mContainer.getContext().getString(resId);
+    return mContainer.getContext().getString(resId, formatArgs);
   }
 }

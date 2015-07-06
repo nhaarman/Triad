@@ -17,9 +17,9 @@
 package com.nhaarman.triad;
 
 import android.app.Activity;
-import android.view.View;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -167,9 +167,9 @@ public class TriadDelegate<M> {
      *
      * @param screen The {@link Screen} to show.
      */
-    public void showScreen(@NonNull final Screen screen,
-                           @NonNull final Triad.Direction direction,
-                           @NonNull final Triad.Callback callback) {
+    private void showScreen(@NonNull final Screen<?, ?, M> screen,
+                            @NonNull final Triad.Direction direction,
+                            @NonNull final Triad.Callback callback) {
       checkState(mMainComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(M).");
       checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 

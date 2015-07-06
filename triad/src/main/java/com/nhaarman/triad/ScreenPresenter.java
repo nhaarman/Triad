@@ -19,6 +19,8 @@ package com.nhaarman.triad;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import static com.nhaarman.triad.Preconditions.checkState;
+
 /**
  * A {@link Presenter} class that is used in combination with a {@link Screen} and a {@link ScreenContainer}.
  *
@@ -35,9 +37,8 @@ public abstract class ScreenPresenter<P extends Presenter<P, C>, C extends Conta
    */
   @NonNull
   protected Triad getTriad() {
-    if (mTriad == null) {
-      throw new IllegalStateException("Triad is null. Make sure setTriad(Triad) has been called with a valid instance.");
-    }
+    checkState(mTriad != null, "Triad is null. Make sure setTriad(Triad) has been called with a valid instance.");
+
     return mTriad;
   }
 

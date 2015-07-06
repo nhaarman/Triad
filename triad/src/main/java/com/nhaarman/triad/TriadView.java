@@ -22,13 +22,15 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewManager;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.RelativeLayout;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import static com.nhaarman.triad.Preconditions.checkArgument;
 
 /**
  * A {@link View}, {@link TriadContainer}, which hosts all {@link View}s belonging to {@link Screen}s in the application.
@@ -59,10 +61,12 @@ public class TriadView extends RelativeLayout {
   }
 
   public void transition(@Nullable final View oldView, @Nullable final View newView, @NonNull final Triad.Callback callback) {
+    checkArgument(oldView != null || newView != null, "Both oldView and newView are null.");
+
     if (newView != null) {
       addView(newView);
       newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView, callback));
-    } else if (oldView != null) {
+    } else {
       animateViewExit(oldView);
     }
   }

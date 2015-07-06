@@ -314,20 +314,4 @@ public class Triad {
       go(mNewBackstack, Direction.BACKWARD);
     }
   }
-
-  private class StartWithTransition extends Transition {
-
-    @NonNull
-    private final Screen<?, ?, ?> mScreen;
-
-    private StartWithTransition(@NonNull final Screen<?, ?, ?> screen) {
-      mScreen = screen;
-    }
-
-    @Override
-    protected void execute() {
-      Backstack backstack = Backstack.single(mScreen);
-      go(backstack, Direction.FORWARD);
-    }
-  }
 }
