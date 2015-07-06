@@ -18,7 +18,7 @@ package com.nhaarman.triad.sample.notes;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
@@ -28,8 +28,7 @@ import android.support.annotation.NonNull;
 
 public class NotesView extends RelativeLayoutContainer<NotesPresenter, NotesContainer> implements NotesContainer {
 
-  @NonNull
-  @InjectView(R.id.view_notes_noteslistview)
+  @Bind(R.id.view_notes_noteslistview)
   protected NotesListView mNotesListView;
 
   public NotesView(final Context context, final AttributeSet attrs) {

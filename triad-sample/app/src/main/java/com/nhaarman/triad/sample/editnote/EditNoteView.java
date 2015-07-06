@@ -20,7 +20,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.EditText;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
@@ -29,10 +29,10 @@ import android.support.annotation.Nullable;
 
 public class EditNoteView extends RelativeLayoutContainer<EditNotePresenter, EditNoteContainer> implements EditNoteContainer {
 
-  @InjectView(R.id.view_editnote_titleet)
+  @Bind(R.id.view_editnote_titleet)
   protected EditText mTitleET;
 
-  @InjectView(R.id.view_editnote_contentset)
+  @Bind(R.id.view_editnote_contentset)
   protected EditText mContentsET;
 
   public EditNoteView(final Context context, final AttributeSet attrs) {

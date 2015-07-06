@@ -87,7 +87,7 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
       return;
     }
 
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
   }
 
   @Override

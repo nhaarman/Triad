@@ -86,7 +86,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * Returns the {@link C} instance this {@code Presenter} controls.
    */
   @NonNull
-  protected Optional<C> getContainer() {
+  public Optional<C> getContainer() {
     return Optional.of(mContainer);
   }
 

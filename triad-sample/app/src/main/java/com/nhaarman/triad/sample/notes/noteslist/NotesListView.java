@@ -23,7 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnItemClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.Note;
@@ -37,8 +37,7 @@ public class NotesListView extends RelativeLayoutContainer<NotesListPresenter, N
   @NonNull
   private final MyAdapter mAdapter;
 
-  @NonNull
-  @InjectView(R.id.view_notes_listview)
+  @Bind(R.id.view_notes_listview)
   protected ListView mListView;
 
   @Nullable
