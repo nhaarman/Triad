@@ -16,6 +16,7 @@
 
 package com.nhaarman.triad.sample.editnote;
 
+import com.nhaarman.triad.Consumer;
 import com.nhaarman.triad.ScreenPresenter;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteCreator;
@@ -38,7 +39,6 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
 
   @NotNull
   private final NoteRepository mNoteRepository;
-
 
   public EditNotePresenter(@Nullable final Note note,
                            @NotNull final NoteValidator noteValidator,
@@ -65,29 +65,31 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
   }
 
   public void onSaveNoteClicked() {
-    if (getContainer() == null) {
-      return;
-    }
+    //noinspection AnonymousInnerClass
+    getContainer().ifPresent(new Consumer<EditNoteContainer>() {
+      @Override
+      public void accept(@NotNull final EditNoteContainer container) {
+        String title = container.getTitle();
+        String contents = container.getContents();
 
-    String title = getContainer().getTitle();
-    String contents = getContainer().getContents();
+        if (!mNoteValidator.validateTitle(title)) {
+          container.setTitleError(getString(R.string.error_title));
+          return;
+        }
 
-    if (!mNoteValidator.validateTitle(title)) {
-      getContainer().setTitleError(getString(R.string.error_title));
-      return;
-    }
+        if (!mNoteValidator.validateContents(contents)) {
+          container.setContentsError(getString(R.string.error_contents));
+          return;
+        }
 
-    if (!mNoteValidator.validateContents(contents)) {
-      getContainer().setContentsError(getString(R.string.error_contents));
-      return;
-    }
+        if (mNote == null) {
+          mNoteCreatorMock.createNote(title, contents);
+        } else {
+          mNoteRepository.update(mNote);
+        }
 
-    if (mNote == null) {
-      mNoteCreatorMock.createNote(title, contents);
-    } else {
-      mNoteRepository.update(mNote);
-    }
-
-    getTriad().goBack();
+        getTriad().goBack();
+      }
+    });
   }
 }

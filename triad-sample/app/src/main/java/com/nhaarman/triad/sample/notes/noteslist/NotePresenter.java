@@ -16,6 +16,7 @@
 
 package com.nhaarman.triad.sample.notes.noteslist;
 
+import com.nhaarman.triad.Consumer;
 import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.Note;
 import org.jetbrains.annotations.NotNull;
@@ -35,11 +36,12 @@ public class NotePresenter extends Presenter<NotePresenter, NoteContainer> {
 
   public void setNote(@NotNull final Note note) {
     mNote = note;
-    if (getContainer() == null) {
-      return;
-    }
-
-    getContainer().setTitle(note.getTitle());
-    getContainer().setContents(note.getContents());
+    getContainer().ifPresent(new Consumer<NoteContainer>() {
+      @Override
+      public void accept(@NotNull final NoteContainer noteContainer) {
+        noteContainer.setTitle(note.getTitle());
+        noteContainer.setContents(note.getContents());
+      }
+    });
   }
 }

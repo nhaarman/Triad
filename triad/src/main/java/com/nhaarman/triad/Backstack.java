@@ -17,6 +17,7 @@
 
 package com.nhaarman.triad;
 
+import com.nhaarman.triad.Backstack.Entry;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
@@ -158,6 +159,34 @@ public final class Backstack implements Iterable<Entry> {
     @Override
     public void remove() {
       throw new UnsupportedOperationException();
+    }
+  }
+
+  @SuppressWarnings("PublicInnerClass")
+  public static class Entry {
+
+    private final long mId;
+
+    @NotNull
+    private final Screen<?, ?, ?> mScreen;
+
+    private Entry(final long id, @NotNull final Screen<?, ?, ?> screen) {
+      mId = id;
+      mScreen = screen;
+    }
+
+    public long getId() {
+      return mId;
+    }
+
+    @NotNull
+    public Screen<?, ?, ?> getScreen() {
+      return mScreen;
+    }
+
+    @Override
+    public String toString() {
+      return "{" + mId + ", " + mScreen + '}';
     }
   }
 }

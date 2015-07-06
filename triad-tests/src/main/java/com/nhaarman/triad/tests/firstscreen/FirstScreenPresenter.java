@@ -16,6 +16,7 @@
 
 package com.nhaarman.triad.tests.firstscreen;
 
+import com.nhaarman.triad.Consumer;
 import com.nhaarman.triad.ScreenPresenter;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,11 +26,16 @@ public class FirstScreenPresenter extends ScreenPresenter<FirstScreenPresenter, 
 
   @Override
   protected void onControlGained(@NotNull final FirstScreenContainer container) {
-    getContainer().setText(String.valueOf(mCounter));
+    container.setText(String.valueOf(mCounter));
   }
 
   public void onButtonClicked() {
     mCounter++;
-    getContainer().setText(String.valueOf(mCounter));
+    getContainer().ifPresent(new Consumer<FirstScreenContainer>() {
+      @Override
+      public void accept(@NotNull final FirstScreenContainer firstScreenContainer) {
+        firstScreenContainer.setText(String.valueOf(mCounter));
+      }
+    });
   }
 }

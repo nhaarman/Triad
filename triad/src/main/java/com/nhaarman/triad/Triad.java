@@ -257,8 +257,8 @@ public class Triad {
       // some arguably bad behavior on the part of clients, but it's still probably the right thing
       // to do.
       Screen<?, ?, ?> lastPopped = null;
-      for (Iterator<Entry> it = mBackstack.reverseIterator(); it.hasNext(); ) {
-        Entry entry = it.next();
+      for (Iterator<Backstack.Entry> it = mBackstack.reverseIterator(); it.hasNext(); ) {
+        Backstack.Entry entry = it.next();
 
         if (entry.getScreen().equals(mScreen)) {
           // Clear up to the target screen.

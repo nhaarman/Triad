@@ -104,7 +104,7 @@ public class TriadDelegate<M> {
     checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 
     if (mTriad.getBackstack().size() > 0) {
-      Entry entry = mTriad.getBackstack().current();
+      Backstack.Entry entry = mTriad.getBackstack().current();
       assert entry != null;
       mTriad.popTo(entry.getScreen());
     }

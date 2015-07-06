@@ -19,6 +19,8 @@ package com.nhaarman.triad;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.nhaarman.triad.Preconditions.checkState;
+
 /**
  * The Presenter class.
  *
@@ -64,7 +66,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
   /**
    * Called when the {@link Container} for this {@code Presenter} is attached to the window
    * and ready to display the state.
-   * From this point on, {@link #getContainer()} will return the {@link C} instance.
+   * From this point on, {@link #getContainer()} will return the {@link C} instance, until {@link #onControlLost()} is called.
    *
    * @param container The {@link C} to gain control over.
    */
@@ -81,16 +83,13 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
   /**
    * Returns the {@link C} instance this {@code Presenter} controls.
    */
-  @Nullable
-  public C getContainer() {
-    return mContainer;
+  @NotNull
+  public Optional<C> getContainer() {
+    return Optional.of(mContainer);
   }
 
-  @Nullable
   protected final String getString(final int resId) {
-    if (mContainer == null) {
-      return null;
-    }
+    checkState(mContainer != null, "Presenter has no control over any Container.");
 
     return mContainer.getContext().getString(resId);
   }
