@@ -257,13 +257,13 @@ public class Triad {
       // some arguably bad behavior on the part of clients, but it's still probably the right thing
       // to do.
       Screen<?, ?, ?> lastPopped = null;
-      for (Iterator<Backstack.Entry> it = mBackstack.reverseIterator(); it.hasNext(); ) {
-        Backstack.Entry entry = it.next();
+      for (Iterator<Screen<?, ?, ?>> it = mBackstack.reverseIterator(); it.hasNext(); ) {
+        Screen<?, ?, ?> screen = it.next();
 
-        if (entry.getScreen().equals(mScreen)) {
+        if (screen.equals(mScreen)) {
           // Clear up to the target screen.
           for (int i = 0; i < mBackstack.size() - count; i++) {
-            lastPopped = builder.pop().getScreen();
+            lastPopped = builder.pop();
           }
           break;
         } else {

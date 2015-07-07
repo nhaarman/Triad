@@ -32,9 +32,6 @@ import android.widget.RelativeLayout;
 
 import static com.nhaarman.triad.Preconditions.checkArgument;
 
-/**
- * A {@link View}, {@link TriadContainer}, which hosts all {@link View}s belonging to {@link Screen}s in the application.
- */
 public class TriadView extends RelativeLayout {
 
   private final long mTransitionAnimationDurationMs;

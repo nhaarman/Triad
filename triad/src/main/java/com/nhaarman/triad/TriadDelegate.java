@@ -104,9 +104,9 @@ public class TriadDelegate<M> {
     checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 
     if (mTriad.getBackstack().size() > 0) {
-      Backstack.Entry entry = mTriad.getBackstack().current();
-      assert entry != null;
-      mTriad.popTo(entry.getScreen());
+      Screen<?, ?, ?> current = mTriad.getBackstack().current();
+      assert current != null;
+      mTriad.popTo(current);
     }
   }
 
@@ -156,7 +156,7 @@ public class TriadDelegate<M> {
     @Override
     public void go(final Backstack nextBackstack, final Triad.Direction direction, final Triad.Callback callback) {
       //noinspection rawtypes
-      Screen screen = nextBackstack.current().getScreen();
+      Screen screen = nextBackstack.current();
       showScreen(screen, direction, callback);
 
       onScreenChanged(screen);
