@@ -73,12 +73,12 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
         String contents = container.getContents();
 
         if (!mNoteValidator.validateTitle(title)) {
-          container.setTitleError(getString(R.string.error_title));
+          container.setTitleError(getResources().get().getString(R.string.error_title));
           return;
         }
 
         if (!mNoteValidator.validateContents(contents)) {
-          container.setContentsError(getString(R.string.error_contents));
+          container.setContentsError(getResources().get().getString(R.string.error_contents));
           return;
         }
 

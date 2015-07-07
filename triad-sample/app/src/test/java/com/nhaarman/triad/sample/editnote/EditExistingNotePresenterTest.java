@@ -1,6 +1,8 @@
 package com.nhaarman.triad.sample.editnote;
 
 import android.content.Context;
+import android.content.res.Resources;
+import com.nhaarman.triad.Optional;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.MemoryNoteRepository;
 import com.nhaarman.triad.sample.Note;
@@ -15,6 +17,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -23,13 +27,17 @@ import static org.mockito.Mockito.when;
 public class EditExistingNotePresenterTest {
 
   private static final String TITLE = "title";
+
   private static final String CONTENTS = "contents";
 
   private EditNotePresenter mEditNotePresenter;
+
   private EditNoteContainer mEditNoteContainerMock;
 
   private Note mNote;
+
   private NoteRepository mNoteRepository;
+
   private NoteValidator mNoteValidator;
 
   private Triad mTriad;
@@ -45,8 +53,9 @@ public class EditExistingNotePresenterTest {
 
     mTriad = mock(Triad.class);
 
-    mEditNotePresenter = new EditNotePresenter(mNote, mNoteValidator, mock(NoteCreator.class), mNoteRepository);
+    mEditNotePresenter = spy(new EditNotePresenter(mNote, mNoteValidator, mock(NoteCreator.class), mNoteRepository));
     mEditNotePresenter.setTriad(mTriad);
+    doReturn(Optional.of(mock(Resources.class))).when(mEditNotePresenter).getResources();
 
     mEditNoteContainerMock = mock(EditNoteContainer.class);
     when(mEditNoteContainerMock.getContext()).thenReturn(mock(Context.class));
