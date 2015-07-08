@@ -58,6 +58,10 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * to notify implementers of this class that the {@link C} is no longer available.
    */
   public void releaseContainer() {
+    if (mContainer == null) {
+      return;
+    }
+    
     mContainer = null;
     onControlLost();
   }
