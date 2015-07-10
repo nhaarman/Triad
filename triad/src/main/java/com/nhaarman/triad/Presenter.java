@@ -61,7 +61,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
     if (mContainer == null) {
       return;
     }
-    
+
     mContainer = null;
     onControlLost();
   }

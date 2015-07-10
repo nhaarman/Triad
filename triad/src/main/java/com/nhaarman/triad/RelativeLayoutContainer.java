@@ -18,6 +18,7 @@ package com.nhaarman.triad;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.support.annotation.CallSuper;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
@@ -76,7 +77,8 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
    * @param presenter The {@link P} instance.
    */
   @Override
-  public final void setPresenter(@NonNull final P presenter) {
+  @CallSuper
+  public void setPresenter(@NonNull final P presenter) {
     mPresenter = presenter;
   }
 
