@@ -54,6 +54,10 @@ public class Optional<T> {
     return value == null ? (Optional<T>) EMPTY : new Optional<>(value);
   }
 
+  public static <T> Optional<T> empty() {
+    return (Optional<T>) EMPTY;
+  }
+
   public interface Consumer<T> {
 
     void accept(@NonNull T t);
