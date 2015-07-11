@@ -44,4 +44,14 @@ public interface Container<P extends Presenter<P, C>, C extends Container<P, C>>
    */
   @NonNull
   Context getContext();
+
+  /**
+   * Shows the soft keyboard if present.
+   */
+  void showKeyboard();
+
+  /**
+   * Hides the soft keyboard if present.
+   */
+  void hideKeyboard();
 }

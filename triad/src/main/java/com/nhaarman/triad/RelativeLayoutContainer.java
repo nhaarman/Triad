@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.util.AttributeSet;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
 import android.support.annotation.NonNull;
@@ -106,5 +107,18 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     getPresenter().releaseContainer();
+  }
+
+  @Override
+  public void hideKeyboard() {
+    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+  }
+
+  @Override
+  public void showKeyboard() {
+    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+    inputMethodManager.toggleSoftInputFromWindow(getWindowToken(), InputMethodManager.SHOW_FORCED, 0);
   }
 }
