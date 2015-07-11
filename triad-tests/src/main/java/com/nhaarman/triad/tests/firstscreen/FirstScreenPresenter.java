@@ -16,20 +16,26 @@
 
 package com.nhaarman.triad.tests.firstscreen;
 
+import com.nhaarman.triad.Optional;
 import com.nhaarman.triad.ScreenPresenter;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class FirstScreenPresenter extends ScreenPresenter<FirstScreenPresenter, FirstScreenContainer> {
 
   private int mCounter;
 
   @Override
-  protected void onControlGained(@NotNull final FirstScreenContainer container) {
-    getContainer().setText(String.valueOf(mCounter));
+  protected void onControlGained(@NonNull final FirstScreenContainer container) {
+    container.setText(String.valueOf(mCounter));
   }
 
   public void onButtonClicked() {
     mCounter++;
-    getContainer().setText(String.valueOf(mCounter));
+    getContainer().ifPresent(new Optional.Consumer<FirstScreenContainer>() {
+      @Override
+      public void accept(@NonNull final FirstScreenContainer firstScreenContainer) {
+        firstScreenContainer.setText(String.valueOf(mCounter));
+      }
+    });
   }
 }

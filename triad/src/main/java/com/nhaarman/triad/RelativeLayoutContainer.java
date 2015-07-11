@@ -18,11 +18,13 @@ package com.nhaarman.triad;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.support.annotation.CallSuper;
 import android.util.AttributeSet;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * An abstract {@link Container} instance that handles {@link Presenter} management,
@@ -61,7 +63,7 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
   /**
    * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
    */
-  @NotNull
+  @NonNull
   public P getPresenter() {
     if (mPresenter == null) {
       throw new NullPointerException("Presenter has not been set.");
@@ -76,7 +78,8 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
    * @param presenter The {@link P} instance.
    */
   @Override
-  public final void setPresenter(@NotNull final P presenter) {
+  @CallSuper
+  public void setPresenter(@NonNull final P presenter) {
     mPresenter = presenter;
   }
 
@@ -87,7 +90,7 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
       return;
     }
 
-    ButterKnife.inject(this);
+    ButterKnife.bind(this);
   }
 
   @Override
@@ -104,5 +107,18 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     getPresenter().releaseContainer();
+  }
+
+  @Override
+  public void hideKeyboard() {
+    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+  }
+
+  @Override
+  public void showKeyboard() {
+    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+    inputMethodManager.toggleSoftInputFromWindow(getWindowToken(), InputMethodManager.SHOW_FORCED, 0);
   }
 }

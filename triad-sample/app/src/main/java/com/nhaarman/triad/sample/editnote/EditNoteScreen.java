@@ -20,8 +20,8 @@ import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.sample.MainComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.R;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class EditNoteScreen extends Screen<EditNotePresenter, EditNoteContainer, MainComponent> {
 
@@ -46,9 +46,9 @@ public class EditNoteScreen extends Screen<EditNotePresenter, EditNoteContainer,
     return R.layout.view_editnote;
   }
 
-  @NotNull
+  @NonNull
   @Override
-  protected EditNotePresenter createPresenter(@NotNull final MainComponent mainComponent) {
+  protected EditNotePresenter createPresenter(@NonNull final MainComponent mainComponent) {
     return new EditNotePresenter(mNote,
         mainComponent.noteValidator(),
         mainComponent.noteCreator(),

@@ -1,6 +1,6 @@
 package com.nhaarman.triad;
 
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class TestPresenter extends ScreenPresenter<TestPresenter, TestRelativeLayoutContainer> {
 
@@ -9,7 +9,7 @@ public class TestPresenter extends ScreenPresenter<TestPresenter, TestRelativeLa
   public boolean onControlLostCalled;
 
   @Override
-  protected void onControlGained(@NotNull final TestRelativeLayoutContainer container) {
+  protected void onControlGained(@NonNull final TestRelativeLayoutContainer container) {
     onControlGainedCalled = true;
   }
 
@@ -18,7 +18,7 @@ public class TestPresenter extends ScreenPresenter<TestPresenter, TestRelativeLa
     onControlLostCalled = true;
   }
 
-  @NotNull
+  @NonNull
   @Override
   public Triad getTriad() {
     return super.getTriad();

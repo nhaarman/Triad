@@ -17,19 +17,19 @@
 package com.nhaarman.triad.sample;
 
 import javax.inject.Inject;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class NoteCreator {
 
-  @NotNull
+  @NonNull
   private final NoteRepository mNoteRepository;
 
   @Inject
-  public NoteCreator(@NotNull final NoteRepository noteRepository) {
+  public NoteCreator(@NonNull final NoteRepository noteRepository) {
     mNoteRepository = noteRepository;
   }
 
-  @NotNull
+  @NonNull
   public Note createNote(final String title, final String contents) {
     Note note = new Note();
 

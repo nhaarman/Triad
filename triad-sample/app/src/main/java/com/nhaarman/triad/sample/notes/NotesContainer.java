@@ -18,10 +18,10 @@ package com.nhaarman.triad.sample.notes;
 
 import com.nhaarman.triad.ScreenContainer;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 interface NotesContainer extends ScreenContainer<NotesPresenter, NotesContainer> {
 
-  @NotNull
+  @NonNull
   NotesListContainer getNotesListContainer();
 }

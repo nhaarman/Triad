@@ -17,9 +17,9 @@
 package com.nhaarman.triad;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -44,7 +44,7 @@ public class TriadDelegate<M> {
   /**
    * The {@link Activity} instance this {@code TriadDelegate} is bound to.
    */
-  @NotNull
+  @NonNull
   private final Activity mActivity;
 
   @Nullable
@@ -71,11 +71,11 @@ public class TriadDelegate<M> {
 
   private TriadView mTriadView;
 
-  public TriadDelegate(@NotNull final Activity activity) {
+  public TriadDelegate(@NonNull final Activity activity) {
     mActivity = activity;
   }
 
-  public void onCreate(@NotNull final M mainComponent) {
+  public void onCreate(@NonNull final M mainComponent) {
     checkState(mActivity.getApplication() instanceof TriadProvider, "Make sure your Application class implements TriadProvider.");
 
     mMainComponent = mainComponent;
@@ -104,9 +104,9 @@ public class TriadDelegate<M> {
     checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 
     if (mTriad.getBackstack().size() > 0) {
-      Entry entry = mTriad.getBackstack().current();
-      assert entry != null;
-      mTriad.popTo(entry.getScreen());
+      Screen<?, ?, ?> current = mTriad.getBackstack().current();
+      assert current != null;
+      mTriad.popTo(current);
     }
   }
 
@@ -131,7 +131,7 @@ public class TriadDelegate<M> {
   /**
    * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
-  @NotNull
+  @NonNull
   public Triad getTriad() {
     checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 
@@ -145,7 +145,7 @@ public class TriadDelegate<M> {
     mOnScreenChangedListener = onScreenChangedListener;
   }
 
-  private void onScreenChanged(@NotNull final Screen<?, ?, M> screen) {
+  private void onScreenChanged(@NonNull final Screen<?, ?, M> screen) {
     if (mOnScreenChangedListener != null) {
       mOnScreenChangedListener.onScreenChanged(screen);
     }
@@ -156,7 +156,7 @@ public class TriadDelegate<M> {
     @Override
     public void go(final Backstack nextBackstack, final Triad.Direction direction, final Triad.Callback callback) {
       //noinspection rawtypes
-      Screen screen = nextBackstack.current().getScreen();
+      Screen screen = nextBackstack.current();
       showScreen(screen, direction, callback);
 
       onScreenChanged(screen);
@@ -167,9 +167,9 @@ public class TriadDelegate<M> {
      *
      * @param screen The {@link Screen} to show.
      */
-    public void showScreen(@NotNull final Screen screen,
-                           @NotNull final Triad.Direction direction,
-                           @NotNull final Triad.Callback callback) {
+    private void showScreen(@NonNull final Screen<?, ?, M> screen,
+                            @NonNull final Triad.Direction direction,
+                            @NonNull final Triad.Callback callback) {
       checkState(mMainComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(M).");
       checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 

@@ -19,19 +19,17 @@ package com.nhaarman.triad.sample.notes.noteslist;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
-import butterknife.InjectView;
+import butterknife.Bind;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.R;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class NoteView extends RelativeLayoutContainer<NotePresenter, NoteContainer> implements NoteContainer {
 
-  @NotNull
-  @InjectView(R.id.view_note_titletv)
+  @Bind(R.id.view_note_titletv)
   protected TextView mTitleTV;
 
-  @NotNull
-  @InjectView(R.id.view_note_contentstv)
+  @Bind(R.id.view_note_contentstv)
   protected TextView mContentsTV;
 
   public NoteView(final Context context, final AttributeSet attrs) {
@@ -43,12 +41,12 @@ public class NoteView extends RelativeLayoutContainer<NotePresenter, NoteContain
   }
 
   @Override
-  public void setTitle(@NotNull final String title) {
+  public void setTitle(@NonNull final String title) {
     mTitleTV.setText(title);
   }
 
   @Override
-  public void setContents(@NotNull final String contents) {
+  public void setContents(@NonNull final String contents) {
     mContentsTV.setText(contents);
   }
 }

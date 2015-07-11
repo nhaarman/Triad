@@ -20,12 +20,12 @@ import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteRepository;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class NotesListPresenter extends Presenter<NotesListPresenter, NotesListContainer> {
 
-  @NotNull
+  @NonNull
   private final NoteRepository mNoteRepository;
 
   @Nullable
@@ -34,12 +34,12 @@ public class NotesListPresenter extends Presenter<NotesListPresenter, NotesListC
   @Nullable
   private OnNoteClickedListener mListener;
 
-  public NotesListPresenter(@NotNull final NoteRepository noteRepository) {
+  public NotesListPresenter(@NonNull final NoteRepository noteRepository) {
     mNoteRepository = noteRepository;
   }
 
   @Override
-  protected void onControlGained(@NotNull final NotesListContainer container) {
+  protected void onControlGained(@NonNull final NotesListContainer container) {
     mNotes = mNoteRepository.findAll();
     container.setNotes(mNotes);
   }
@@ -58,6 +58,6 @@ public class NotesListPresenter extends Presenter<NotesListPresenter, NotesListC
 
   public interface OnNoteClickedListener {
 
-    void onNoteClicked(@NotNull Note note);
+    void onNoteClicked(@NonNull Note note);
   }
 }

@@ -16,8 +16,9 @@
 
 package com.nhaarman.triad;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.content.res.Resources;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * The Presenter class.
@@ -39,7 +40,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    *
    * @param container The {@link C} to gain control over.
    */
-  public void acquire(@NotNull final C container) {
+  public void acquire(@NonNull final C container) {
     if (container.equals(mContainer)) {
       return;
     }
@@ -57,6 +58,10 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * to notify implementers of this class that the {@link C} is no longer available.
    */
   public void releaseContainer() {
+    if (mContainer == null) {
+      return;
+    }
+
     mContainer = null;
     onControlLost();
   }
@@ -64,11 +69,11 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
   /**
    * Called when the {@link Container} for this {@code Presenter} is attached to the window
    * and ready to display the state.
-   * From this point on, {@link #getContainer()} will return the {@link C} instance.
+   * From this point on, {@link #getContainer()} will return the {@link C} instance, until {@link #onControlLost()} is called.
    *
    * @param container The {@link C} to gain control over.
    */
-  protected void onControlGained(@NotNull final C container) {
+  protected void onControlGained(@NonNull final C container) {
   }
 
   /**
@@ -81,17 +86,20 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
   /**
    * Returns the {@link C} instance this {@code Presenter} controls.
    */
-  @Nullable
-  public C getContainer() {
-    return mContainer;
+  @NonNull
+  public Optional<C> getContainer() {
+    return Optional.of(mContainer);
   }
 
-  @Nullable
-  protected final String getString(final int resId) {
+  /**
+   * Return a Resources instance for your application's package.
+   */
+  @NonNull
+  public Optional<Resources> getResources() {
     if (mContainer == null) {
-      return null;
+      return Optional.of(null);
+    } else {
+      return Optional.of(mContainer.getContext().getResources());
     }
-
-    return mContainer.getContext().getString(resId);
   }
 }

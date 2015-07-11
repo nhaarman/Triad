@@ -16,10 +16,10 @@
 
 package com.nhaarman.triad;
 
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public interface TriadProvider {
 
-  @NotNull
+  @NonNull
   Triad getTriad();
 }

@@ -20,7 +20,7 @@ import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.sample.MainComponent;
 import com.nhaarman.triad.sample.R;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class NotesScreen extends Screen<NotesPresenter, NotesContainer, MainComponent> {
 
@@ -29,9 +29,9 @@ public class NotesScreen extends Screen<NotesPresenter, NotesContainer, MainComp
     return R.layout.view_notes;
   }
 
-  @NotNull
+  @NonNull
   @Override
-  protected NotesPresenter createPresenter(@NotNull final MainComponent mainComponent) {
+  protected NotesPresenter createPresenter(@NonNull final MainComponent mainComponent) {
     NotesListPresenter notesListPresenter = new NotesListPresenter(mainComponent.noteRepository());
     return new NotesPresenter(notesListPresenter);
   }

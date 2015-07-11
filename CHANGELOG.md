@@ -1,5 +1,12 @@
 # Changelog
 
+Version 0.7.0 *(2015-07-11)*
+-----------------------------------
+
+ * Made `Presenter.getContainer()` return `Optional` instance.
+ * Updated ButterKnife
+ * Bugfixes
+
 Version 0.6.0 *(2015-07-06)*
 -----------------------------------
 

@@ -17,20 +17,20 @@
 package com.nhaarman.triad.sample.editnote;
 
 import com.nhaarman.triad.ScreenContainer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public interface EditNoteContainer extends ScreenContainer<EditNotePresenter, EditNoteContainer> {
 
-  @NotNull
+  @NonNull
   String getTitle();
 
-  void setTitle(@NotNull String title);
+  void setTitle(@NonNull String title);
 
-  @NotNull
+  @NonNull
   String getContents();
 
-  void setContents(@NotNull String contents);
+  void setContents(@NonNull String contents);
 
   void setTitleError(@Nullable String message);
 

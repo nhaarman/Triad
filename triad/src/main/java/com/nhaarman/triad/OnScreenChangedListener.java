@@ -16,7 +16,7 @@
 
 package com.nhaarman.triad;
 
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 /**
  * An interface to provide a callback when a new screen is presented.
@@ -30,5 +30,5 @@ public interface OnScreenChangedListener<M> {
    *
    * @param screen The newly added screen.
    */
-  void onScreenChanged(@NotNull Screen<?, ?, M> screen);
+  void onScreenChanged(@NonNull Screen<?, ?, M> screen);
 }

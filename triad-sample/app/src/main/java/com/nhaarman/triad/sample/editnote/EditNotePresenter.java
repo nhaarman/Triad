@@ -16,34 +16,34 @@
 
 package com.nhaarman.triad.sample.editnote;
 
+import com.nhaarman.triad.Optional;
 import com.nhaarman.triad.ScreenPresenter;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteCreator;
 import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNoteContainer> {
 
   @Nullable
   private final Note mNote;
 
-  @NotNull
+  @NonNull
   private final NoteValidator mNoteValidator;
 
-  @NotNull
+  @NonNull
   private final NoteCreator mNoteCreatorMock;
 
-  @NotNull
+  @NonNull
   private final NoteRepository mNoteRepository;
 
-
   public EditNotePresenter(@Nullable final Note note,
-                           @NotNull final NoteValidator noteValidator,
-                           @NotNull final NoteCreator noteCreatorMock,
-                           @NotNull final NoteRepository noteRepository) {
+                           @NonNull final NoteValidator noteValidator,
+                           @NonNull final NoteCreator noteCreatorMock,
+                           @NonNull final NoteRepository noteRepository) {
     mNote = note;
     mNoteValidator = noteValidator;
     mNoteCreatorMock = noteCreatorMock;
@@ -51,7 +51,7 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
   }
 
   @Override
-  protected void onControlGained(@NotNull final EditNoteContainer container) {
+  protected void onControlGained(@NonNull final EditNoteContainer container) {
     String title = "";
     String contents = "";
 
@@ -65,29 +65,31 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
   }
 
   public void onSaveNoteClicked() {
-    if (getContainer() == null) {
-      return;
-    }
+    //noinspection AnonymousInnerClass
+    getContainer().ifPresent(new Optional.Consumer<EditNoteContainer>() {
+      @Override
+      public void accept(@NonNull final EditNoteContainer container) {
+        String title = container.getTitle();
+        String contents = container.getContents();
 
-    String title = getContainer().getTitle();
-    String contents = getContainer().getContents();
+        if (!mNoteValidator.validateTitle(title)) {
+          container.setTitleError(getResources().get().getString(R.string.error_title));
+          return;
+        }
 
-    if (!mNoteValidator.validateTitle(title)) {
-      getContainer().setTitleError(getString(R.string.error_title));
-      return;
-    }
+        if (!mNoteValidator.validateContents(contents)) {
+          container.setContentsError(getResources().get().getString(R.string.error_contents));
+          return;
+        }
 
-    if (!mNoteValidator.validateContents(contents)) {
-      getContainer().setContentsError(getString(R.string.error_contents));
-      return;
-    }
+        if (mNote == null) {
+          mNoteCreatorMock.createNote(title, contents);
+        } else {
+          mNoteRepository.update(mNote);
+        }
 
-    if (mNote == null) {
-      mNoteCreatorMock.createNote(title, contents);
-    } else {
-      mNoteRepository.update(mNote);
-    }
-
-    getTriad().goBack();
+        getTriad().goBack();
+      }
+    });
   }
 }

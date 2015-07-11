@@ -3,12 +3,10 @@ package com.nhaarman.triad;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
 
 @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
 public class PresenterTest {
@@ -21,12 +19,12 @@ public class PresenterTest {
   }
 
   @Test
-  public void initially_theContainerIsNull() {
-    assertThat(mPresenter.getContainer(), is(nullValue()));
+  public void initially_theContainerIsPresent() {
+    assertThat(mPresenter.getContainer().isPresent(), is(false));
   }
 
   @Test
-  public void afterAcquiringContainer_theContainerIsNotNull() {
+  public void afterAcquiringContainer_theContainerIsPresent() {
     /* Given */
     TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
 
@@ -34,11 +32,11 @@ public class PresenterTest {
     mPresenter.acquire(container);
 
     /* Then */
-    assertThat(mPresenter.getContainer(), is(not(nullValue())));
+    assertThat(mPresenter.getContainer().isPresent(), is(true));
   }
 
   @Test
-  public void afterReleasingContainer_theContainerIsNull() {
+  public void afterReleasingContainer_theContainerIsNotPresent() {
     /* Given */
     TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
     mPresenter.acquire(container);
@@ -47,7 +45,7 @@ public class PresenterTest {
     mPresenter.releaseContainer();
 
     /* Then */
-    assertThat(mPresenter.getContainer(), is(nullValue()));
+    assertThat(mPresenter.getContainer().isPresent(), is(false));
   }
 
   @Test

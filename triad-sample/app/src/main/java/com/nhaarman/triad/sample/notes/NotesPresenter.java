@@ -20,20 +20,20 @@ import com.nhaarman.triad.ScreenPresenter;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 class NotesPresenter extends ScreenPresenter<NotesPresenter, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
 
-  @NotNull
+  @NonNull
   private final NotesListPresenter mNotesListPresenter;
 
-  NotesPresenter(@NotNull final NotesListPresenter notesListPresenter) {
+  NotesPresenter(@NonNull final NotesListPresenter notesListPresenter) {
     mNotesListPresenter = notesListPresenter;
     mNotesListPresenter.setNoteClickedListener(this);
   }
 
   @Override
-  protected void onControlGained(@NotNull final NotesContainer container) {
+  protected void onControlGained(@NonNull final NotesContainer container) {
     container.getNotesListContainer().setPresenter(mNotesListPresenter);
   }
 
@@ -42,7 +42,7 @@ class NotesPresenter extends ScreenPresenter<NotesPresenter, NotesContainer> imp
   }
 
   @Override
-  public void onNoteClicked(@NotNull final Note note) {
+  public void onNoteClicked(@NonNull final Note note) {
     getTriad().goTo(new EditNoteScreen(note));
   }
 }

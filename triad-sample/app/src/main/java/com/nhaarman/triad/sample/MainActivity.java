@@ -19,7 +19,7 @@ package com.nhaarman.triad.sample;
 import android.os.Bundle;
 import com.nhaarman.triad.TriadActivity;
 import com.nhaarman.triad.sample.notes.NotesScreen;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class MainActivity extends TriadActivity<MainComponent> {
 
@@ -31,7 +31,7 @@ public class MainActivity extends TriadActivity<MainComponent> {
   }
 
   @Override
-  @NotNull
+  @NonNull
   protected MainComponent createActivityComponent() {
     return new MainComponent();
   }

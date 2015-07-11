@@ -18,8 +18,8 @@
 package com.nhaarman.triad;
 
 import java.util.Iterator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -31,31 +31,31 @@ public class Triad {
   @Nullable
   private Listener mListener;
 
-  @NotNull
+  @NonNull
   private Backstack mBackstack;
 
   @Nullable
   private Transition mTransition;
 
-  private Triad(@NotNull final Backstack backstack) {
+  private Triad(@NonNull final Backstack backstack) {
     mBackstack = backstack;
   }
 
-  private Triad(@NotNull final Backstack backstack, @Nullable final Listener listener) {
+  private Triad(@NonNull final Backstack backstack, @Nullable final Listener listener) {
     mListener = listener;
     mBackstack = backstack;
   }
 
-  public void setListener(@NotNull final Listener listener) {
+  public void setListener(@NonNull final Listener listener) {
     mListener = listener;
   }
 
-  @NotNull
+  @NonNull
   public Backstack getBackstack() {
     return mBackstack;
   }
 
-  public void startWith(@NotNull final Screen<?, ?, ?> screen) {
+  public void startWith(@NonNull final Screen<?, ?, ?> screen) {
     if (mBackstack.size() != 0) {
       return;
     }
@@ -63,17 +63,17 @@ public class Triad {
     mBackstack = Backstack.single(screen);
   }
 
-  public void goTo(@NotNull final Screen<?, ?, ?> screen) {
+  public void goTo(@NonNull final Screen<?, ?, ?> screen) {
     checkState(mBackstack.size() > 0, "Use startWith(Screen) to show your first Screen.");
 
     move(new GoToTransition(screen));
   }
 
-  public void popTo(@NotNull final Screen<?, ?, ?> screen) {
+  public void popTo(@NonNull final Screen<?, ?, ?> screen) {
     move(new PopToTransition(screen));
   }
 
-  public void replaceWith(@NotNull final Screen<?, ?, ?> screen) {
+  public void replaceWith(@NonNull final Screen<?, ?, ?> screen) {
     move(new ReplaceWithTransition(screen));
   }
 
@@ -85,15 +85,15 @@ public class Triad {
     return canGoBack;
   }
 
-  public void forward(@NotNull final Backstack newBackstack) {
+  public void forward(@NonNull final Backstack newBackstack) {
     move(new ForwardTransition(newBackstack));
   }
 
-  public void backward(@NotNull final Backstack newBackstack) {
+  public void backward(@NonNull final Backstack newBackstack) {
     move(new BackwardTransition(newBackstack));
   }
 
-  private void move(@NotNull final Transition transition) {
+  private void move(@NonNull final Transition transition) {
     if (mTransition == null || mTransition.isFinished()) {
       mTransition = transition;
       transition.execute();
@@ -102,13 +102,13 @@ public class Triad {
     }
   }
 
-  @NotNull
+  @NonNull
   public static Triad emptyInstance() {
     return new Triad(Backstack.emptyBuilder().build());
   }
 
-  @NotNull
-  public static Triad newInstance(@NotNull final Backstack backstack, @NotNull final Listener listener) {
+  @NonNull
+  public static Triad newInstance(@NonNull final Backstack backstack, @NonNull final Listener listener) {
     return new Triad(backstack, listener);
   }
 
@@ -152,7 +152,7 @@ public class Triad {
     @Nullable
     private Backstack mNextBackstack;
 
-    void enqueue(@NotNull final Transition transition) {
+    void enqueue(@NonNull final Transition transition) {
       if (mNext == null) {
         mNext = transition;
       } else {
@@ -207,10 +207,10 @@ public class Triad {
 
   private class ReplaceWithTransition extends Transition {
 
-    @NotNull
+    @NonNull
     private final Screen<?, ?, ?> mScreen;
 
-    private ReplaceWithTransition(@NotNull final Screen<?, ?, ?> screen) {
+    private ReplaceWithTransition(@NonNull final Screen<?, ?, ?> screen) {
       mScreen = screen;
     }
 
@@ -227,10 +227,10 @@ public class Triad {
 
   private class ForwardTransition extends Transition {
 
-    @NotNull
+    @NonNull
     private final Backstack mNewBackstack;
 
-    private ForwardTransition(@NotNull final Backstack newBackstack) {
+    private ForwardTransition(@NonNull final Backstack newBackstack) {
       mNewBackstack = newBackstack;
     }
 
@@ -242,10 +242,10 @@ public class Triad {
 
   private class PopToTransition extends Transition {
 
-    @NotNull
+    @NonNull
     private final Screen<?, ?, ?> mScreen;
 
-    private PopToTransition(@NotNull final Screen<?, ?, ?> screen) {
+    private PopToTransition(@NonNull final Screen<?, ?, ?> screen) {
       mScreen = screen;
     }
 
@@ -257,13 +257,13 @@ public class Triad {
       // some arguably bad behavior on the part of clients, but it's still probably the right thing
       // to do.
       Screen<?, ?, ?> lastPopped = null;
-      for (Iterator<Entry> it = mBackstack.reverseIterator(); it.hasNext(); ) {
-        Entry entry = it.next();
+      for (Iterator<Screen<?, ?, ?>> it = mBackstack.reverseIterator(); it.hasNext(); ) {
+        Screen<?, ?, ?> screen = it.next();
 
-        if (entry.getScreen().equals(mScreen)) {
+        if (screen.equals(mScreen)) {
           // Clear up to the target screen.
           for (int i = 0; i < mBackstack.size() - count; i++) {
-            lastPopped = builder.pop().getScreen();
+            lastPopped = builder.pop();
           }
           break;
         } else {
@@ -286,10 +286,10 @@ public class Triad {
 
   private class GoToTransition extends Transition {
 
-    @NotNull
+    @NonNull
     private final Screen<?, ?, ?> mScreen;
 
-    private GoToTransition(@NotNull final Screen<?, ?, ?> screen) {
+    private GoToTransition(@NonNull final Screen<?, ?, ?> screen) {
       mScreen = screen;
     }
 
@@ -302,32 +302,16 @@ public class Triad {
 
   private class BackwardTransition extends Transition {
 
-    @NotNull
+    @NonNull
     private final Backstack mNewBackstack;
 
-    private BackwardTransition(@NotNull final Backstack newBackstack) {
+    private BackwardTransition(@NonNull final Backstack newBackstack) {
       mNewBackstack = newBackstack;
     }
 
     @Override
     public void execute() {
       go(mNewBackstack, Direction.BACKWARD);
-    }
-  }
-
-  private class StartWithTransition extends Transition {
-
-    @NotNull
-    private final Screen<?, ?, ?> mScreen;
-
-    private StartWithTransition(@NotNull final Screen<?, ?, ?> screen) {
-      mScreen = screen;
-    }
-
-    @Override
-    protected void execute() {
-      Backstack backstack = Backstack.single(mScreen);
-      go(backstack, Direction.FORWARD);
     }
   }
 }

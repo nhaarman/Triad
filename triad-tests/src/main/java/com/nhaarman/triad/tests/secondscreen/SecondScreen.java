@@ -19,7 +19,7 @@ package com.nhaarman.triad.tests.secondscreen;
 import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.tests.R;
 import com.nhaarman.triad.tests.TestComponent;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class SecondScreen extends Screen<SecondScreenPresenter, SecondScreenContainer, TestComponent> {
 
@@ -28,9 +28,9 @@ public class SecondScreen extends Screen<SecondScreenPresenter, SecondScreenCont
     return R.layout.view_screen_second;
   }
 
-  @NotNull
+  @NonNull
   @Override
-  protected SecondScreenPresenter createPresenter(@NotNull final TestComponent testComponent) {
+  protected SecondScreenPresenter createPresenter(@NonNull final TestComponent testComponent) {
     return new SecondScreenPresenter();
   }
 }

@@ -17,10 +17,14 @@
 package com.nhaarman.triad;
 
 import android.app.Application;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import static com.nhaarman.triad.Preconditions.checkState;
 
 public class TriadApplication extends Application implements TriadProvider {
 
+  @Nullable
   private Triad mTriad;
 
   @Override
@@ -30,8 +34,10 @@ public class TriadApplication extends Application implements TriadProvider {
   }
 
   @Override
-  @NotNull
+  @NonNull
   public Triad getTriad() {
+    checkState(mTriad != null, "Calling getTriad() before onCreate().");
+
     return mTriad;
   }
 }

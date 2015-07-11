@@ -22,33 +22,26 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Describes the history of a {@link Triad} at a specific point in time.
  */
-public final class Backstack implements Iterable<Entry> {
+public final class Backstack implements Iterable<Screen<?, ?, ?>> {
 
-  private final long mHighestId;
+  private final Deque<Screen<?, ?, ?>> mBackstack;
 
-  private final Deque<Entry> mBackstack;
-
-  private Backstack(final long highestId, final Deque<Entry> backstack) {
-    mHighestId = highestId;
+  private Backstack(final Deque<Screen<?, ?, ?>> backstack) {
     mBackstack = backstack;
   }
 
-  public long getHighestId() {
-    return mHighestId;
-  }
-
   @Override
-  public Iterator<Entry> iterator() {
+  public Iterator<Screen<?, ?, ?>> iterator() {
     return new ReadIterator<>(mBackstack.iterator());
   }
 
-  public Iterator<Entry> reverseIterator() {
+  public Iterator<Screen<?, ?, ?>> reverseIterator() {
     return new ReadIterator<>(mBackstack.descendingIterator());
   }
 
@@ -57,7 +50,7 @@ public final class Backstack implements Iterable<Entry> {
   }
 
   @Nullable
-  public Entry current() {
+  public Screen<?, ?, ?> current() {
     return mBackstack.peek();
   }
 
@@ -65,7 +58,7 @@ public final class Backstack implements Iterable<Entry> {
    * Get a builder to modify a copy of this backstack.
    */
   public Builder buildUpon() {
-    return new Builder(mHighestId, mBackstack);
+    return new Builder(mBackstack);
   }
 
   @Override
@@ -74,7 +67,7 @@ public final class Backstack implements Iterable<Entry> {
   }
 
   public static Builder emptyBuilder() {
-    return new Builder(-1, Collections.<Entry>emptyList());
+    return new Builder(Collections.<Screen<?, ?, ?>>emptyList());
   }
 
   /**
@@ -86,54 +79,49 @@ public final class Backstack implements Iterable<Entry> {
 
   public static final class Builder {
 
-    @NotNull
-    private final Deque<Entry> mBackstack;
+    @NonNull
+    private final Deque<Screen<?, ?, ?>> mBackstack;
 
-    private long mHighestId;
-
-    Builder(final long highestId, @NotNull final Collection<Entry> backstack) {
-      mHighestId = highestId;
+    Builder(@NonNull final Collection<Screen<?, ?, ?>> backstack) {
       mBackstack = new ArrayDeque<>(backstack);
     }
 
-    @NotNull
-    public Builder push(@NotNull final Screen<?, ?, ?> screen) {
-      mHighestId++;
-      mBackstack.push(new Entry(mHighestId, screen));
+    @NonNull
+    public Builder push(@NonNull final Screen<?, ?, ?> screen) {
+      mBackstack.push(screen);
 
       return this;
     }
 
-    @NotNull
-    public Builder addAll(@NotNull final Collection<Screen<?, ?, ?>> screens) {
+    @NonNull
+    public Builder addAll(@NonNull final Collection<Screen<?, ?, ?>> screens) {
       for (Screen<?, ?, ?> screen : screens) {
-        mHighestId++;
-        mBackstack.push(new Entry(mHighestId, screen));
+        mBackstack.push(screen);
       }
 
       return this;
     }
 
     @Nullable
-    public Entry peek() {
+    public Screen<?, ?, ?> peek() {
       return mBackstack.peek();
     }
 
     @Nullable
-    public Entry pop() {
+    public Screen<?, ?, ?> pop() {
       return mBackstack.pop();
     }
 
-    @NotNull
+    @NonNull
     public Builder clear() {
       mBackstack.clear();
 
       return this;
     }
 
-    @NotNull
+    @NonNull
     public Backstack build() {
-      return new Backstack(mHighestId, mBackstack);
+      return new Backstack(mBackstack);
     }
   }
 

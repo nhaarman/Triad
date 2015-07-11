@@ -19,7 +19,7 @@ package com.nhaarman.triad.tests.firstscreen;
 import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.tests.R;
 import com.nhaarman.triad.tests.TestComponent;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class FirstScreen extends Screen<FirstScreenPresenter, FirstScreenContainer, TestComponent> {
 
@@ -28,9 +28,9 @@ public class FirstScreen extends Screen<FirstScreenPresenter, FirstScreenContain
     return R.layout.view_screen_first;
   }
 
-  @NotNull
+  @NonNull
   @Override
-  protected FirstScreenPresenter createPresenter(@NotNull final TestComponent testComponent) {
+  protected FirstScreenPresenter createPresenter(@NonNull final TestComponent testComponent) {
     return new FirstScreenPresenter();
   }
 }

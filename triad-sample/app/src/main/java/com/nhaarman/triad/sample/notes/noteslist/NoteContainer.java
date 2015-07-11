@@ -17,14 +17,14 @@
 package com.nhaarman.triad.sample.notes.noteslist;
 
 import com.nhaarman.triad.Container;
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public interface NoteContainer extends Container<NotePresenter, NoteContainer> {
 
-  void setTitle(@NotNull String title);
+  void setTitle(@NonNull String title);
 
-  void setContents(@NotNull String contents);
+  void setContents(@NonNull String contents);
 
-  @NotNull
+  @NonNull
   NotePresenter getPresenter();
 }

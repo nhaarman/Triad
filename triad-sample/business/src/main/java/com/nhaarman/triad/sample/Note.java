@@ -16,7 +16,7 @@
 
 package com.nhaarman.triad.sample;
 
-import org.jetbrains.annotations.NotNull;
+import android.support.annotation.NonNull;
 
 public class Note implements Comparable<Note> {
 
@@ -49,7 +49,7 @@ public class Note implements Comparable<Note> {
   }
 
   @Override
-  public int compareTo(@NotNull final Note another) {
+  public int compareTo(@NonNull final Note another) {
     return Long.valueOf(mCreated).compareTo(another.getCreated());
   }
 }

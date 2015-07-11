@@ -16,10 +16,11 @@
 
 package com.nhaarman.triad.sample.notes.noteslist;
 
+import com.nhaarman.triad.Optional;
 import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.Note;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class NotePresenter extends Presenter<NotePresenter, NoteContainer> {
 
@@ -27,19 +28,20 @@ public class NotePresenter extends Presenter<NotePresenter, NoteContainer> {
   private Note mNote;
 
   @Override
-  protected void onControlGained(@NotNull final NoteContainer container) {
+  protected void onControlGained(@NonNull final NoteContainer container) {
     if (mNote != null) {
       setNote(mNote);
     }
   }
 
-  public void setNote(@NotNull final Note note) {
+  public void setNote(@NonNull final Note note) {
     mNote = note;
-    if (getContainer() == null) {
-      return;
-    }
-
-    getContainer().setTitle(note.getTitle());
-    getContainer().setContents(note.getContents());
+    getContainer().ifPresent(new Optional.Consumer<NoteContainer>() {
+      @Override
+      public void accept(@NonNull final NoteContainer noteContainer) {
+        noteContainer.setTitle(note.getTitle());
+        noteContainer.setContents(note.getContents());
+      }
+    });
   }
 }

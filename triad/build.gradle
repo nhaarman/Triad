@@ -13,12 +13,11 @@ apply from: rootProject.projectDir.absolutePath + '/gradle/bintray.gradle'
 apply from: rootProject.projectDir.absolutePath + '/gradle/artifactory.gradle'
 
 dependencies {
-
   /* Butter Knife */
-  compile 'com.jakewharton:butterknife:6.1.0'
+  compile 'com.jakewharton:butterknife:7.0.1'
 
   /* Annotations library */
-  provided 'org.jetbrains:annotations:13.0'
+  provided 'com.android.support:support-annotations:22.2.0'
 
   /* Tests */
   testCompile 'junit:junit:4.12'
