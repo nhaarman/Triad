@@ -30,17 +30,28 @@ import android.support.annotation.Nullable;
 public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
 
   @NonNull
-  private final TriadDelegate<M> mTriadDelegate;
+  private final TriadDelegate<M> mDelegate;
+
+  @Nullable
+  private M mActivityComponent;
 
   public TriadAppCompatActivity() {
-    mTriadDelegate = new TriadDelegate<>(this);
+    mDelegate = new TriadDelegate<>(this);
   }
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mDelegate.onCreate(getActivityComponent());
+  }
 
-    mTriadDelegate.onCreate(createMainComponent());
+  @NonNull
+  protected synchronized M getActivityComponent() {
+    if (mActivityComponent == null) {
+      mActivityComponent = createActivityComponent();
+    }
+
+    return mActivityComponent;
   }
 
   /**
@@ -49,37 +60,29 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
    * @return The created main component.
    */
   @NonNull
-  protected abstract M createMainComponent();
-
-  /**
-   * Creates the {@link Screen} that is to be shown when the application starts.
-   *
-   * @return The created {@link Screen}.
-   */
-  @NonNull
-  protected abstract Screen<?, ?, M> createInitialScreen();
+  protected abstract M createActivityComponent();
 
   @Override
   protected void onStart() {
     super.onStart();
-    mTriadDelegate.onStart();
+    mDelegate.onStart();
   }
 
   @Override
   protected void onPostCreate(final Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
-    mTriadDelegate.onPostCreate();
+    mDelegate.onPostCreate();
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    mTriadDelegate.onStop();
+    mDelegate.onStop();
   }
 
   @Override
   public void onBackPressed() {
-    if (!mTriadDelegate.onBackPressed()) {
+    if (!mDelegate.onBackPressed()) {
       super.onBackPressed();
     }
   }
@@ -88,11 +91,11 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
    * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
    */
   @NonNull
-  protected Triad getFlow() {
-    return mTriadDelegate.getTriad();
+  protected Triad getTriad() {
+    return mDelegate.getTriad();
   }
 
   protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {
-    mTriadDelegate.setOnScreenChangedListener(onScreenChangedListener);
+    mDelegate.setOnScreenChangedListener(onScreenChangedListener);
   }
 }
