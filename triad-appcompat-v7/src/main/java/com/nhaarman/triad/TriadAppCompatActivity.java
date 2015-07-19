@@ -17,10 +17,11 @@
 package com.nhaarman.triad;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * An {@link Activity} which is the root of an application that uses Triad.
@@ -85,6 +86,11 @@ public abstract class TriadAppCompatActivity<M> extends AppCompatActivity {
     if (!mDelegate.onBackPressed()) {
       super.onBackPressed();
     }
+  }
+
+  @Override
+  protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    mDelegate.onActivityResult(requestCode, resultCode, data);
   }
 
   /**
