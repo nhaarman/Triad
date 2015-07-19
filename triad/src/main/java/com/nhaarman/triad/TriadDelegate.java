@@ -17,6 +17,7 @@
 package com.nhaarman.triad;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -84,7 +85,14 @@ public class TriadDelegate<M> {
     mTriadView = (TriadView) mActivity.findViewById(R.id.view_triad);
 
     mTriad = ((TriadProvider) mActivity.getApplication()).getTriad();
+    mTriad.setActivity(mActivity);
     mTriad.setListener(new MyFlowListener());
+
+    if (mTriad.getBackstack().size() > 0) {
+      Screen<?, ?, ?> current = mTriad.getBackstack().current();
+      assert current != null;
+      mTriad.popTo(current);
+    }
   }
 
   public void onStart() {
@@ -101,13 +109,7 @@ public class TriadDelegate<M> {
   }
 
   public void onPostCreate() {
-    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 
-    if (mTriad.getBackstack().size() > 0) {
-      Screen<?, ?, ?> current = mTriad.getBackstack().current();
-      assert current != null;
-      mTriad.popTo(current);
-    }
   }
 
   public void onStop() {
@@ -126,6 +128,12 @@ public class TriadDelegate<M> {
     checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 
     return mCurrentScreen != null && mCurrentScreen.getPresenter(mMainComponent, mTriad).onBackPressed() || mTriad.goBack();
+  }
+
+  public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M)");
+
+    mTriad.onActivityResult(requestCode, resultCode, data);
   }
 
   /**

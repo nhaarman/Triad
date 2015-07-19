@@ -17,6 +17,7 @@
 package com.nhaarman.triad;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -84,6 +85,11 @@ public abstract class TriadActivity<M> extends Activity {
     if (!mDelegate.onBackPressed()) {
       super.onBackPressed();
     }
+  }
+
+  @Override
+  protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    mDelegate.onActivityResult(requestCode, resultCode, data);
   }
 
   /**
