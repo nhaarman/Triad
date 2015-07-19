@@ -163,8 +163,10 @@ public class TriadDelegate<M> {
 
     @Override
     public void go(final Backstack nextBackstack, final Triad.Direction direction, final Triad.Callback callback) {
+      checkState(nextBackstack.size() > 0, "Empty backstack");
       //noinspection rawtypes
       Screen screen = nextBackstack.current();
+      assert screen != null;
       showScreen(screen, direction, callback);
 
       onScreenChanged(screen);
@@ -187,7 +189,7 @@ public class TriadDelegate<M> {
       ScreenPresenter presenter = screen.getPresenter(mMainComponent, mTriad);
       container.setPresenter(presenter);
 
-      mTriadView.transition(mCurrentView, (View) container, callback);
+      mTriadView.transition(mCurrentView, (View) container, direction, callback, screen);
 
       mCurrentView = (View) container;
     }

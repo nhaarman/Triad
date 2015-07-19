@@ -57,12 +57,16 @@ public class TriadView extends RelativeLayout {
     return getResources().getInteger(android.R.integer.config_shortAnimTime);
   }
 
-  public void transition(@Nullable final View oldView, @Nullable final View newView, @NonNull final Triad.Callback callback) {
+  public void transition(@Nullable final View oldView,
+                         @Nullable final View newView,
+                         @NonNull final Triad.Direction direction,
+                         @NonNull final Triad.Callback callback,
+                         @NonNull final TransitionAnimator animator) {
     checkArgument(oldView != null || newView != null, "Both oldView and newView are null.");
 
     if (newView != null) {
       addView(newView);
-      newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView, callback));
+      newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView, direction, callback, animator));
     } else {
       animateViewExit(oldView);
     }
@@ -97,7 +101,13 @@ public class TriadView extends RelativeLayout {
     private final View mNewView;
 
     @NonNull
+    private final Triad.Direction mDirection;
+
+    @NonNull
     private final Triad.Callback mCallback;
+
+    @NonNull
+    private final TransitionAnimator mAnimator;
 
     /**
      * @param oldView The {@link View} to execute an exit animation for.
@@ -105,16 +115,23 @@ public class TriadView extends RelativeLayout {
      */
     TransitionPreDrawListener(@Nullable final View oldView,
                               @NonNull final View newView,
-                              @NonNull final Triad.Callback callback) {
+                              @NonNull final Triad.Direction direction,
+                              @NonNull final Triad.Callback callback,
+                              @NonNull final TransitionAnimator animator) {
       mOldView = oldView;
       mNewView = newView;
+      mDirection = direction;
       mCallback = callback;
+      mAnimator = animator;
     }
 
     @Override
     public boolean onPreDraw() {
       mNewView.getViewTreeObserver().removeOnPreDrawListener(this);
-      animateViewReplacing();
+      boolean handled = mAnimator.animateTransition(mOldView, mNewView, mDirection, mCallback);
+      if (!handled) {
+        animateViewReplacing();
+      }
       return true;
     }
 
