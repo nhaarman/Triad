@@ -17,9 +17,14 @@
 
 package com.nhaarman.triad;
 
-import java.util.Iterator;
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -27,6 +32,9 @@ import static com.nhaarman.triad.Preconditions.checkState;
  * Holds the current truth, the history of screens, and exposes operations to change it.
  */
 public class Triad {
+
+  @NonNull
+  private final Map<Integer, ActivityResultListener> mActivityResultListeners;
 
   @Nullable
   private Listener mListener;
@@ -37,13 +45,26 @@ public class Triad {
   @Nullable
   private Transition mTransition;
 
+  @NonNull
+  private WeakReference<Activity> mActivity;
+
+  private int mRequestCodeCounter;
+
   private Triad(@NonNull final Backstack backstack) {
-    mBackstack = backstack;
+    this(backstack, null);
   }
 
   private Triad(@NonNull final Backstack backstack, @Nullable final Listener listener) {
     mListener = listener;
     mBackstack = backstack;
+
+    mActivityResultListeners = new HashMap<>();
+
+    mActivity = new WeakReference<>(null);
+  }
+
+  void setActivity(@Nullable final Activity activity) {
+    mActivity = new WeakReference<>(activity);
   }
 
   public void setListener(@NonNull final Listener listener) {
@@ -56,15 +77,13 @@ public class Triad {
   }
 
   public void startWith(@NonNull final Screen<?, ?, ?> screen) {
-    if (mBackstack.size() != 0) {
-      return;
+    if (mBackstack.size() == 0 && mTransition == null) {
+      move(new GoToTransition(screen));
     }
-
-    mBackstack = Backstack.single(screen);
   }
 
   public void goTo(@NonNull final Screen<?, ?, ?> screen) {
-    checkState(mBackstack.size() > 0, "Use startWith(Screen) to show your first Screen.");
+    checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
 
     move(new GoToTransition(screen));
   }
@@ -93,6 +112,25 @@ public class Triad {
     move(new BackwardTransition(newBackstack));
   }
 
+  public void startActivity(@NonNull final Intent intent) {
+    checkState(mActivity.get() != null, "Activity reference is null.");
+
+    mActivity.get().startActivity(intent);
+  }
+
+  public void startActivityForResult(@NonNull final Intent intent, @NonNull final ActivityResultListener listener) {
+    checkState(mActivity.get() != null, "Activity reference is null.");
+
+    mActivity.get().startActivityForResult(intent, mRequestCodeCounter);
+    mActivityResultListeners.put(mRequestCodeCounter, listener);
+    mRequestCodeCounter++;
+  }
+
+  void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
+    mActivityResultListeners.get(requestCode).onActivityResult(resultCode, data);
+    mActivityResultListeners.remove(requestCode);
+  }
+
   private void move(@NonNull final Transition transition) {
     if (mTransition == null || mTransition.isFinished()) {
       mTransition = transition;
@@ -112,14 +150,14 @@ public class Triad {
     return new Triad(backstack, listener);
   }
 
-  enum Direction {
+  public enum Direction {
     FORWARD, BACKWARD, REPLACE
   }
 
   /**
    * Supplied by Triad to the Listener, which is responsible for calling onComplete().
    */
-  interface Callback {
+  public interface Callback {
 
     /**
      * Must be called exactly once to indicate that the corresponding transition has completed.
@@ -130,7 +168,7 @@ public class Triad {
     void onComplete();
   }
 
-  interface Listener {
+  public interface Listener {
 
     /**
      * Notifies the listener that the backstack is about to change. Note that the backstack of
@@ -140,6 +178,11 @@ public class Triad {
      * @param callback Must be called to indicate completion.
      */
     void go(Backstack nextBackstack, Direction direction, Callback callback);
+  }
+
+  public interface ActivityResultListener {
+
+    void onActivityResult(int resultCode, @Nullable Intent data);
   }
 
   private abstract class Transition implements Callback {

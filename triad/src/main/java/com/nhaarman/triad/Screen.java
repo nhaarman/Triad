@@ -16,11 +16,11 @@
 
 package com.nhaarman.triad;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 /**
  * A class that creates the {@link ScreenContainer} and {@link ScreenPresenter} for a screen in the application.
@@ -33,7 +33,7 @@ import android.support.annotation.Nullable;
  * @param <C> The specialized {@link ScreenContainer} type.
  * @param <M> The type of the {@code main component}.
  */
-public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>, M> {
+public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>, M> implements TransitionAnimator {
 
   /**
    * The {@link P} that is tied to this {@link Screen} instance.
@@ -56,7 +56,7 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    * @return The created {@link P}.
    */
   @NonNull
-  protected abstract P createPresenter(@NonNull final M m);
+  protected abstract P createPresenter(@NonNull M m);
 
   /**
    * Inflates the layout resource id returned by {@link #getLayoutResId()}, and returns the {@link C} instance.
@@ -86,6 +86,12 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
       mPresenter = createPresenter(component);
       mPresenter.setTriad(triad);
     }
+
     return mPresenter;
+  }
+
+  @Override
+  public boolean animateTransition(@Nullable final View oldView, @NonNull final View newView, @NonNull final Triad.Direction direction, @NonNull final Triad.Callback callback) {
+    return false;
   }
 }

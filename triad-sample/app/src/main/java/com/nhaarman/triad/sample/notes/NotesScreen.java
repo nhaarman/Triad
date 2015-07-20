@@ -16,11 +16,11 @@
 
 package com.nhaarman.triad.sample.notes;
 
+import android.support.annotation.NonNull;
 import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.sample.MainComponent;
 import com.nhaarman.triad.sample.R;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
-import android.support.annotation.NonNull;
 
 public class NotesScreen extends Screen<NotesPresenter, NotesContainer, MainComponent> {
 
