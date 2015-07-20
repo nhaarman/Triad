@@ -83,7 +83,7 @@ public class Triad {
   }
 
   public void goTo(@NonNull final Screen<?, ?, ?> screen) {
-    checkState(mBackstack.size() > 0, "Use startWith(Screen) to show your first Screen.");
+    checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
 
     move(new GoToTransition(screen));
   }
@@ -150,14 +150,14 @@ public class Triad {
     return new Triad(backstack, listener);
   }
 
-  enum Direction {
+  public enum Direction {
     FORWARD, BACKWARD, REPLACE
   }
 
   /**
    * Supplied by Triad to the Listener, which is responsible for calling onComplete().
    */
-  interface Callback {
+  public interface Callback {
 
     /**
      * Must be called exactly once to indicate that the corresponding transition has completed.
@@ -168,7 +168,7 @@ public class Triad {
     void onComplete();
   }
 
-  interface Listener {
+  public interface Listener {
 
     /**
      * Notifies the listener that the backstack is about to change. Note that the backstack of
