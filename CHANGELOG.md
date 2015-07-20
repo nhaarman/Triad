@@ -1,5 +1,11 @@
 # Changelog
 
+Version 0.8.0 *(2015-07-20)*
+-----------------------------------
+
+ * Created a way to start Activities with `Triad`
+ * Created a way to manage screen transitions
+
 Version 0.7.1 *(2015-07-18)*
 -----------------------------------
 
