@@ -108,17 +108,4 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
     super.onDetachedFromWindow();
     getPresenter().releaseContainer();
   }
-
-  @Override
-  public void hideKeyboard() {
-    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-    inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-  }
-
-  @Override
-  public void showKeyboard() {
-    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-    inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-    inputMethodManager.toggleSoftInputFromWindow(getWindowToken(), InputMethodManager.SHOW_FORCED, 0);
-  }
 }
