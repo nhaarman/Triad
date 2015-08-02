@@ -17,6 +17,7 @@
 package com.nhaarman.triad;
 
 import android.content.res.Resources;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -40,6 +41,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    *
    * @param container The {@link C} to gain control over.
    */
+  @MainThread
   public void acquire(@NonNull final C container) {
     if (container.equals(mContainer)) {
       return;
@@ -57,6 +59,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * Releases the {@link C} this {@code Presenter} controls, and calls {@link #onControlLost()}
    * to notify implementers of this class that the {@link C} is no longer available.
    */
+  @MainThread
   public void releaseContainer() {
     if (mContainer == null) {
       return;
@@ -73,6 +76,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    *
    * @param container The {@link C} to gain control over.
    */
+  @MainThread
   protected void onControlGained(@NonNull final C container) {
   }
 
@@ -80,6 +84,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * Called when this {@code Presenter} no longer controls the {@link C}.
    * From this point on, {@link #getContainer()} will return {@link null}.
    */
+  @MainThread
   protected void onControlLost() {
   }
 

@@ -20,7 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
+import android.view.ViewGroup;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -59,10 +59,10 @@ public class TriadDelegate<M> {
 
   @SuppressWarnings("rawtypes")
   @Nullable
-  private Screen<? extends ScreenPresenter, ? extends ScreenContainer, M> mCurrentScreen;
+  private Screen mCurrentScreen;
 
   @Nullable
-  private View mCurrentView;
+  private ViewGroup mCurrentView;
 
   /**
    * An optional {@link OnScreenChangedListener} that is notified of screen changes.
@@ -103,9 +103,7 @@ public class TriadDelegate<M> {
       return;
     }
 
-    ScreenPresenter presenter = mCurrentScreen.getPresenter(mMainComponent, mTriad);
-    ScreenContainer container = (ScreenContainer) mCurrentView;
-    presenter.acquire(container);
+    mCurrentScreen.acquirePresenter(mMainComponent, mTriad,  mCurrentView);
   }
 
   public void onPostCreate() {
@@ -120,14 +118,14 @@ public class TriadDelegate<M> {
       return;
     }
 
-    mCurrentScreen.getPresenter(mMainComponent, mTriad).releaseContainer();
+    mCurrentScreen.releaseContainer(mMainComponent, mTriad);
   }
 
   public boolean onBackPressed() {
     checkState(mMainComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(M).");
     checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
 
-    return mCurrentScreen != null && mCurrentScreen.getPresenter(mMainComponent, mTriad).onBackPressed() || mTriad.goBack();
+    return mCurrentScreen != null && mCurrentScreen.onBackPressed(mMainComponent, mTriad) || mTriad.goBack();
   }
 
   public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
@@ -177,7 +175,7 @@ public class TriadDelegate<M> {
      *
      * @param screen The {@link Screen} to show.
      */
-    private void showScreen(@NonNull final Screen<?, ?, M> screen,
+    private void showScreen(@NonNull final Screen screen,
                             @NonNull final Triad.Direction direction,
                             @NonNull final Triad.Callback callback) {
       checkState(mMainComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(M).");
@@ -185,13 +183,12 @@ public class TriadDelegate<M> {
 
       mCurrentScreen = screen;
 
-      ScreenContainer container = screen.createView(mTriadView);
-      ScreenPresenter presenter = screen.getPresenter(mMainComponent, mTriad);
-      container.setPresenter(presenter);
+      ViewGroup container = screen.createView(mTriadView);
+      screen.acquirePresenter(mMainComponent, mTriad, container);
 
-      mTriadView.transition(mCurrentView, (View) container, direction, callback, screen);
+      mTriadView.transition(mCurrentView, container, direction, callback, screen);
 
-      mCurrentView = (View) container;
+      mCurrentView = container;
     }
   }
 }

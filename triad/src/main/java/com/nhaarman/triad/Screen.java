@@ -16,8 +16,12 @@
 
 package com.nhaarman.triad;
 
+import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,17 +50,23 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    * <p/>
    * The root of this resource should be an implementation of {@link C}.
    */
+  @LayoutRes
   protected abstract int getLayoutResId();
+
+  @StyleRes
+  protected int getThemeResId() {
+    return -1;
+  }
 
   /**
    * Creates a {@link P} for this {@code Screen}.
    *
-   * @param m The {@code main component} that can be used to create the {@link P}.
+   * @param component The {@code main component} that can be used to create the {@link P}.
    *
    * @return The created {@link P}.
    */
   @NonNull
-  protected abstract P createPresenter(@NonNull M m);
+  protected abstract P createPresenter(@NonNull M component);
 
   /**
    * Inflates the layout resource id returned by {@link #getLayoutResId()}, and returns the {@link C} instance.
@@ -67,8 +77,14 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    * @return The created {@link C}.
    */
   @NonNull
-  public final C createView(@NonNull final ViewGroup parent) {
-    return (C) LayoutInflater.from(parent.getContext()).inflate(getLayoutResId(), parent, false);
+  final ViewGroup createView(@NonNull final ViewGroup parent) {
+    Context context = parent.getContext();
+
+    if (getThemeResId() != -1) {
+      context = new ContextThemeWrapper(context, getThemeResId());
+    }
+
+    return (ViewGroup) LayoutInflater.from(context).inflate(getLayoutResId(), parent, false);
   }
 
   /**
@@ -81,7 +97,7 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    * @return The {@link P}.
    */
   @NonNull
-  public final P getPresenter(@NonNull final M component, @NonNull final Triad triad) {
+  private P getPresenter(@NonNull final M component, @NonNull final Triad triad) {
     if (mPresenter == null) {
       mPresenter = createPresenter(component);
       mPresenter.setTriad(triad);
@@ -93,5 +109,17 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
   @Override
   public boolean animateTransition(@Nullable final View oldView, @NonNull final View newView, @NonNull final Triad.Direction direction, @NonNull final Triad.Callback callback) {
     return false;
+  }
+
+  void acquirePresenter(@NonNull final M component, @NonNull final Triad triad, @NonNull final ViewGroup container) {
+    ((Container<P, C>) container).setPresenter(getPresenter(component, triad));
+  }
+
+  void releaseContainer(@NonNull final M component, @NonNull final Triad triad) {
+    getPresenter(component, triad).releaseContainer();
+  }
+
+  boolean onBackPressed(@NonNull final M component, @NonNull final Triad triad) {
+    return getPresenter(component, triad).onBackPressed();
   }
 }
