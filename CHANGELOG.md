@@ -1,5 +1,10 @@
 # Changelog
 
+Version 0.8.1 *(2015-08-02)*
+
+ * Added DrawerScreen
+ * Removed keyboard manipulation
+
 Version 0.8.0 *(2015-07-20)*
 -----------------------------------
 
