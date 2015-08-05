@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,12 +16,21 @@
 
 package com.nhaarman.triad;
 
+import android.support.annotation.NonNull;
+
 /**
  * A {@link Container} interface that is used in combination with a {@link Screen} and a {@link ScreenPresenter}.
  *
  * @param <P> The specialized {@link ScreenPresenter} type.
  * @param <C> The specialized {@link ScreenContainer} type.
  */
-public interface ScreenContainer<P extends ScreenPresenter<P, C>, C extends Container<P, C>> extends Container<P, C> {
+public interface ScreenContainer
+    <
+        ActivityComponent,
+        P extends ScreenPresenter<ActivityComponent, P, C>,
+        C extends ScreenContainer<ActivityComponent, P, C>
+        >
+    extends Container<P, C> {
 
+  void setActivityComponent(@NonNull ActivityComponent activityComponent);
 }

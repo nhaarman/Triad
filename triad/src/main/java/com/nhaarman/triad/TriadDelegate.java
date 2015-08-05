@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,9 +38,10 @@ import static com.nhaarman.triad.Preconditions.checkState;
  * <li>{@link #onBackPressed()}</li>
  * </ul>
  *
- * @param <M> The {@code main component} to use for {@link Presenter} creation.
+ * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code Presenter} creation.
+ * @param <ActivityComponent> The {@code ActivityComponent} to supply to {@code Presenters}.
  */
-public class TriadDelegate<M> {
+public class TriadDelegate<ApplicationComponent, ActivityComponent> {
 
   /**
    * The {@link Activity} instance this {@code TriadDelegate} is bound to.
@@ -49,7 +50,10 @@ public class TriadDelegate<M> {
   private final Activity mActivity;
 
   @Nullable
-  private M mMainComponent;
+  private ApplicationComponent mApplicationComponent;
+
+  @Nullable
+  private ActivityComponent mActivityComponent;
 
   /**
    * The {@link Triad} instance that is used to navigate between {@link Screen}s.
@@ -68,7 +72,7 @@ public class TriadDelegate<M> {
    * An optional {@link OnScreenChangedListener} that is notified of screen changes.
    */
   @Nullable
-  private OnScreenChangedListener<M> mOnScreenChangedListener;
+  private OnScreenChangedListener<ApplicationComponent, ActivityComponent> mOnScreenChangedListener;
 
   private TriadView mTriadView;
 
@@ -76,10 +80,12 @@ public class TriadDelegate<M> {
     mActivity = activity;
   }
 
-  public void onCreate(@NonNull final M mainComponent) {
+  public void onCreate(@NonNull final ActivityComponent mainComponent) {
     checkState(mActivity.getApplication() instanceof TriadProvider, "Make sure your Application class implements TriadProvider.");
+    checkState(mActivity.getApplication() instanceof ApplicationComponentProvider, "Make sure your Application class implements ApplicationComponentProvider.");
 
-    mMainComponent = mainComponent;
+    mApplicationComponent = ((ApplicationComponentProvider<ApplicationComponent>) mActivity.getApplication()).getApplicationComponent();
+    mActivityComponent = mainComponent;
 
     mActivity.setContentView(R.layout.view_triad);
     mTriadView = (TriadView) mActivity.findViewById(R.id.view_triad);
@@ -89,21 +95,21 @@ public class TriadDelegate<M> {
     mTriad.setListener(new MyFlowListener());
 
     if (mTriad.getBackstack().size() > 0) {
-      Screen<?, ?, ?> current = mTriad.getBackstack().current();
+      Screen<?, ?, ?, ?> current = mTriad.getBackstack().current();
       assert current != null;
       mTriad.popTo(current);
     }
   }
 
   public void onStart() {
-    checkState(mMainComponent != null, "MainComponent is null. Make sure to call TriadDelegate.onCreate(M).");
-    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
+    checkState(mActivityComponent != null, "MainComponent is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
+    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
 
     if (mCurrentScreen == null || mCurrentView == null) {
       return;
     }
 
-    mCurrentScreen.acquirePresenter(mMainComponent, mTriad,  mCurrentView);
+    mCurrentScreen.acquirePresenter(mActivityComponent, mActivityComponent, mTriad, mCurrentView);
   }
 
   public void onPostCreate() {
@@ -111,25 +117,25 @@ public class TriadDelegate<M> {
   }
 
   public void onStop() {
-    checkState(mMainComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(M).");
-    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
+    checkState(mActivityComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
+    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
 
     if (mCurrentScreen == null) {
       return;
     }
 
-    mCurrentScreen.releaseContainer(mMainComponent, mTriad);
+    mCurrentScreen.releaseContainer(mActivityComponent, mTriad);
   }
 
   public boolean onBackPressed() {
-    checkState(mMainComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(M).");
-    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
+    checkState(mActivityComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
+    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
 
-    return mCurrentScreen != null && mCurrentScreen.onBackPressed(mMainComponent, mTriad) || mTriad.goBack();
+    return mCurrentScreen != null && mCurrentScreen.onBackPressed(mActivityComponent, mTriad) || mTriad.goBack();
   }
 
   public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M)");
+    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(ActivityComponent)");
 
     mTriad.onActivityResult(requestCode, resultCode, data);
   }
@@ -139,7 +145,7 @@ public class TriadDelegate<M> {
    */
   @NonNull
   public Triad getTriad() {
-    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
+    checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
 
     return mTriad;
   }
@@ -147,11 +153,11 @@ public class TriadDelegate<M> {
   /**
    * Sets an {@link OnScreenChangedListener} to be notified of screen changes.
    */
-  public void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {
+  public void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<ApplicationComponent, ActivityComponent> onScreenChangedListener) {
     mOnScreenChangedListener = onScreenChangedListener;
   }
 
-  private void onScreenChanged(@NonNull final Screen<?, ?, M> screen) {
+  private void onScreenChanged(@NonNull final Screen<ApplicationComponent, ActivityComponent, ?, ?> screen) {
     if (mOnScreenChangedListener != null) {
       mOnScreenChangedListener.onScreenChanged(screen);
     }
@@ -178,13 +184,14 @@ public class TriadDelegate<M> {
     private void showScreen(@NonNull final Screen screen,
                             @NonNull final Triad.Direction direction,
                             @NonNull final Triad.Callback callback) {
-      checkState(mMainComponent != null, "TriadPresenter is null. Make sure to call TriadDelegate.onCreate(M).");
-      checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(M).");
+      checkState(mApplicationComponent != null, "ApplicationComponent is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
+      checkState(mActivityComponent != null, "ActivityComponent is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
+      checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
 
       mCurrentScreen = screen;
 
       ViewGroup container = screen.createView(mTriadView);
-      screen.acquirePresenter(mMainComponent, mTriad, container);
+      screen.acquirePresenter(mApplicationComponent, mActivityComponent, mTriad, container);
 
       mTriadView.transition(mCurrentView, container, direction, callback, screen);
 

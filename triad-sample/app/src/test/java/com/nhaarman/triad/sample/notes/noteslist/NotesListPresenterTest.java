@@ -21,6 +21,7 @@ public class NotesListPresenterTest {
   private NoteRepository mNoteRepository;
 
   private Note mNote1;
+
   private Note mNote2;
 
   @Before

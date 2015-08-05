@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,17 +16,18 @@
 
 package com.nhaarman.triad.sample.editnote;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.nhaarman.triad.Optional;
 import com.nhaarman.triad.ScreenPresenter;
+import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteCreator;
 import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNoteContainer> {
+public class EditNotePresenter extends ScreenPresenter<ActivityComponent, EditNotePresenter, EditNoteContainer> {
 
   @Nullable
   private final Note mNote;
@@ -51,7 +52,7 @@ public class EditNotePresenter extends ScreenPresenter<EditNotePresenter, EditNo
   }
 
   @Override
-  protected void onControlGained(@NonNull final EditNoteContainer container) {
+  protected void onControlGained(@NonNull final EditNoteContainer container, @NonNull final ActivityComponent activityComponent) {
     String title = "";
     String contents = "";
 

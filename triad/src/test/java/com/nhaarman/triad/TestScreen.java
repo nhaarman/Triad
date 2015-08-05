@@ -2,7 +2,7 @@ package com.nhaarman.triad;
 
 import android.support.annotation.NonNull;
 
-public class TestScreen extends Screen<TestPresenter, TestRelativeLayoutContainer, TestComponent> {
+public class TestScreen extends Screen<ApplicationComponent, ActivityComponent, TestPresenter, TestRelativeLayoutScreenContainer> {
 
   @Override
   protected int getLayoutResId() {
@@ -11,7 +11,7 @@ public class TestScreen extends Screen<TestPresenter, TestRelativeLayoutContaine
 
   @NonNull
   @Override
-  protected TestPresenter createPresenter(@NonNull final TestComponent testComponent) {
+  protected TestPresenter createPresenter(@NonNull final ApplicationComponent applicationComponent) {
     return new TestPresenter();
   }
 }

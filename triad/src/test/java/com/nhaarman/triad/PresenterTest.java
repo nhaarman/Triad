@@ -3,7 +3,6 @@ package com.nhaarman.triad;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
@@ -26,10 +25,10 @@ public class PresenterTest {
   @Test
   public void afterAcquiringContainer_theContainerIsPresent() {
     /* Given */
-    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
+    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
 
     /* When */
-    mPresenter.acquire(container);
+    mPresenter.acquire(container, mock(ActivityComponent.class));
 
     /* Then */
     assertThat(mPresenter.getContainer().isPresent(), is(true));
@@ -38,8 +37,8 @@ public class PresenterTest {
   @Test
   public void afterReleasingContainer_theContainerIsNotPresent() {
     /* Given */
-    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
-    mPresenter.acquire(container);
+    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
+    mPresenter.acquire(container, mock(ActivityComponent.class));
 
     /* When */
     mPresenter.releaseContainer();
@@ -51,10 +50,10 @@ public class PresenterTest {
   @Test
   public void afterAcquiringContainer_onControlGainedIsCalled() {
     /* Given */
-    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
+    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
 
     /* When */
-    mPresenter.acquire(container);
+    mPresenter.acquire(container, mock(ActivityComponent.class));
 
     /* Then */
     assertThat(mPresenter.onControlGainedCalled, is(true));
@@ -64,8 +63,8 @@ public class PresenterTest {
   @Test
   public void afterReleasingContainer_onControlLostIsCalled() {
     /* Given */
-    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
-    mPresenter.acquire(container);
+    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
+    mPresenter.acquire(container, mock(ActivityComponent.class));
     mPresenter.onControlGainedCalled = false;
 
     /* When */
@@ -79,13 +78,13 @@ public class PresenterTest {
   @Test
   public void acquiringTheSameContainerTwice_doesNothing() {
     /* Given */
-    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
-    mPresenter.acquire(container);
+    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
+    mPresenter.acquire(container, mock(ActivityComponent.class));
     mPresenter.onControlLostCalled = false;
     mPresenter.onControlGainedCalled = false;
 
     /* When */
-    mPresenter.acquire(container);
+    mPresenter.acquire(container, mock(ActivityComponent.class));
 
     /* Then */
     assertThat(mPresenter.onControlLostCalled, is(false));
@@ -95,15 +94,15 @@ public class PresenterTest {
   @Test
   public void acquiringAnotherContainer_firstReleasesTheCurrentContainer() {
     /* Given */
-    TestRelativeLayoutContainer container1 = mock(TestRelativeLayoutContainer.class);
-    TestRelativeLayoutContainer container2 = mock(TestRelativeLayoutContainer.class);
+    TestRelativeLayoutScreenContainer container1 = mock(TestRelativeLayoutScreenContainer.class);
+    TestRelativeLayoutScreenContainer container2 = mock(TestRelativeLayoutScreenContainer.class);
 
-    mPresenter.acquire(container1);
+    mPresenter.acquire(container1, mock(ActivityComponent.class));
     mPresenter.onControlLostCalled = false;
     mPresenter.onControlGainedCalled = false;
 
     /* When */
-    mPresenter.acquire(container2);
+    mPresenter.acquire(container2, mock(ActivityComponent.class));
 
     /* Then */
     assertThat(mPresenter.onControlLostCalled, is(true));

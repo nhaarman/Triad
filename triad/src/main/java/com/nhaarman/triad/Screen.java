@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,15 +29,21 @@ import android.view.ViewGroup;
 /**
  * A class that creates the {@link ScreenContainer} and {@link ScreenPresenter} for a screen in the application.
  * <p/>
- * Since the creation of a {@link Presenter} may need additional dependencies, a {@code main component} is supplied
- * when requesting the {@link Presenter} instance. This {@code main component} should contain all dependencies necessary
- * for the {@link Presenter}, and is to be supplied by the implementer.
+ * Since the creation of a {@link Presenter} may need additional dependencies, an {@code ApplicationComponent} is supplied
+ * when requesting the {@link Presenter} instance.
  *
+ * @param <ApplicationComponent> The type of the {@code ApplicationComponent}.
+ * @param <ActivityComponent> The type of the {@code ActivityComponent}.
  * @param <P> The specialized {@link ScreenPresenter} type.
  * @param <C> The specialized {@link ScreenContainer} type.
- * @param <M> The type of the {@code main component}.
  */
-public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenContainer<P, C>, M> implements TransitionAnimator {
+public abstract class Screen
+    <
+        ApplicationComponent,
+        ActivityComponent,
+        P extends ScreenPresenter<ActivityComponent, P, C>,
+        C extends ScreenContainer<ActivityComponent, P, C>
+        > implements TransitionAnimator {
 
   /**
    * The {@link P} that is tied to this {@link Screen} instance.
@@ -61,12 +67,12 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
   /**
    * Creates a {@link P} for this {@code Screen}.
    *
-   * @param component The {@code main component} that can be used to create the {@link P}.
+   * @param applicationComponent The {@code activity component} that can be used to create the {@link P}.
    *
    * @return The created {@link P}.
    */
   @NonNull
-  protected abstract P createPresenter(@NonNull M component);
+  protected abstract P createPresenter(@NonNull ApplicationComponent applicationComponent);
 
   /**
    * Inflates the layout resource id returned by {@link #getLayoutResId()}, and returns the {@link C} instance.
@@ -91,15 +97,15 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
    * Returns the {@link P} that is tied to this {@code Screen} instance.
    * This instance is lazily instantiated.
    *
-   * @param component The {@code main component} to retrieve dependencies from.
+   * @param applicationComponent The {@code activity component} to retrieve dependencies from.
    * @param triad The Triad instance of the application.
    *
    * @return The {@link P}.
    */
   @NonNull
-  private P getPresenter(@NonNull final M component, @NonNull final Triad triad) {
+  private P getPresenter(@NonNull final ApplicationComponent applicationComponent, @NonNull final Triad triad) {
     if (mPresenter == null) {
-      mPresenter = createPresenter(component);
+      mPresenter = createPresenter(applicationComponent);
       mPresenter.setTriad(triad);
     }
 
@@ -107,19 +113,26 @@ public abstract class Screen<P extends ScreenPresenter<P, C>, C extends ScreenCo
   }
 
   @Override
-  public boolean animateTransition(@Nullable final View oldView, @NonNull final View newView, @NonNull final Triad.Direction direction, @NonNull final Triad.Callback callback) {
+  public boolean animateTransition(@Nullable final View oldView,
+                                   @NonNull final View newView,
+                                   @NonNull final Triad.Direction direction,
+                                   @NonNull final Triad.Callback callback) {
     return false;
   }
 
-  void acquirePresenter(@NonNull final M component, @NonNull final Triad triad, @NonNull final ViewGroup container) {
-    ((Container<P, C>) container).setPresenter(getPresenter(component, triad));
+  void acquirePresenter(@NonNull final ApplicationComponent applicationComponent,
+                        @NonNull final ActivityComponent activityComponent,
+                        @NonNull final Triad triad,
+                        @NonNull final ViewGroup container) {
+    ((Container<P, C>) container).setPresenter(getPresenter(applicationComponent, triad));
+    ((ScreenContainer<ActivityComponent, P, C>) container).setActivityComponent(activityComponent);
   }
 
-  void releaseContainer(@NonNull final M component, @NonNull final Triad triad) {
-    getPresenter(component, triad).releaseContainer();
+  void releaseContainer(@NonNull final ApplicationComponent applicationComponent, @NonNull final Triad triad) {
+    getPresenter(applicationComponent, triad).releaseContainer();
   }
 
-  boolean onBackPressed(@NonNull final M component, @NonNull final Triad triad) {
-    return getPresenter(component, triad).onBackPressed();
+  boolean onBackPressed(@NonNull final ApplicationComponent applicationComponent, @NonNull final Triad triad) {
+    return getPresenter(applicationComponent, triad).onBackPressed();
   }
 }
