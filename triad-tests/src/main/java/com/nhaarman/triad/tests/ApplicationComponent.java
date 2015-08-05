@@ -16,14 +16,6 @@
 
 package com.nhaarman.triad.tests;
 
-import android.support.annotation.NonNull;
-import com.nhaarman.triad.TriadApplication;
+public class ApplicationComponent {
 
-public class TestApplication extends TriadApplication<ApplicationComponent> {
-
-  @NonNull
-  @Override
-  public ApplicationComponent getApplicationComponent() {
-    return new ApplicationComponent();
-  }
 }

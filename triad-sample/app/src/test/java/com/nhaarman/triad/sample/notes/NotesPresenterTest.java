@@ -1,6 +1,7 @@
 package com.nhaarman.triad.sample.notes;
 
 import com.nhaarman.triad.Triad;
+import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
@@ -8,7 +9,6 @@ import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -46,8 +46,10 @@ public class NotesPresenterTest {
     NotesListContainer notesListContainerMock = mock(NotesListContainer.class);
     when(notesContainerMock.getNotesListContainer()).thenReturn(notesListContainerMock);
 
+    ActivityComponent activityComponent = new ActivityComponent();
+
     /* When */
-    mNotesPresenter.onControlGained(notesContainerMock);
+    mNotesPresenter.onControlGained(notesContainerMock, activityComponent);
 
     /* Then */
     verify(notesListContainerMock).setPresenter(mNotesListPresenterMock);

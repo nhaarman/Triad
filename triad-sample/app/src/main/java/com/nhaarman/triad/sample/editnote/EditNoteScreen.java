@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,13 +24,13 @@ import android.view.View;
 import android.view.ViewManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.Triad;
-import com.nhaarman.triad.sample.MainComponent;
+import com.nhaarman.triad.sample.ApplicationComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.R;
+import com.nhaarman.triad.sample.SampleScreen;
 
-public class EditNoteScreen extends Screen<EditNotePresenter, EditNoteContainer, MainComponent> {
+public class EditNoteScreen extends SampleScreen<EditNotePresenter, EditNoteContainer> {
 
   @Nullable
   private final Note mNote;
@@ -55,11 +55,12 @@ public class EditNoteScreen extends Screen<EditNotePresenter, EditNoteContainer,
 
   @NonNull
   @Override
-  protected EditNotePresenter createPresenter(@NonNull final MainComponent mainComponent) {
-    return new EditNotePresenter(mNote,
-        mainComponent.noteValidator(),
-        mainComponent.noteCreator(),
-        mainComponent.noteRepository()
+  protected EditNotePresenter createPresenter(@NonNull final ApplicationComponent applicationComponent) {
+    return new EditNotePresenter(
+        mNote,
+        applicationComponent.noteValidator(),
+        applicationComponent.noteCreator(),
+        applicationComponent.noteRepository()
     );
   }
 

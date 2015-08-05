@@ -30,7 +30,7 @@ A screen in an Android application that uses Triad consists of four classes: a `
 ### Screen
 
 ```java
-public class MyScreen extends Screen<MyPresenter, MyContainer, MainComponent> {
+public class MyScreen extends Screen<ApplicationComponent, ActivityComponent, MyPresenter, MyContainer> {
 
   @Override
   protected int getLayoutResId() {
@@ -38,7 +38,7 @@ public class MyScreen extends Screen<MyPresenter, MyContainer, MainComponent> {
   }
 
   @Override
-  protected MyPresenter createPresenter(MainComponent mainComponent) {
+  protected MyPresenter createPresenter(ApplicationComponent applicationComponent) {
     return new MyPresenter();
   }
 }
@@ -46,7 +46,7 @@ public class MyScreen extends Screen<MyPresenter, MyContainer, MainComponent> {
 ### View
 
 ```java
-public class MyView extends RelativeLayoutContainer<MyPresenter, MyContainer> implements MyContainer {
+public class MyView extends RelativeLayoutScreenContainer<ActivityComponent, MyPresenter, MyContainer> implements MyContainer {
 
   @InjectView(R.id.view_my_textview)
   protected TextView mTextView;
@@ -84,7 +84,7 @@ public class MyView extends RelativeLayoutContainer<MyPresenter, MyContainer> im
 ### Container
 
 ```java
-interface MyContainer extends ScreenContainer<MyPresenter, MyContainer> {
+interface MyContainer extends ScreenContainer<ActivityComponent, MyPresenter, MyContainer> {
 
   void setText(String text);
 }
@@ -93,10 +93,10 @@ interface MyContainer extends ScreenContainer<MyPresenter, MyContainer> {
 ### Presenter
 
 ```java
-class MyPresenter extends ScreenPresenter<MyPresenter, MyContainer> {
+class MyPresenter extends ScreenPresenter<ActivityComponent, MyPresenter, MyContainer> {
 
   @Override
-  public void onControlGained(MyContainer container) {
+  public void onControlGained(MyContainer container, ActivityComponent activityComponent) {
     container.setText("Hello world!");
   }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * The {@link C} this {@link Presenter} controls.
    */
   @Nullable
-  private C mContainer;
+  C mContainer;
 
   /**
    * Sets the {@link C} this {@code Presenter} controls, and calls {@link #onControlGained(Container)}

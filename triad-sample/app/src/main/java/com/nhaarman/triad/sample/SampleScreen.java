@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package com.nhaarman.triad.tests;
+package com.nhaarman.triad.sample;
 
-import android.support.annotation.NonNull;
-import com.nhaarman.triad.TriadApplication;
+import com.nhaarman.triad.Screen;
+import com.nhaarman.triad.ScreenContainer;
+import com.nhaarman.triad.ScreenPresenter;
 
-public class TestApplication extends TriadApplication<ApplicationComponent> {
+public abstract class SampleScreen<
+    P extends ScreenPresenter<ActivityComponent, P, C>,
+    C extends ScreenContainer<ActivityComponent, P, C>
+    > extends Screen<ApplicationComponent, ActivityComponent, P, C> {
 
-  @NonNull
-  @Override
-  public ApplicationComponent getApplicationComponent() {
-    return new ApplicationComponent();
-  }
 }

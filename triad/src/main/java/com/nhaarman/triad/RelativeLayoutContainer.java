@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,23 +19,23 @@ package com.nhaarman.triad;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.support.annotation.CallSuper;
-import android.util.AttributeSet;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
-import butterknife.ButterKnife;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.AttributeSet;
+import android.widget.RelativeLayout;
+import butterknife.ButterKnife;
 
 /**
  * An abstract {@link Container} instance that handles {@link Presenter} management,
- * and uses Butter Knife to inject view fields in implementing classes.
+ * and uses Butter Knife to bind view fields in implementing classes.
  *
  * @param <P> The specialized {@link Presenter} type.
  * @param <C> The specialized {@link Container} type.
  */
-public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C extends Container<P, C>>
-    extends RelativeLayout
-    implements Container<P, C> {
+public abstract class RelativeLayoutContainer<
+    P extends Presenter<P, C>,
+    C extends Container<P, C>
+    > extends RelativeLayout implements Container<P, C> {
 
   /**
    * The {@link P} that is tied to this instance.
@@ -66,7 +66,7 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
   @NonNull
   public P getPresenter() {
     if (mPresenter == null) {
-      throw new NullPointerException("Presenter has not been set.");
+      throw new NullPointerException("Presenter has not been set for " + getClass().getCanonicalName());
     }
 
     return mPresenter;
@@ -100,6 +100,10 @@ public abstract class RelativeLayoutContainer<P extends Presenter<P, C>, C exten
       return;
     }
 
+    acquire();
+  }
+
+  void acquire() {
     getPresenter().acquire((C) this);
   }
 

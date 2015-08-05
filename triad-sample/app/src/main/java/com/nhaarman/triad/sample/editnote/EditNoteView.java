@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,12 +22,13 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.OnClick;
-import com.nhaarman.triad.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutScreenContainer;
+import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public class EditNoteView extends RelativeLayoutContainer<EditNotePresenter, EditNoteContainer> implements EditNoteContainer {
+public class EditNoteView extends RelativeLayoutScreenContainer<ActivityComponent, EditNotePresenter, EditNoteContainer> implements EditNoteContainer {
 
   @Bind(R.id.view_editnote_titleet)
   protected EditText mTitleET;
