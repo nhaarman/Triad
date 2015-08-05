@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,7 @@ package com.nhaarman.triad.sample;
 
 import android.support.annotation.NonNull;
 
-public class MainComponent {
+public class ApplicationComponent {
 
   @NonNull
   private final NoteRepository mNoteRepository;
@@ -29,7 +29,7 @@ public class MainComponent {
   @NonNull
   private final NoteValidator mNoteValidator;
 
-  public MainComponent() {
+  public ApplicationComponent() {
     mNoteRepository = new MemoryNoteRepository();
     mNoteCreator = new NoteCreator(mNoteRepository);
     mNoteValidator = new NoteValidator();

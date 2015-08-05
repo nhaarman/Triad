@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,12 +16,13 @@
 
 package com.nhaarman.triad.tests.firstscreen;
 
-import com.nhaarman.triad.Screen;
-import com.nhaarman.triad.tests.R;
-import com.nhaarman.triad.tests.TestComponent;
 import android.support.annotation.NonNull;
+import com.nhaarman.triad.Screen;
+import com.nhaarman.triad.tests.ActivityComponent;
+import com.nhaarman.triad.tests.ApplicationComponent;
+import com.nhaarman.triad.tests.R;
 
-public class FirstScreen extends Screen<FirstScreenPresenter, FirstScreenContainer, TestComponent> {
+public class FirstScreen extends Screen<ApplicationComponent, ActivityComponent, FirstScreenPresenter, FirstScreenContainer> {
 
   @Override
   protected int getLayoutResId() {
@@ -30,7 +31,7 @@ public class FirstScreen extends Screen<FirstScreenPresenter, FirstScreenContain
 
   @NonNull
   @Override
-  protected FirstScreenPresenter createPresenter(@NonNull final TestComponent testComponent) {
+  protected FirstScreenPresenter createPresenter(@NonNull final ApplicationComponent applicationComponent) {
     return new FirstScreenPresenter();
   }
 }

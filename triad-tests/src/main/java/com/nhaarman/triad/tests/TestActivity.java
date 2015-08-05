@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,12 +17,12 @@
 package com.nhaarman.triad.tests;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.TriadActivity;
 import com.nhaarman.triad.tests.firstscreen.FirstScreen;
-import android.support.annotation.NonNull;
 
-public class TestActivity extends TriadActivity<TestComponent> {
+public class TestActivity extends TriadActivity<ApplicationComponent, ActivityComponent> {
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -32,8 +32,8 @@ public class TestActivity extends TriadActivity<TestComponent> {
 
   @NonNull
   @Override
-  protected TestComponent createActivityComponent() {
-    return new TestComponent();
+  protected ActivityComponent createActivityComponent() {
+    return new ActivityComponent();
   }
 
   @NonNull

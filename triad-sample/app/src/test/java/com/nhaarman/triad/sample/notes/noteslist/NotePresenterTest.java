@@ -4,18 +4,21 @@ import com.nhaarman.triad.sample.Note;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.core.Is.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class NotePresenterTest {
 
   private static final String TITLE = "title";
+
   private static final String CONTENTS = "contents";
 
   private NotePresenter mNotePresenter;
+
   private NoteContainer mNoteContainerMock;
+
   private Note mNote;
 
   @Before

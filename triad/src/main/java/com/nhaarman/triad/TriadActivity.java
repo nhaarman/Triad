@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,15 +25,16 @@ import android.support.annotation.Nullable;
 /**
  * An {@link Activity} which is the root of an application that uses Triad.
  *
- * @param <M> The {@code main component} to use for {@link Presenter} creation.
+ * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code Presenter} creation.
+ * @param <ActivityComponent> The {@code ActivityComponent} to supply to {@code Presenters}.
  */
-public abstract class TriadActivity<M> extends Activity {
+public abstract class TriadActivity<ApplicationComponent, ActivityComponent> extends Activity {
 
   @NonNull
-  private final TriadDelegate<M> mDelegate;
+  private final TriadDelegate<ApplicationComponent, ActivityComponent> mDelegate;
 
   @Nullable
-  private M mActivityComponent;
+  private ActivityComponent mActivityComponent;
 
   public TriadActivity() {
     mDelegate = new TriadDelegate<>(this);
@@ -46,7 +47,7 @@ public abstract class TriadActivity<M> extends Activity {
   }
 
   @NonNull
-  protected synchronized M getActivityComponent() {
+  protected synchronized ActivityComponent getActivityComponent() {
     if (mActivityComponent == null) {
       mActivityComponent = createActivityComponent();
     }
@@ -55,12 +56,12 @@ public abstract class TriadActivity<M> extends Activity {
   }
 
   /**
-   * Creates the main component which is used to retrieve dependencies from that are needed to create {@link Presenter}s.
+   * Creates the {@code ActivityComponent} which is used to retrieve dependencies from that are needed to create {@link Presenter}s.
    *
-   * @return The created main component.
+   * @return The created {@code ActivityComponent}.
    */
   @NonNull
-  protected abstract M createActivityComponent();
+  protected abstract ActivityComponent createActivityComponent();
 
   @Override
   protected void onStart() {
@@ -100,7 +101,7 @@ public abstract class TriadActivity<M> extends Activity {
     return mDelegate.getTriad();
   }
 
-  protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<M> onScreenChangedListener) {
+  protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<ApplicationComponent, ActivityComponent> onScreenChangedListener) {
     mDelegate.setOnScreenChangedListener(onScreenChangedListener);
   }
 }

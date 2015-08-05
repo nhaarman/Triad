@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,16 +17,17 @@
 package com.nhaarman.triad.sample.notes;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import butterknife.Bind;
 import butterknife.OnClick;
-import com.nhaarman.triad.RelativeLayoutContainer;
+import com.nhaarman.triad.RelativeLayoutScreenContainer;
+import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListView;
-import android.support.annotation.NonNull;
 
-public class NotesView extends RelativeLayoutContainer<NotesPresenter, NotesContainer> implements NotesContainer {
+public class NotesView extends RelativeLayoutScreenContainer<ActivityComponent, NotesPresenter, NotesContainer> implements NotesContainer {
 
   @Bind(R.id.view_notes_noteslistview)
   protected NotesListView mNotesListView;
