@@ -25,7 +25,7 @@ public class PresenterTest {
   @Test
   public void afterAcquiringContainer_theContainerIsPresent() {
     /* Given */
-    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
 
     /* When */
     mPresenter.acquire(container, mock(ActivityComponent.class));
@@ -37,7 +37,7 @@ public class PresenterTest {
   @Test
   public void afterReleasingContainer_theContainerIsNotPresent() {
     /* Given */
-    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
     mPresenter.acquire(container, mock(ActivityComponent.class));
 
     /* When */
@@ -50,7 +50,7 @@ public class PresenterTest {
   @Test
   public void afterAcquiringContainer_onControlGainedIsCalled() {
     /* Given */
-    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
 
     /* When */
     mPresenter.acquire(container, mock(ActivityComponent.class));
@@ -63,7 +63,7 @@ public class PresenterTest {
   @Test
   public void afterReleasingContainer_onControlLostIsCalled() {
     /* Given */
-    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
     mPresenter.acquire(container, mock(ActivityComponent.class));
     mPresenter.onControlGainedCalled = false;
 
@@ -78,7 +78,7 @@ public class PresenterTest {
   @Test
   public void acquiringTheSameContainerTwice_doesNothing() {
     /* Given */
-    TestRelativeLayoutScreenContainer container = mock(TestRelativeLayoutScreenContainer.class);
+    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
     mPresenter.acquire(container, mock(ActivityComponent.class));
     mPresenter.onControlLostCalled = false;
     mPresenter.onControlGainedCalled = false;
@@ -94,8 +94,8 @@ public class PresenterTest {
   @Test
   public void acquiringAnotherContainer_firstReleasesTheCurrentContainer() {
     /* Given */
-    TestRelativeLayoutScreenContainer container1 = mock(TestRelativeLayoutScreenContainer.class);
-    TestRelativeLayoutScreenContainer container2 = mock(TestRelativeLayoutScreenContainer.class);
+    TestRelativeLayoutContainer container1 = mock(TestRelativeLayoutContainer.class);
+    TestRelativeLayoutContainer container2 = mock(TestRelativeLayoutContainer.class);
 
     mPresenter.acquire(container1, mock(ActivityComponent.class));
     mPresenter.onControlLostCalled = false;
@@ -107,5 +107,24 @@ public class PresenterTest {
     /* Then */
     assertThat(mPresenter.onControlLostCalled, is(true));
     assertThat(mPresenter.onControlGainedCalled, is(true));
+  }
+
+  @Test
+  public void getFlow_returnsSettedFlow() {
+    /* Given */
+    Triad triad = Triad.emptyInstance();
+    mPresenter.setTriad(triad);
+
+    /* When */
+    Triad result = mPresenter.getTriad();
+
+    /* Then */
+    assertThat(result, is(triad));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void getFlow_withoutSettedFlow_throwsException() {
+    /* When */
+    mPresenter.getTriad();
   }
 }

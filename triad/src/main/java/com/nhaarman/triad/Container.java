@@ -25,16 +25,19 @@ import android.support.annotation.NonNull;
  * @param <P> The specialized type of the {@link Presenter} for this {@link Container}.
  * @param <C> The specialized type of the {@link Container}.
  */
-public interface Container<P extends Presenter<P, C>, C extends Container<P, C>> {
+public interface Container<
+    ActivityComponent,
+    P extends Presenter<ActivityComponent, P, C>,
+    C extends Container<ActivityComponent, P, C>> {
 
   /**
    * Sets the {@link Presenter} that should control this {@code Container}.
-   * Implementers must ensure that {@link Presenter#acquire(Container)}  and {@link Presenter#releaseContainer()}
+   * Implementers must ensure that {@link Presenter#acquire(Container, Object)}  and {@link Presenter#releaseContainer()}
    * are called at proper times.
    *
    * @param presenter The {@link Presenter} instance.
    */
-  void setPresenter(@NonNull P presenter);
+  void setPresenterAndActivityComponent(@NonNull P presenter, @NonNull ActivityComponent activityComponent);
 
   /**
    * Returns the context the container is running in, through which it can

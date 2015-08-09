@@ -16,11 +16,11 @@
 
 package com.nhaarman.triad.sample.notes.noteslist;
 
-import com.nhaarman.triad.Container;
 import android.support.annotation.NonNull;
+import com.nhaarman.triad.Container;
 import com.nhaarman.triad.sample.ActivityComponent;
 
-public interface NoteContainer extends Container<NotePresenter, NoteContainer> {
+public interface NoteContainer extends Container<ActivityComponent, NotePresenter, NoteContainer> {
 
   void setTitle(@NonNull String title);
 

@@ -9,9 +9,6 @@ import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -52,7 +49,7 @@ public class NotesPresenterTest {
     mNotesPresenter.onControlGained(notesContainerMock, activityComponent);
 
     /* Then */
-    verify(notesListContainerMock).setPresenter(mNotesListPresenterMock);
+    verify(notesListContainerMock).setPresenterAndActivityComponent(mNotesListPresenterMock, activityComponent);
   }
 
   @Test

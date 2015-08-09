@@ -21,13 +21,13 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import butterknife.Bind;
 import butterknife.OnClick;
-import com.nhaarman.triad.RelativeLayoutScreenContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListView;
 
-public class NotesView extends RelativeLayoutScreenContainer<ActivityComponent, NotesPresenter, NotesContainer> implements NotesContainer {
+public class NotesView extends RelativeLayoutContainer<ActivityComponent, NotesPresenter, NotesContainer> implements NotesContainer {
 
   @Bind(R.id.view_notes_noteslistview)
   protected NotesListView mNotesListView;

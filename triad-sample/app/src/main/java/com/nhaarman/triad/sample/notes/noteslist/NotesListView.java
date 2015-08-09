@@ -28,11 +28,12 @@ import android.widget.ListView;
 import butterknife.Bind;
 import butterknife.OnItemClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
+import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.R;
 import java.util.List;
 
-public class NotesListView extends RelativeLayoutContainer<NotesListPresenter, NotesListContainer> implements NotesListContainer {
+public class NotesListView extends RelativeLayoutContainer<ActivityComponent, NotesListPresenter, NotesListContainer> implements NotesListContainer {
 
   @NonNull
   private final MyAdapter mAdapter;
@@ -50,11 +51,6 @@ public class NotesListView extends RelativeLayoutContainer<NotesListPresenter, N
   public NotesListView(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
     mAdapter = new MyAdapter();
-  }
-
-  @Override
-  public void setPresenter(@NonNull final NotesListPresenter presenter) {
-    super.setPresenter(presenter);
   }
 
   @Override
@@ -98,7 +94,7 @@ public class NotesListView extends RelativeLayoutContainer<NotesListPresenter, N
       NoteContainer noteContainer = (NoteContainer) convertView;
       if (noteContainer == null) {
         noteContainer = (NoteContainer) LayoutInflater.from(getContext()).inflate(R.layout.view_note, parent, false);
-        noteContainer.setPresenter(getPresenter().createNotePresenter());
+        noteContainer.setPresenterAndActivityComponent(getPresenter().createNotePresenter(), getActivityComponent());
       }
 
       noteContainer.getPresenter().setNote(getItem(position));

@@ -16,12 +16,12 @@
 
 package com.nhaarman.triad.sample.notes;
 
-import com.nhaarman.triad.ScreenContainer;
+import com.nhaarman.triad.Container;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
 import android.support.annotation.NonNull;
 
-interface NotesContainer extends ScreenContainer<ActivityComponent, NotesPresenter, NotesContainer> {
+interface NotesContainer extends Container<ActivityComponent, NotesPresenter, NotesContainer> {
 
   @NonNull
   NotesListContainer getNotesListContainer();

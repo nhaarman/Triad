@@ -19,11 +19,12 @@ package com.nhaarman.triad.sample.notes.noteslist;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteRepository;
 import java.util.List;
 
-public class NotesListPresenter extends Presenter<NotesListPresenter, NotesListContainer> {
+public class NotesListPresenter extends Presenter<ActivityComponent, NotesListPresenter, NotesListContainer> {
 
   @NonNull
   private final NoteRepository mNoteRepository;
@@ -39,7 +40,7 @@ public class NotesListPresenter extends Presenter<NotesListPresenter, NotesListC
   }
 
   @Override
-  protected void onControlGained(@NonNull final NotesListContainer container) {
+  protected void onControlGained(@NonNull final NotesListContainer container, @NonNull final ActivityComponent activityComponent) {
     mNotes = mNoteRepository.findAll();
     container.setNotes(mNotes);
   }

@@ -17,13 +17,13 @@
 package com.nhaarman.triad.sample.notes;
 
 import android.support.annotation.NonNull;
-import com.nhaarman.triad.ScreenPresenter;
+import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
-class NotesPresenter extends ScreenPresenter<ActivityComponent, NotesPresenter, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
+class NotesPresenter extends Presenter<ActivityComponent, NotesPresenter, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
 
   @NonNull
   private final NotesListPresenter mNotesListPresenter;
@@ -35,7 +35,7 @@ class NotesPresenter extends ScreenPresenter<ActivityComponent, NotesPresenter, 
 
   @Override
   protected void onControlGained(@NonNull final NotesContainer container, @NonNull final ActivityComponent activityComponent) {
-    container.getNotesListContainer().setPresenter(mNotesListPresenter);
+    container.getNotesListContainer().setPresenterAndActivityComponent(mNotesListPresenter, activityComponent);
   }
 
   public void onCreateNoteClicked() {

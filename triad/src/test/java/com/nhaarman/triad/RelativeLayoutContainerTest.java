@@ -9,14 +9,14 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class RelativeLayoutScreenContainerTest {
+public class RelativeLayoutContainerTest {
 
-  private TestRelativeLayoutScreenContainer mRelativeLayoutContainer;
+  private TestRelativeLayoutContainer mRelativeLayoutContainer;
 
   @Before
   public void setUp() {
     Context context = mock(Context.class);
-    mRelativeLayoutContainer = new TestRelativeLayoutScreenContainer(context);
+    mRelativeLayoutContainer = new TestRelativeLayoutContainer(context);
   }
 
   @Test(expected = NullPointerException.class)
@@ -30,7 +30,7 @@ public class RelativeLayoutScreenContainerTest {
     TestPresenter presenter = mock(TestPresenter.class);
 
     /* When */
-    mRelativeLayoutContainer.setPresenter(presenter);
+    mRelativeLayoutContainer.setPresenterAndActivityComponent(presenter, new ActivityComponent());
 
     /* Then */
     assertThat(mRelativeLayoutContainer.getPresenter(), is(presenter));
@@ -41,8 +41,7 @@ public class RelativeLayoutScreenContainerTest {
     /* Given */
     TestPresenter presenter = mock(TestPresenter.class);
     ActivityComponent activityComponent = mock(ActivityComponent.class);
-    mRelativeLayoutContainer.setPresenter(presenter);
-    mRelativeLayoutContainer.setActivityComponent(activityComponent);
+    mRelativeLayoutContainer.setPresenterAndActivityComponent(presenter, activityComponent);
 
     /* When */
     mRelativeLayoutContainer.onAttachedToWindow();
@@ -55,8 +54,7 @@ public class RelativeLayoutScreenContainerTest {
   public void onDetachedFromWindow_releasesPresenterControl() {
     /* Given */
     TestPresenter presenter = mock(TestPresenter.class);
-    mRelativeLayoutContainer.setPresenter(presenter);
-    mRelativeLayoutContainer.setActivityComponent(mock(ActivityComponent.class));
+    mRelativeLayoutContainer.setPresenterAndActivityComponent(presenter, new ActivityComponent());
     mRelativeLayoutContainer.onAttachedToWindow();
 
     /* When */

@@ -18,10 +18,10 @@ package com.nhaarman.triad.tests.secondscreen;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import com.nhaarman.triad.RelativeLayoutScreenContainer;
+import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public class SecondScreenView extends RelativeLayoutScreenContainer<ActivityComponent, SecondScreenPresenter, SecondScreenContainer> implements SecondScreenContainer {
+public class SecondScreenView extends RelativeLayoutContainer<ActivityComponent, SecondScreenPresenter, SecondScreenContainer> implements SecondScreenContainer {
 
   public SecondScreenView(final Context context, final AttributeSet attrs) {
     super(context, attrs);

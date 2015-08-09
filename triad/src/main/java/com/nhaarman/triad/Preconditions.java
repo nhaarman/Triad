@@ -18,6 +18,7 @@ package com.nhaarman.triad;
 
 @SuppressWarnings("BooleanParameter")
 final class Preconditions {
+
   private Preconditions() {
   }
 

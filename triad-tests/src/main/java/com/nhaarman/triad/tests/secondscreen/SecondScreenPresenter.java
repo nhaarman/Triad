@@ -16,8 +16,9 @@
 
 package com.nhaarman.triad.tests.secondscreen;
 
-import com.nhaarman.triad.ScreenPresenter;
+import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public class SecondScreenPresenter extends ScreenPresenter<ActivityComponent, SecondScreenPresenter, SecondScreenContainer> {
+public class SecondScreenPresenter extends Presenter<ActivityComponent, SecondScreenPresenter, SecondScreenContainer> {
+
 }
