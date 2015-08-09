@@ -84,13 +84,18 @@ public abstract class Screen
    */
   @NonNull
   protected ViewGroup createView(@NonNull final ViewGroup parent, @NonNull final ActivityComponent activityComponent) {
-    Context context = parent.getContext();
+    Context context = wrapContext(parent.getContext());
 
     if (getThemeResId() != -1) {
       context = new ContextThemeWrapper(context, getThemeResId());
     }
 
     return (ViewGroup) LayoutInflater.from(context).inflate(getLayoutResId(), parent, false);
+  }
+
+  @NonNull
+  protected Context wrapContext(@NonNull final Context context) {
+    return context;
   }
 
   /**
