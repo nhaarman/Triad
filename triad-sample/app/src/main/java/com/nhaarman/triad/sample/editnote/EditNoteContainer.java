@@ -16,12 +16,12 @@
 
 package com.nhaarman.triad.sample.editnote;
 
-import com.nhaarman.triad.ScreenContainer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.nhaarman.triad.Container;
 import com.nhaarman.triad.sample.ActivityComponent;
 
-public interface EditNoteContainer extends ScreenContainer<ActivityComponent, EditNotePresenter, EditNoteContainer> {
+public interface EditNoteContainer extends Container<ActivityComponent, EditNotePresenter, EditNoteContainer> {
 
   @NonNull
   String getTitle();

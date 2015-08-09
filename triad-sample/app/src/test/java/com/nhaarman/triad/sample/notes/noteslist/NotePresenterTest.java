@@ -1,5 +1,6 @@
 package com.nhaarman.triad.sample.notes.noteslist;
 
+import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class NotePresenterTest {
     mNotePresenter = new NotePresenter();
 
     mNoteContainerMock = mock(NoteContainer.class);
-    mNotePresenter.acquire(mNoteContainerMock);
+    mNotePresenter.acquire(mNoteContainerMock, new ActivityComponent());
 
     mNote = new Note();
     mNote.setTitle(TITLE);
@@ -70,7 +71,7 @@ public class NotePresenterTest {
     notePresenter.setNote(mNote);
 
     /* When */
-    notePresenter.acquire(mNoteContainerMock);
+    notePresenter.acquire(mNoteContainerMock, new ActivityComponent());
 
     /* Then */
     verify(mNoteContainerMock).setTitle(TITLE);
@@ -83,7 +84,7 @@ public class NotePresenterTest {
     notePresenter.setNote(mNote);
 
     /* When */
-    notePresenter.acquire(mNoteContainerMock);
+    notePresenter.acquire(mNoteContainerMock, new ActivityComponent());
 
     /* Then */
     verify(mNoteContainerMock).setContents(CONTENTS);

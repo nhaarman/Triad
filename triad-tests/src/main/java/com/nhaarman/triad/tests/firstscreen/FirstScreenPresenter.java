@@ -18,10 +18,10 @@ package com.nhaarman.triad.tests.firstscreen;
 
 import android.support.annotation.NonNull;
 import com.nhaarman.triad.Optional;
-import com.nhaarman.triad.ScreenPresenter;
+import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public class FirstScreenPresenter extends ScreenPresenter<ActivityComponent, FirstScreenPresenter, FirstScreenContainer> {
+public class FirstScreenPresenter extends Presenter<ActivityComponent, FirstScreenPresenter, FirstScreenContainer> {
 
   private int mCounter;
 
@@ -34,8 +34,8 @@ public class FirstScreenPresenter extends ScreenPresenter<ActivityComponent, Fir
     mCounter++;
     getContainer().ifPresent(new Optional.Consumer<FirstScreenContainer>() {
       @Override
-      public void accept(@NonNull final FirstScreenContainer firstScreenContainer) {
-        firstScreenContainer.setText(String.valueOf(mCounter));
+      public void accept(@NonNull final FirstScreenContainer firstContainer) {
+        firstContainer.setText(String.valueOf(mCounter));
       }
     });
   }

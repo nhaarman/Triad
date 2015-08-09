@@ -21,13 +21,20 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import static com.nhaarman.triad.Preconditions.checkState;
+
 /**
  * The Presenter class.
  *
- * @param <P> The specialized type of the {@link Presenter}.
- * @param <C> The specialized type of the {@link Container}.
+ * @param <ActivityComponent> The activity component.
+ * @param <P>                 The specialized type of the {@link Presenter}.
+ * @param <C>                 The specialized type of the {@link Container}.
  */
-public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
+public class Presenter<
+    ActivityComponent,
+    P extends Presenter<ActivityComponent, P, C>,
+    C extends Container<ActivityComponent, P, C>
+    > {
 
   /**
    * The {@link C} this {@link Presenter} controls.
@@ -35,14 +42,20 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
   @Nullable
   C mContainer;
 
+  @Nullable
+  private ActivityComponent mActivityComponent;
+
+  @Nullable
+  private Triad mTriad;
+
   /**
-   * Sets the {@link C} this {@code Presenter} controls, and calls {@link #onControlGained(Container)}
+   * Sets the {@link C} this {@code Presenter} controls, and calls {@link #onControlGained(Container, Object)} )}
    * to notify implementers of this class that the {@link C} is available.
    *
    * @param container The {@link C} to gain control over.
    */
   @MainThread
-  public void acquire(@NonNull final C container) {
+  public void acquire(@NonNull final C container, @NonNull final ActivityComponent activityComponent) {
     if (container.equals(mContainer)) {
       return;
     }
@@ -52,7 +65,8 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
     }
 
     mContainer = container;
-    onControlGained(container);
+    mActivityComponent = activityComponent;
+    onControlGained(container, activityComponent);
   }
 
   /**
@@ -66,6 +80,7 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
     }
 
     mContainer = null;
+    mActivityComponent = null;
     onControlLost();
   }
 
@@ -77,7 +92,8 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
    * @param container The {@link C} to gain control over.
    */
   @MainThread
-  protected void onControlGained(@NonNull final C container) {
+  protected void onControlGained(@NonNull final C container,
+                                 @NonNull final ActivityComponent activityComponent) {
   }
 
   /**
@@ -94,6 +110,31 @@ public class Presenter<P extends Presenter<P, C>, C extends Container<P, C>> {
   @NonNull
   public Optional<C> getContainer() {
     return Optional.of(mContainer);
+  }
+
+  /**
+   * Returns the {@link ActivityComponent}.
+   */
+  @NonNull
+  public Optional<ActivityComponent> getActivityComponent() {
+    return Optional.of(mActivityComponent);
+  }
+
+  /**
+   * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
+   */
+  @NonNull
+  protected Triad getTriad() {
+    checkState(mTriad != null, "Triad is null. Make sure setTriad(Triad) has been called with a valid instance.");
+
+    return mTriad;
+  }
+
+  /**
+   * Sets the {@link Triad} instance to be used to navigate between {@link Screen}s.
+   */
+  public final void setTriad(@NonNull final Triad triad) {
+    mTriad = triad;
   }
 
   /**

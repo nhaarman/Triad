@@ -27,22 +27,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * A class that creates the {@link ScreenContainer} and {@link ScreenPresenter} for a screen in the application.
- * <p/>
+ * A class that creates the {@link Container} and {@link Presenter} for a screen in the application.
+ * <p>
  * Since the creation of a {@link Presenter} may need additional dependencies, an {@code ApplicationComponent} is supplied
  * when requesting the {@link Presenter} instance.
  *
  * @param <ApplicationComponent> The type of the {@code ApplicationComponent}.
- * @param <ActivityComponent> The type of the {@code ActivityComponent}.
- * @param <P> The specialized {@link ScreenPresenter} type.
- * @param <C> The specialized {@link ScreenContainer} type.
+ * @param <ActivityComponent>    The type of the {@code ActivityComponent}.
+ * @param <P>                    The specialized {@link Presenter} type.
+ * @param <C>                    The specialized {@link Container} type.
  */
 public abstract class Screen
     <
         ApplicationComponent,
         ActivityComponent,
-        P extends ScreenPresenter<ActivityComponent, P, C>,
-        C extends ScreenContainer<ActivityComponent, P, C>
+        P extends Presenter<ActivityComponent, P, C>,
+        C extends Container<ActivityComponent, P, C>
         > implements TransitionAnimator {
 
   /**
@@ -53,7 +53,7 @@ public abstract class Screen
 
   /**
    * Returns the layout resource id for this {@code Screen}.
-   * <p/>
+   * <p>
    * The root of this resource should be an implementation of {@link C}.
    */
   @LayoutRes
@@ -83,7 +83,7 @@ public abstract class Screen
    * @return The created {@link C}.
    */
   @NonNull
-  final ViewGroup createView(@NonNull final ViewGroup parent) {
+  protected ViewGroup createView(@NonNull final ViewGroup parent, @NonNull final ActivityComponent activityComponent) {
     Context context = parent.getContext();
 
     if (getThemeResId() != -1) {
@@ -98,7 +98,7 @@ public abstract class Screen
    * This instance is lazily instantiated.
    *
    * @param applicationComponent The {@code activity component} to retrieve dependencies from.
-   * @param triad The Triad instance of the application.
+   * @param triad                The Triad instance of the application.
    *
    * @return The {@link P}.
    */
@@ -124,8 +124,7 @@ public abstract class Screen
                         @NonNull final ActivityComponent activityComponent,
                         @NonNull final Triad triad,
                         @NonNull final ViewGroup container) {
-    ((Container<P, C>) container).setPresenter(getPresenter(applicationComponent, triad));
-    ((ScreenContainer<ActivityComponent, P, C>) container).setActivityComponent(activityComponent);
+    ((Container<ActivityComponent, P, C>) container).setPresenterAndActivityComponent(getPresenter(applicationComponent, triad), activityComponent);
   }
 
   void releaseContainer(@NonNull final ApplicationComponent applicationComponent, @NonNull final Triad triad) {
@@ -133,6 +132,6 @@ public abstract class Screen
   }
 
   boolean onBackPressed(@NonNull final ApplicationComponent applicationComponent, @NonNull final Triad triad) {
-    return getPresenter(applicationComponent, triad).onBackPressed();
+    return false;
   }
 }

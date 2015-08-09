@@ -1,5 +1,6 @@
 package com.nhaarman.triad.sample.notes.noteslist;
 
+import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.MemoryNoteRepository;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteRepository;
@@ -41,7 +42,7 @@ public class NotesListPresenterTest {
   @Test
   public void onControlGained_requestsAllNotes() {
     /* When */
-    mNotesListPresenter.onControlGained(mock(NotesListContainer.class));
+    mNotesListPresenter.onControlGained(mock(NotesListContainer.class), new ActivityComponent());
 
     /* Then */
     verify(mNoteRepository).findAll();
@@ -53,7 +54,7 @@ public class NotesListPresenterTest {
     NotesListContainer containerMock = mock(NotesListContainer.class);
 
     /* When */
-    mNotesListPresenter.onControlGained(containerMock);
+    mNotesListPresenter.onControlGained(containerMock, new ActivityComponent());
 
     /* Then */
     verify(containerMock).setNotes((List<Note>) argThat(contains(mNote1, mNote2)));
@@ -64,7 +65,7 @@ public class NotesListPresenterTest {
     /* Given */
     NotesListPresenter.OnNoteClickedListener listenerMock = mock(NotesListPresenter.OnNoteClickedListener.class);
     mNotesListPresenter.setNoteClickedListener(listenerMock);
-    mNotesListPresenter.acquire(mock(NotesListContainer.class));
+    mNotesListPresenter.acquire(mock(NotesListContainer.class), new ActivityComponent());
 
     /* When */
     mNotesListPresenter.onNoteClicked(0);

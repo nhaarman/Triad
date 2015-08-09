@@ -2,14 +2,14 @@ package com.nhaarman.triad;
 
 import android.support.annotation.NonNull;
 
-public class TestPresenter extends ScreenPresenter<ActivityComponent, TestPresenter, TestRelativeLayoutScreenContainer> {
+public class TestPresenter extends Presenter<ActivityComponent, TestPresenter, TestRelativeLayoutContainer> {
 
   public boolean onControlGainedCalled;
 
   public boolean onControlLostCalled;
 
   @Override
-  protected void onControlGained(@NonNull final TestRelativeLayoutScreenContainer container, @NonNull final ActivityComponent activityComponent) {
+  protected void onControlGained(@NonNull final TestRelativeLayoutContainer container, @NonNull final ActivityComponent activityComponent) {
     onControlGainedCalled = true;
   }
 

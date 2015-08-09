@@ -46,7 +46,7 @@ public class MyScreen extends Screen<ApplicationComponent, ActivityComponent, My
 ### View
 
 ```java
-public class MyView extends RelativeLayoutScreenContainer<ActivityComponent, MyPresenter, MyContainer> implements MyContainer {
+public class MyView extends RelativeLayoutContainer<ActivityComponent, MyPresenter, MyContainer> implements MyContainer {
 
   @InjectView(R.id.view_my_textview)
   protected TextView mTextView;
@@ -84,7 +84,7 @@ public class MyView extends RelativeLayoutScreenContainer<ActivityComponent, MyP
 ### Container
 
 ```java
-interface MyContainer extends ScreenContainer<ActivityComponent, MyPresenter, MyContainer> {
+interface MyContainer extends Container<ActivityComponent, MyPresenter, MyContainer> {
 
   void setText(String text);
 }
@@ -93,7 +93,7 @@ interface MyContainer extends ScreenContainer<ActivityComponent, MyPresenter, My
 ### Presenter
 
 ```java
-class MyPresenter extends ScreenPresenter<ActivityComponent, MyPresenter, MyContainer> {
+class MyPresenter extends Presenter<ActivityComponent, MyPresenter, MyContainer> {
 
   @Override
   public void onControlGained(MyContainer container, ActivityComponent activityComponent) {

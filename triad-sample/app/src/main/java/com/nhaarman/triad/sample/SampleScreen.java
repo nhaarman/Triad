@@ -16,13 +16,13 @@
 
 package com.nhaarman.triad.sample;
 
+import com.nhaarman.triad.Container;
+import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.Screen;
-import com.nhaarman.triad.ScreenContainer;
-import com.nhaarman.triad.ScreenPresenter;
 
 public abstract class SampleScreen<
-    P extends ScreenPresenter<ActivityComponent, P, C>,
-    C extends ScreenContainer<ActivityComponent, P, C>
+    P extends Presenter<ActivityComponent, P, C>,
+    C extends Container<ActivityComponent, P, C>
     > extends Screen<ApplicationComponent, ActivityComponent, P, C> {
 
 }

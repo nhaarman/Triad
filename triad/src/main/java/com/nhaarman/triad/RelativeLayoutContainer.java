@@ -33,15 +33,19 @@ import butterknife.ButterKnife;
  * @param <C> The specialized {@link Container} type.
  */
 public abstract class RelativeLayoutContainer<
-    P extends Presenter<P, C>,
-    C extends Container<P, C>
-    > extends RelativeLayout implements Container<P, C> {
+    ActivityComponent,
+    P extends Presenter<ActivityComponent, P, C>,
+    C extends Container<ActivityComponent, P, C>
+    > extends RelativeLayout implements Container<ActivityComponent, P, C> {
 
   /**
    * The {@link P} that is tied to this instance.
    */
   @Nullable
   private P mPresenter;
+
+  @Nullable
+  private ActivityComponent mActivityComponent;
 
   public RelativeLayoutContainer(final Context context) {
     super(context);
@@ -79,8 +83,18 @@ public abstract class RelativeLayoutContainer<
    */
   @Override
   @CallSuper
-  public void setPresenter(@NonNull final P presenter) {
+  public void setPresenterAndActivityComponent(@NonNull final P presenter, @NonNull final ActivityComponent activityComponent) {
     mPresenter = presenter;
+    mActivityComponent = activityComponent;
+  }
+
+  @NonNull
+  public ActivityComponent getActivityComponent() {
+    if (mActivityComponent == null) {
+      throw new NullPointerException("ActivityComponent has not been set for " + getClass().getCanonicalName());
+    }
+
+    return mActivityComponent;
   }
 
   @Override
@@ -104,7 +118,7 @@ public abstract class RelativeLayoutContainer<
   }
 
   void acquire() {
-    getPresenter().acquire((C) this);
+    getPresenter().acquire((C) this, getActivityComponent());
   }
 
   @Override

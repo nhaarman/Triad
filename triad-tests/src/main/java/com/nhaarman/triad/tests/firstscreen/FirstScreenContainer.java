@@ -16,10 +16,10 @@
 
 package com.nhaarman.triad.tests.firstscreen;
 
-import com.nhaarman.triad.ScreenContainer;
+import com.nhaarman.triad.Container;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public interface FirstScreenContainer extends ScreenContainer<ActivityComponent, FirstScreenPresenter, FirstScreenContainer> {
+public interface FirstScreenContainer extends Container<ActivityComponent, FirstScreenPresenter, FirstScreenContainer> {
 
   void setText(String text);
 }

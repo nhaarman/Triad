@@ -1,8 +1,12 @@
 # Changelog
 
+Version 0.10.0 *(2015-08-09)*
+
+ * Removed distinction between Presenter and ScreenPresenter
+
 Version 0.9.0 *(2015-08-05)*
 
-  * Explicitely use ApplicationComponent and ActivityComponent
+ * Explicitely use ApplicationComponent and ActivityComponent
 
 Version 0.8.1 *(2015-08-02)*
 
@@ -56,7 +60,7 @@ Version 0.4.0 *(2015-04-23)*
 Version 0.3.0 *(2015-04-05)*
 -----------------------------------
 
- * Provided `Flow` instance to `ScreenPresenters`
+ * Provided `Flow` instance to `Presenters`
  * Added `OnScreenChangedListener`
  * Added `triad-appcompat-v7` which includes `TriadActionBarActivity`
 

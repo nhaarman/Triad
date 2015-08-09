@@ -19,7 +19,7 @@ package com.nhaarman.triad.sample.editnote;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.nhaarman.triad.Optional;
-import com.nhaarman.triad.ScreenPresenter;
+import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteCreator;
@@ -27,7 +27,7 @@ import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
 
-public class EditNotePresenter extends ScreenPresenter<ActivityComponent, EditNotePresenter, EditNoteContainer> {
+public class EditNotePresenter extends Presenter<ActivityComponent, EditNotePresenter, EditNoteContainer> {
 
   @Nullable
   private final Note mNote;

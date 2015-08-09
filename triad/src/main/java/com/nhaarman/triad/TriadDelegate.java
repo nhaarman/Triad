@@ -190,7 +190,7 @@ public class TriadDelegate<ApplicationComponent, ActivityComponent> {
 
       mCurrentScreen = screen;
 
-      ViewGroup container = screen.createView(mTriadView);
+      ViewGroup container = screen.createView(mTriadView, mActivityComponent);
       screen.acquirePresenter(mApplicationComponent, mActivityComponent, mTriad, container);
 
       mTriadView.transition(mCurrentView, container, direction, callback, screen);

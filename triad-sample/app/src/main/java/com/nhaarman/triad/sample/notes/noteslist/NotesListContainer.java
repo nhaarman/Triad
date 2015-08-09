@@ -16,13 +16,13 @@
 
 package com.nhaarman.triad.sample.notes.noteslist;
 
+import android.support.annotation.NonNull;
 import com.nhaarman.triad.Container;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import java.util.List;
-import android.support.annotation.NonNull;
 
-public interface NotesListContainer extends Container<NotesListPresenter, NotesListContainer> {
+public interface NotesListContainer extends Container<ActivityComponent, NotesListPresenter, NotesListContainer> {
 
   void setNotes(@NonNull List<Note> notes);
 }

@@ -21,12 +21,12 @@ import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 
 public abstract class DrawerScreen<
-    P extends ScreenPresenter<ActivityComponent, P, C>,
-    C extends ScreenContainer<ActivityComponent, P, C>,
-    DP extends Presenter<DP, DC>,
-    DC extends Container<DP, DC>,
     ApplicationComponent,
-    ActivityComponent
+    ActivityComponent,
+    P extends Presenter<ActivityComponent, P, C>,
+    C extends Container<ActivityComponent, P, C>,
+    DP extends Presenter<ActivityComponent, DP, DC>,
+    DC extends Container<ActivityComponent, DP, DC>
     > extends Screen<ApplicationComponent, ActivityComponent, P, C> {
 
   @Nullable
@@ -59,7 +59,7 @@ public abstract class DrawerScreen<
                         @NonNull final ViewGroup container) {
     DC dc = (DC) container.getChildAt(1);
 
-    dc.setPresenter(getDrawerPresenter(applicationComponent));
+    dc.setPresenterAndActivityComponent(getDrawerPresenter(applicationComponent), activityComponent);
     super.acquirePresenter(applicationComponent, activityComponent, triad, (ViewGroup) container.getChildAt(0));
   }
 }
