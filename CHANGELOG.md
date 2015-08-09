@@ -1,5 +1,9 @@
 # Changelog
 
+Version 0.11.0 *(2015-08-09)*
+
+ * Added option to wrap a screen's Context
+
 Version 0.10.0 *(2015-08-09)*
 
  * Removed distinction between Presenter and ScreenPresenter
