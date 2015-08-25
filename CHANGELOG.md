@@ -1,18 +1,28 @@
 # Changelog
 
+Version 0.11.1 *(2015-08-25)*
+-----------------------------------
+
+ * Fixed bug where presenter would not gain control over container
+ * Created `ContainerDelegate`.
+
 Version 0.11.0 *(2015-08-09)*
+-----------------------------------
 
  * Added option to wrap a screen's Context
 
 Version 0.10.0 *(2015-08-09)*
+-----------------------------------
 
  * Removed distinction between Presenter and ScreenPresenter
 
 Version 0.9.0 *(2015-08-05)*
+-----------------------------------
 
  * Explicitely use ApplicationComponent and ActivityComponent
 
 Version 0.8.1 *(2015-08-02)*
+-----------------------------------
 
  * Added DrawerScreen
  * Removed keyboard manipulation
