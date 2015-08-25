@@ -20,10 +20,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
-import butterknife.ButterKnife;
 
 /**
  * An abstract {@link Container} instance that handles {@link Presenter} management,
@@ -38,14 +36,8 @@ public abstract class RelativeLayoutContainer<
     C extends Container<ActivityComponent, P, C>
     > extends RelativeLayout implements Container<ActivityComponent, P, C> {
 
-  /**
-   * The {@link P} that is tied to this instance.
-   */
-  @Nullable
-  private P mPresenter;
-
-  @Nullable
-  private ActivityComponent mActivityComponent;
+  @NonNull
+  private final ContainerDelegate<ActivityComponent, P, C> mDelegate = new ContainerDelegate<>((C) this);
 
   public RelativeLayoutContainer(final Context context) {
     super(context);
@@ -69,11 +61,7 @@ public abstract class RelativeLayoutContainer<
    */
   @NonNull
   public P getPresenter() {
-    if (mPresenter == null) {
-      throw new NullPointerException("Presenter has not been set for " + getClass().getCanonicalName());
-    }
-
-    return mPresenter;
+    return mDelegate.getPresenter();
   }
 
   /**
@@ -84,46 +72,29 @@ public abstract class RelativeLayoutContainer<
   @Override
   @CallSuper
   public void setPresenterAndActivityComponent(@NonNull final P presenter, @NonNull final ActivityComponent activityComponent) {
-    mPresenter = presenter;
-    mActivityComponent = activityComponent;
+    mDelegate.setPresenterAndActivityComponent(presenter, activityComponent);
   }
 
   @NonNull
   public ActivityComponent getActivityComponent() {
-    if (mActivityComponent == null) {
-      throw new NullPointerException("ActivityComponent has not been set for " + getClass().getCanonicalName());
-    }
-
-    return mActivityComponent;
+    return mDelegate.getActivityComponent();
   }
 
   @Override
   protected void onFinishInflate() {
     super.onFinishInflate();
-    if (isInEditMode()) {
-      return;
-    }
-
-    ButterKnife.bind(this);
+    mDelegate.onFinishInflate();
   }
 
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
-    if (isInEditMode()) {
-      return;
-    }
-
-    acquire();
-  }
-
-  void acquire() {
-    getPresenter().acquire((C) this, getActivityComponent());
+    mDelegate.onAttachedToWindow();
   }
 
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
-    getPresenter().releaseContainer();
+    mDelegate.onDetachedFromWindow();
   }
 }
