@@ -44,9 +44,10 @@ public abstract class DrawerScreen<
    * @return The {@link P}.
    */
   @NonNull
-  private DP getDrawerPresenter(@NonNull final ApplicationComponent applicationComponent) {
+  private DP getDrawerPresenter(@NonNull final ApplicationComponent applicationComponent, @NonNull final Triad triad) {
     if (mDrawerPresenter == null) {
       mDrawerPresenter = createDrawerPresenter(applicationComponent);
+      mDrawerPresenter.setTriad(triad);
     }
 
     return mDrawerPresenter;
@@ -59,7 +60,7 @@ public abstract class DrawerScreen<
                         @NonNull final ViewGroup container) {
     DC dc = (DC) container.getChildAt(1);
 
-    dc.setPresenterAndActivityComponent(getDrawerPresenter(applicationComponent), activityComponent);
+    dc.setPresenterAndActivityComponent(getDrawerPresenter(applicationComponent, triad), activityComponent);
     super.acquirePresenter(applicationComponent, activityComponent, triad, (ViewGroup) container.getChildAt(0));
   }
 }
