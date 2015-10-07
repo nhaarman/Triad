@@ -49,7 +49,7 @@ public class NotesListView extends RelativeLayoutContainer<ActivityComponent, No
   }
 
   public NotesListView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
+    super(context, attrs, defStyle, NotesListPresenter.class);
     mAdapter = new MyAdapter();
   }
 
@@ -94,7 +94,6 @@ public class NotesListView extends RelativeLayoutContainer<ActivityComponent, No
       NoteContainer noteContainer = (NoteContainer) convertView;
       if (noteContainer == null) {
         noteContainer = (NoteContainer) LayoutInflater.from(getContext()).inflate(R.layout.view_note, parent, false);
-        noteContainer.setPresenterAndActivityComponent(getPresenter().createNotePresenter(), getActivityComponent());
       }
 
       noteContainer.getPresenter().setNote(getItem(position));

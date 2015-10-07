@@ -30,5 +30,5 @@ public interface OnScreenChangedListener<ApplicationComponent, ActivityComponent
    *
    * @param screen The newly added screen.
    */
-  void onScreenChanged(@NonNull Screen<ApplicationComponent, ActivityComponent, ?, ?> screen);
+  void onScreenChanged(@NonNull Screen<ApplicationComponent> screen);
 }

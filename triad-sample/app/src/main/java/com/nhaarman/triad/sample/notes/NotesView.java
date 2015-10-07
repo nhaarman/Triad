@@ -33,15 +33,11 @@ public class NotesView extends RelativeLayoutContainer<ActivityComponent, NotesP
   protected NotesListView mNotesListView;
 
   public NotesView(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
+    super(context, attrs, NotesPresenter.class);
   }
 
   public NotesView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
-  }
-
-  public NotesView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
+    super(context, attrs, defStyle, NotesPresenter.class);
   }
 
   @Override

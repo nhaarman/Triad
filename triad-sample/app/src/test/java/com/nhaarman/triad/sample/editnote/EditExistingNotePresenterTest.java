@@ -86,8 +86,7 @@ public class EditExistingNotePresenterTest {
   @Test
   public void onSaveNoteClicked_validatesTitle() {
     /* Given */
-    ActivityComponent activityComponentMock = mock(ActivityComponent.class);
-    mEditNotePresenter.acquire(mEditNoteContainerMock, activityComponentMock);
+    mEditNotePresenter.setContainer(mEditNoteContainerMock);
 
     when(mEditNoteContainerMock.getTitle()).thenReturn(TITLE);
     when(mEditNoteContainerMock.getContents()).thenReturn(CONTENTS);
@@ -102,8 +101,7 @@ public class EditExistingNotePresenterTest {
   @Test
   public void onSaveNoteClicked_validatesContents() {
     /* Given */
-    ActivityComponent activityComponentMock = mock(ActivityComponent.class);
-    mEditNotePresenter.acquire(mEditNoteContainerMock, activityComponentMock);
+    mEditNotePresenter.setContainer(mEditNoteContainerMock);
 
     when(mEditNoteContainerMock.getTitle()).thenReturn(TITLE);
     when(mEditNoteContainerMock.getContents()).thenReturn(CONTENTS);
@@ -118,8 +116,7 @@ public class EditExistingNotePresenterTest {
   @Test
   public void onSaveNoteClickedWithEmptyTitle_showsErrorMessage() {
     /* Given */
-    ActivityComponent activityComponentMock = mock(ActivityComponent.class);
-    mEditNotePresenter.acquire(mEditNoteContainerMock, activityComponentMock);
+    mEditNotePresenter.setContainer(mEditNoteContainerMock);
 
     when(mEditNoteContainerMock.getTitle()).thenReturn("");
     when(mEditNoteContainerMock.getContents()).thenReturn(CONTENTS);
@@ -134,8 +131,7 @@ public class EditExistingNotePresenterTest {
   @Test
   public void onSaveNoteClickedWithEmptyContents_showsErrorMessage() {
     /* Given */
-    ActivityComponent activityComponentMock = mock(ActivityComponent.class);
-    mEditNotePresenter.acquire(mEditNoteContainerMock, activityComponentMock);
+    mEditNotePresenter.setContainer(mEditNoteContainerMock);
 
     when(mEditNoteContainerMock.getTitle()).thenReturn(TITLE);
     when(mEditNoteContainerMock.getContents()).thenReturn("");
@@ -150,8 +146,7 @@ public class EditExistingNotePresenterTest {
   @Test
   public void onSaveNoteClicked_persistsTheNote() {
     /* Given */
-    ActivityComponent activityComponentMock = mock(ActivityComponent.class);
-    mEditNotePresenter.acquire(mEditNoteContainerMock, activityComponentMock);
+    mEditNotePresenter.setContainer(mEditNoteContainerMock);
 
     when(mEditNoteContainerMock.getTitle()).thenReturn(TITLE);
     when(mEditNoteContainerMock.getContents()).thenReturn(CONTENTS);
@@ -167,8 +162,7 @@ public class EditExistingNotePresenterTest {
   public void onSaveNoteClicked_navigatesBack() {
     /* Given */
     EditNoteContainer containerMock = mock(EditNoteContainer.class);
-    ActivityComponent activityComponentMock = mock(ActivityComponent.class);
-    mEditNotePresenter.acquire(containerMock, activityComponentMock);
+    mEditNotePresenter.setContainer(containerMock);
 
     when(containerMock.getTitle()).thenReturn(TITLE);
     when(containerMock.getContents()).thenReturn(CONTENTS);

@@ -18,6 +18,8 @@ package com.nhaarman.triad.sample.editnote;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.EditText;
 import butterknife.Bind;
@@ -25,8 +27,6 @@ import butterknife.OnClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 public class EditNoteView extends RelativeLayoutContainer<ActivityComponent, EditNotePresenter, EditNoteContainer> implements EditNoteContainer {
 
@@ -37,15 +37,11 @@ public class EditNoteView extends RelativeLayoutContainer<ActivityComponent, Edi
   protected EditText mContentsET;
 
   public EditNoteView(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
+    super(context, attrs, EditNotePresenter.class);
   }
 
   public EditNoteView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
-  }
-
-  public EditNoteView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
+    super(context, attrs, defStyle, EditNotePresenter.class);
   }
 
   @OnClick(R.id.view_editnote_savebutton)

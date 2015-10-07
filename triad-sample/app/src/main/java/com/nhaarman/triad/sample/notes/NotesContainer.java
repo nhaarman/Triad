@@ -21,7 +21,7 @@ import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
 import android.support.annotation.NonNull;
 
-interface NotesContainer extends Container<ActivityComponent, NotesPresenter, NotesContainer> {
+interface NotesContainer extends Container<ActivityComponent> {
 
   @NonNull
   NotesListContainer getNotesListContainer();

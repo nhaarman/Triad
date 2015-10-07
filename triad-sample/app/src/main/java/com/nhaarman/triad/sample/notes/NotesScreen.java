@@ -17,12 +17,14 @@
 package com.nhaarman.triad.sample.notes;
 
 import android.support.annotation.NonNull;
+import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.sample.ApplicationComponent;
 import com.nhaarman.triad.sample.R;
-import com.nhaarman.triad.sample.SampleScreen;
+import com.nhaarman.triad.sample.notes.noteslist.NotePresenter;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
-public class NotesScreen extends SampleScreen<NotesPresenter, NotesContainer> {
+public class NotesScreen extends Screen<ApplicationComponent> {
 
   @Override
   protected int getLayoutResId() {
@@ -31,8 +33,19 @@ public class NotesScreen extends SampleScreen<NotesPresenter, NotesContainer> {
 
   @NonNull
   @Override
-  protected NotesPresenter createPresenter(@NonNull final ApplicationComponent applicationComponent) {
-    NotesListPresenter notesListPresenter = new NotesListPresenter(applicationComponent.noteRepository());
-    return new NotesPresenter(notesListPresenter);
+  protected <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
+    if (presenterClass.equals(NotesPresenter.class)) {
+      return new NotesPresenter((NotesListPresenter) getPresenter(NotesListPresenter.class));
+    }
+
+    if (presenterClass.equals(NotesListPresenter.class)) {
+      return new NotesListPresenter(applicationComponent().noteRepository());
+    }
+
+    if (presenterClass.equals(NotePresenter.class)) {
+      return new NotePresenter();
+    }
+
+    throw new AssertionError("Unknown presenter class: " + presenterClass);
   }
 }

@@ -65,7 +65,7 @@ public class NotesListPresenterTest {
     /* Given */
     NotesListPresenter.OnNoteClickedListener listenerMock = mock(NotesListPresenter.OnNoteClickedListener.class);
     mNotesListPresenter.setNoteClickedListener(listenerMock);
-    mNotesListPresenter.acquire(mock(NotesListContainer.class), new ActivityComponent());
+    mNotesListPresenter.acquire(mock(NotesListContainer.class), mock(ActivityComponent.class));
 
     /* When */
     mNotesListPresenter.onNoteClicked(0);

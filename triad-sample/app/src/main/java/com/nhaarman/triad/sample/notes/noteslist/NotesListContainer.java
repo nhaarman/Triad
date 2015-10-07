@@ -22,7 +22,7 @@ import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import java.util.List;
 
-public interface NotesListContainer extends Container<ActivityComponent, NotesListPresenter, NotesListContainer> {
+public interface NotesListContainer extends Container<ActivityComponent> {
 
   void setNotes(@NonNull List<Note> notes);
 }

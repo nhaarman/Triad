@@ -20,7 +20,7 @@ import android.support.annotation.NonNull;
 import com.nhaarman.triad.Container;
 import com.nhaarman.triad.sample.ActivityComponent;
 
-public interface NoteContainer extends Container<ActivityComponent, NotePresenter, NoteContainer> {
+public interface NoteContainer extends Container<ActivityComponent> {
 
   void setTitle(@NonNull String title);
 

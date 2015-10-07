@@ -5,16 +5,8 @@ import android.util.AttributeSet;
 
 public class TestRelativeLayoutContainer extends RelativeLayoutContainer<ActivityComponent, TestPresenter, TestRelativeLayoutContainer> {
 
-  public TestRelativeLayoutContainer(final Context context) {
-    super(context);
-  }
-
-  public TestRelativeLayoutContainer(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
-  }
-
   public TestRelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
+    super(context, attrs, defStyle, TestPresenter.class);
   }
 
   @Override

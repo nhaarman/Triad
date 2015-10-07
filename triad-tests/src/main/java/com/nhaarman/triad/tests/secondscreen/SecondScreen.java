@@ -17,12 +17,12 @@
 package com.nhaarman.triad.tests.secondscreen;
 
 import android.support.annotation.NonNull;
+import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.Screen;
-import com.nhaarman.triad.tests.ActivityComponent;
 import com.nhaarman.triad.tests.ApplicationComponent;
 import com.nhaarman.triad.tests.R;
 
-public class SecondScreen extends Screen<ApplicationComponent, ActivityComponent, SecondScreenPresenter, SecondScreenContainer> {
+public class SecondScreen extends Screen<ApplicationComponent> {
 
   @Override
   protected int getLayoutResId() {
@@ -31,7 +31,7 @@ public class SecondScreen extends Screen<ApplicationComponent, ActivityComponent
 
   @NonNull
   @Override
-  protected SecondScreenPresenter createPresenter(@NonNull final ApplicationComponent applicationComponent) {
+  protected <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
     return new SecondScreenPresenter();
   }
 }

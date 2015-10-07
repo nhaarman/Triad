@@ -24,7 +24,7 @@ import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteRepository;
 import java.util.List;
 
-public class NotesListPresenter extends Presenter<ActivityComponent, NotesListPresenter, NotesListContainer> {
+public class NotesListPresenter extends Presenter<ActivityComponent, NotesListContainer> {
 
   @NonNull
   private final NoteRepository mNoteRepository;

@@ -1,12 +1,13 @@
 Triad
 =====
-[![Build Status](https://travis-ci.org/nhaarman/Triad.svg?branch=master)](https://travis-ci.org/nhaarman/Triad)
-[ ![Download](https://api.bintray.com/packages/nhaarman/maven/Triad/images/download.svg) ](https://bintray.com/nhaarman/maven/Triad/_latestVersion) 
+[ ![Download](https://api.bintray.com/packages/nhaarman/maven/Triad/images/download.svg) ](https://bintray.com/nhaarman/maven/Triad/_latestVersion)
 
-[![In Progress](https://badge.waffle.io/nhaarman/triad.svg?label=in-progress&title=In Progress)](http://waffle.io/nhaarman/triad)
-[![Ready for Release](https://badge.waffle.io/nhaarman/triad.svg?label=next-release&title=Ready for Release)](http://waffle.io/nhaarman/triad)
+[ ![In Progress](https://badge.waffle.io/nhaarman/triad.svg?label=in-progress&title=In Progress) ](http://waffle.io/nhaarman/triad)
+[ ![Ready for Release](https://badge.waffle.io/nhaarman/triad.svg?label=next-release&title=Ready for Release) ](http://waffle.io/nhaarman/triad)
 
-Triad is an Android library which enables use of the Model-View-Presenter pattern in an easy way.
+Triad is a tiny Android library which enables use of the Model-View-Presenter pattern in an easy way.
+It uses custom Views to replace the [dreaded Fragments](https://corner.squareup.com/2014/10/advocating-against-android-fragments.html), and introduces Presenter classes to separate business logic from view logic.
+Since the Presenters are plain Java objects, tests for these classes can run blazingly fast on a local JVM.
 
 ## Setup
 
@@ -25,12 +26,12 @@ dependencies {
 
 ## Classes
 
-A screen in an Android application that uses Triad consists of four classes: a `Screen` which defines the `View` and `Presenter`, a `Presenter` which handles logic formats data for the view, a `Container` which acts as an interface between the `Presenter` and the `View`, and the `View` class which displays data to the user.
+A simple screen in an Android application that uses Triad consists of four classes: a `Screen` which defines the `View` and `Presenter`, a `Presenter` which handles logic formats data for the view, a `Container` which acts as an interface between the `Presenter` and the `View`, and the `View` class which displays data to the user.
 
 ### Screen
 
 ```java
-public class MyScreen extends Screen<ApplicationComponent, ActivityComponent, MyPresenter, MyContainer> {
+public class MyScreen extends Screen<ApplicationComponent> {
 
   @Override
   protected int getLayoutResId() {
@@ -38,8 +39,12 @@ public class MyScreen extends Screen<ApplicationComponent, ActivityComponent, My
   }
 
   @Override
-  protected MyPresenter createPresenter(ApplicationComponent applicationComponent) {
-    return new MyPresenter();
+  public <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
+    if (presenterClass.equals(MyPresenter.class) {
+      return new MyPresenter();
+    }
+    
+    throw new AssertionError("Unknown Presenter class: " + presenterClass);
   }
 }
 ```
@@ -52,11 +57,11 @@ public class MyView extends RelativeLayoutContainer<ActivityComponent, MyPresent
   protected TextView mTextView;
 
   public MyView(Context context, AttributeSet attrs) {
-    super(context, attrs);
+    super(context, attrs, MyPresenter.class);
   }
 
   public MyView(Context context, AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
+    super(context, attrs, defStyleAttr, MyPresenter.class);
   }
 
   @Override
@@ -84,7 +89,7 @@ public class MyView extends RelativeLayoutContainer<ActivityComponent, MyPresent
 ### Container
 
 ```java
-interface MyContainer extends Container<ActivityComponent, MyPresenter, MyContainer> {
+interface MyContainer extends Container<ActivityComponent> {
 
   void setText(String text);
 }
@@ -93,7 +98,7 @@ interface MyContainer extends Container<ActivityComponent, MyPresenter, MyContai
 ### Presenter
 
 ```java
-class MyPresenter extends Presenter<ActivityComponent, MyPresenter, MyContainer> {
+class MyPresenter extends Presenter<ActivityComponent, MyContainer> {
 
   @Override
   public void onControlGained(MyContainer container, ActivityComponent activityComponent) {
@@ -104,9 +109,10 @@ class MyPresenter extends Presenter<ActivityComponent, MyPresenter, MyContainer>
 
 For more information, see the [Wiki](https://github.com/nhaarman/Triad/wiki).
 
+## Flow
+Navigating through screens is based on earlier versions of Square's [Flow](https://github.com/square/flow).
 
-License
-=======
+## License
 
     Copyright 2015 Niek Haarman
 

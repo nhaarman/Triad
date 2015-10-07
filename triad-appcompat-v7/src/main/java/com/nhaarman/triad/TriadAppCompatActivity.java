@@ -16,7 +16,6 @@
 
 package com.nhaarman.triad;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,12 +23,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * An {@link Activity} which is the root of an application that uses Triad.
+ * An {@link AppCompatActivity} which is the root of an application that uses Triad.
  *
  * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code Presenter} creation.
- * @param <ActivityComponent> The {@code ActivityComponent} to supply to {@code Presenters}.
+ * @param <ActivityComponent>    The {@code ActivityComponent} to supply to {@code Presenters}.
  */
-public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityComponent> extends AppCompatActivity {
+public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityComponent> extends AppCompatActivity
+    implements ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
 
   @NonNull
   private final TriadDelegate<ApplicationComponent, ActivityComponent> mDelegate;
@@ -38,7 +38,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
   private ActivityComponent mActivityComponent;
 
   public TriadAppCompatActivity() {
-    mDelegate = new TriadDelegate<>(this);
+    mDelegate = TriadDelegate.createFor(this);
   }
 
   @Override
@@ -47,8 +47,9 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
     mDelegate.onCreate(getActivityComponent());
   }
 
+  @Override
   @NonNull
-  protected synchronized ActivityComponent getActivityComponent() {
+  public synchronized ActivityComponent getActivityComponent() {
     if (mActivityComponent == null) {
       mActivityComponent = createActivityComponent();
     }
@@ -64,22 +65,10 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
   @NonNull
   protected abstract ActivityComponent createActivityComponent();
 
+  @NonNull
   @Override
-  protected void onStart() {
-    super.onStart();
-    mDelegate.onStart();
-  }
-
-  @Override
-  protected void onPostCreate(final Bundle savedInstanceState) {
-    super.onPostCreate(savedInstanceState);
-    mDelegate.onPostCreate();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mDelegate.onStop();
+  public Screen<ApplicationComponent> getCurrentScreen() {
+    return mDelegate.getCurrentScreen();
   }
 
   @Override

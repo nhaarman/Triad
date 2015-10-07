@@ -27,7 +27,7 @@ public class NotePresenterTest {
     mNotePresenter = new NotePresenter();
 
     mNoteContainerMock = mock(NoteContainer.class);
-    mNotePresenter.acquire(mNoteContainerMock, new ActivityComponent());
+    mNotePresenter.setContainer(mNoteContainerMock);
 
     mNote = new Note();
     mNote.setTitle(TITLE);
@@ -71,7 +71,7 @@ public class NotePresenterTest {
     notePresenter.setNote(mNote);
 
     /* When */
-    notePresenter.acquire(mNoteContainerMock, new ActivityComponent());
+    notePresenter.acquire(mNoteContainerMock, mock(ActivityComponent.class));
 
     /* Then */
     verify(mNoteContainerMock).setTitle(TITLE);
@@ -84,7 +84,7 @@ public class NotePresenterTest {
     notePresenter.setNote(mNote);
 
     /* When */
-    notePresenter.acquire(mNoteContainerMock, new ActivityComponent());
+    notePresenter.acquire(mNoteContainerMock, mock(ActivityComponent.class));
 
     /* Then */
     verify(mNoteContainerMock).setContents(CONTENTS);

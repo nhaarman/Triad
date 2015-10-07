@@ -34,11 +34,11 @@ public class NoteView extends RelativeLayoutContainer<ActivityComponent, NotePre
   protected TextView mContentsTV;
 
   public NoteView(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
+    super(context, attrs, NotePresenter.class);
   }
 
   public NoteView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
+    super(context, attrs, defStyle, NotePresenter.class);
   }
 
   @Override

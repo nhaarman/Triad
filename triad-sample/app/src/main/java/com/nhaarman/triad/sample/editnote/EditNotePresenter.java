@@ -18,7 +18,6 @@ package com.nhaarman.triad.sample.editnote;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.nhaarman.triad.Optional;
 import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
@@ -27,7 +26,7 @@ import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
 
-public class EditNotePresenter extends Presenter<ActivityComponent, EditNotePresenter, EditNoteContainer> {
+public class EditNotePresenter extends Presenter<ActivityComponent, EditNoteContainer> {
 
   @Nullable
   private final Note mNote;
@@ -66,31 +65,31 @@ public class EditNotePresenter extends Presenter<ActivityComponent, EditNotePres
   }
 
   public void onSaveNoteClicked() {
-    //noinspection AnonymousInnerClass
-    getContainer().ifPresent(new Optional.Consumer<EditNoteContainer>() {
-      @Override
-      public void accept(@NonNull final EditNoteContainer container) {
-        String title = container.getTitle();
-        String contents = container.getContents();
+    if (!container().isPresent()) {
+      return;
+    }
 
-        if (!mNoteValidator.validateTitle(title)) {
-          container.setTitleError(getResources().get().getString(R.string.error_title));
-          return;
-        }
+    EditNoteContainer container = container().get();
 
-        if (!mNoteValidator.validateContents(contents)) {
-          container.setContentsError(getResources().get().getString(R.string.error_contents));
-          return;
-        }
+    String title = container.getTitle();
+    String contents = container.getContents();
 
-        if (mNote == null) {
-          mNoteCreatorMock.createNote(title, contents);
-        } else {
-          mNoteRepository.update(mNote);
-        }
+    if (!mNoteValidator.validateTitle(title)) {
+      container.setTitleError(getResources().get().getString(R.string.error_title));
+      return;
+    }
 
-        getTriad().goBack();
-      }
-    });
+    if (!mNoteValidator.validateContents(contents)) {
+      container.setContentsError(getResources().get().getString(R.string.error_contents));
+      return;
+    }
+
+    if (mNote == null) {
+      mNoteCreatorMock.createNote(title, contents);
+    } else {
+      mNoteRepository.update(mNote);
+    }
+
+    getTriad().goBack();
   }
 }

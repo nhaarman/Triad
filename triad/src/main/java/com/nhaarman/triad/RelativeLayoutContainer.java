@@ -16,12 +16,12 @@
 
 package com.nhaarman.triad;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
+
+import butterknife.ButterKnife;
 
 /**
  * An abstract {@link Container} instance that handles {@link Presenter} management,
@@ -31,70 +31,55 @@ import android.widget.RelativeLayout;
  * @param <C> The specialized {@link Container} type.
  */
 public abstract class RelativeLayoutContainer<
-    ActivityComponent,
-    P extends Presenter<ActivityComponent, P, C>,
-    C extends Container<ActivityComponent, P, C>
-    > extends RelativeLayout implements Container<ActivityComponent, P, C> {
+        ActivityComponent,
+        P extends Presenter<ActivityComponent, C>,
+        C extends Container<ActivityComponent>
+        > extends RelativeLayout implements Container<ActivityComponent> {
 
-  @NonNull
-  private final ContainerDelegate<ActivityComponent, P, C> mDelegate = new ContainerDelegate<>((C) this);
+    @NonNull
+    private final P mPresenter;
 
-  public RelativeLayoutContainer(final Context context) {
-    super(context);
-  }
+    @NonNull
+    private final ActivityComponent mActivityComponent;
 
-  public RelativeLayoutContainer(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
-  }
+    public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final Class<P> presenterClass) {
+        this(context, attrs, 0, presenterClass);
+    }
 
-  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
-  }
+    public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle, final Class<P> presenterClass) {
+        super(context, attrs, defStyle);
 
-  @TargetApi(21)
-  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
-  }
+        mActivityComponent = ((ActivityComponentProvider<ActivityComponent>) context).getActivityComponent();
+        mPresenter = (P) ((ScreenProvider<?>) context).getCurrentScreen().getPresenter(presenterClass);
+        mPresenter.setTriad(((TriadProvider) context.getApplicationContext()).getTriad());
+    }
 
-  /**
-   * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
-   */
-  @NonNull
-  public P getPresenter() {
-    return mDelegate.getPresenter();
-  }
+    /**
+     * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
+     */
+    @NonNull
+    public P getPresenter() {
+        return mPresenter;
+    }
 
-  /**
-   * Sets the {@link P} that controls this {@code RelativeLayoutContainer}.
-   *
-   * @param presenter The {@link P} instance.
-   */
-  @Override
-  @CallSuper
-  public void setPresenterAndActivityComponent(@NonNull final P presenter, @NonNull final ActivityComponent activityComponent) {
-    mDelegate.setPresenterAndActivityComponent(presenter, activityComponent);
-  }
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
 
-  @NonNull
-  public ActivityComponent getActivityComponent() {
-    return mDelegate.getActivityComponent();
-  }
+        ButterKnife.bind(this);
+    }
 
-  @Override
-  protected void onFinishInflate() {
-    super.onFinishInflate();
-    mDelegate.onFinishInflate();
-  }
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
 
-  @Override
-  protected void onAttachedToWindow() {
-    super.onAttachedToWindow();
-    mDelegate.onAttachedToWindow();
-  }
+        mPresenter.acquire((C) this, mActivityComponent);
+    }
 
-  @Override
-  protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
-    mDelegate.onDetachedFromWindow();
-  }
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        mPresenter.releaseContainer();
+    }
 }
