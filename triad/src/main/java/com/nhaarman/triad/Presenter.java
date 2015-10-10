@@ -30,7 +30,7 @@ import static com.nhaarman.triad.Preconditions.checkState;
  * @param <ActivityComponent> The activity component.
  * @param <C>                 The specialized type of the {@link Container}.
  */
-public class Presenter<ActivityComponent, C extends Container<ActivityComponent>> {
+public class Presenter<ActivityComponent, C extends Container> {
 
   /**
    * The {@link C} this {@link Presenter} controls.

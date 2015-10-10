@@ -89,7 +89,7 @@ public class MyView extends RelativeLayoutContainer<ActivityComponent, MyPresent
 ### Container
 
 ```java
-interface MyContainer extends Container<ActivityComponent> {
+interface MyContainer extends Container {
 
   void setText(String text);
 }

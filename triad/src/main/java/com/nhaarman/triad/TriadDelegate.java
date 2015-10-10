@@ -70,7 +70,7 @@ public class TriadDelegate<ApplicationComponent, ActivityComponent> {
    * An optional {@link OnScreenChangedListener} that is notified of screen changes.
    */
   @Nullable
-  private OnScreenChangedListener<ApplicationComponent, ActivityComponent> mOnScreenChangedListener;
+  private OnScreenChangedListener<ApplicationComponent> mOnScreenChangedListener;
 
   private TriadView mTriadView;
 
@@ -129,7 +129,7 @@ public class TriadDelegate<ApplicationComponent, ActivityComponent> {
   /**
    * Sets an {@link OnScreenChangedListener} to be notified of screen changes.
    */
-  public void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<ApplicationComponent, ActivityComponent> onScreenChangedListener) {
+  public void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<ApplicationComponent> onScreenChangedListener) {
     mOnScreenChangedListener = onScreenChangedListener;
   }
 

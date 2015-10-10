@@ -17,14 +17,12 @@
 package com.nhaarman.triad.sample.notes;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import butterknife.Bind;
 import butterknife.OnClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
-import com.nhaarman.triad.sample.notes.noteslist.NotesListContainer;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListView;
 
 public class NotesView extends RelativeLayoutContainer<ActivityComponent, NotesPresenter, NotesContainer> implements NotesContainer {
@@ -38,12 +36,6 @@ public class NotesView extends RelativeLayoutContainer<ActivityComponent, NotesP
 
   public NotesView(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle, NotesPresenter.class);
-  }
-
-  @Override
-  @NonNull
-  public NotesListContainer getNotesListContainer() {
-    return mNotesListView;
   }
 
   @OnClick(R.id.view_notes_createnotebutton)

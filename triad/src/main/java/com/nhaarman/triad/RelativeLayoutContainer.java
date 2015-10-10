@@ -33,8 +33,8 @@ import butterknife.ButterKnife;
 public abstract class RelativeLayoutContainer<
         ActivityComponent,
         P extends Presenter<ActivityComponent, C>,
-        C extends Container<ActivityComponent>
-        > extends RelativeLayout implements Container<ActivityComponent> {
+        C extends Container
+        > extends RelativeLayout implements Container {
 
     @NonNull
     private final P mPresenter;

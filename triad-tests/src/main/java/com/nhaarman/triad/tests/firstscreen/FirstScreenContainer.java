@@ -17,9 +17,8 @@
 package com.nhaarman.triad.tests.firstscreen;
 
 import com.nhaarman.triad.Container;
-import com.nhaarman.triad.tests.ActivityComponent;
 
-public interface FirstScreenContainer extends Container<ActivityComponent> {
+public interface FirstScreenContainer extends Container {
 
   void setText(String text);
 }

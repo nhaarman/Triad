@@ -91,7 +91,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
     return mDelegate.getTriad();
   }
 
-  protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<ApplicationComponent, ActivityComponent> onScreenChangedListener) {
+  protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<ApplicationComponent> onScreenChangedListener) {
     mDelegate.setOnScreenChangedListener(onScreenChangedListener);
   }
 }

@@ -49,6 +49,21 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
     return R.layout.view_editnote;
   }
 
+  @NonNull
+  @Override
+  protected <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
+    if (presenterClass.equals(EditNotePresenter.class)) {
+      return new EditNotePresenter(
+          mNote,
+          applicationComponent().noteValidator(),
+          applicationComponent().noteCreator(),
+          applicationComponent().noteRepository()
+      );
+    }
+
+    throw new AssertionError("Unknown class: " + presenterClass);
+  }
+
   @Override
   public boolean animateTransition(@Nullable final View oldView,
                                    @NonNull final View newView,
@@ -69,20 +84,5 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
     });
 
     return true;
-  }
-
-  @NonNull
-  @Override
-  protected <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
-    if (presenterClass.equals(EditNotePresenter.class)) {
-      return new EditNotePresenter(
-          mNote,
-          applicationComponent().noteValidator(),
-          applicationComponent().noteCreator(),
-          applicationComponent().noteRepository()
-      );
-    }
-
-    throw new AssertionError("Unknown class: " + presenterClass);
   }
 }

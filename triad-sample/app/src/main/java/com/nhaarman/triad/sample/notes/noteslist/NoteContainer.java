@@ -18,9 +18,8 @@ package com.nhaarman.triad.sample.notes.noteslist;
 
 import android.support.annotation.NonNull;
 import com.nhaarman.triad.Container;
-import com.nhaarman.triad.sample.ActivityComponent;
 
-public interface NoteContainer extends Container<ActivityComponent> {
+public interface NoteContainer extends Container {
 
   void setTitle(@NonNull String title);
 

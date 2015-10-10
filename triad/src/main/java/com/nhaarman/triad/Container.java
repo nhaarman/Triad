@@ -19,7 +19,7 @@ package com.nhaarman.triad;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-public interface Container<ActivityComponent> {
+public interface Container {
 
   /**
    * Returns the context the container is running in, through which it can

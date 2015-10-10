@@ -24,7 +24,7 @@ dependencies {
   compile 'com.jakewharton:butterknife:7.0.1'
 
   /* Annotations library */
-  provided 'com.android.support:support-annotations:23.0.0'
+  provided 'com.android.support:support-annotations:23.0.1'
   provided 'org.jetbrains:annotations:13.0'
 
   /* Tests */
