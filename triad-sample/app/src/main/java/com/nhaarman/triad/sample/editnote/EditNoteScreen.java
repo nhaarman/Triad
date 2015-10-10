@@ -69,7 +69,9 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
                                    @NonNull final View newView,
                                    @NonNull final Triad.Direction direction,
                                    @NonNull final Triad.Callback callback) {
-    assert oldView != null;
+    if (oldView == null) {
+      return false;
+    }
 
     oldView.animate().x(-oldView.getWidth()).setInterpolator(new AccelerateInterpolator());
     newView.setX(((View) newView.getParent()).getWidth());

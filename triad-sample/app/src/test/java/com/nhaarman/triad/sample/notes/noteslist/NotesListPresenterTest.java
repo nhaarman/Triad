@@ -7,14 +7,16 @@ import com.nhaarman.triad.sample.NoteRepository;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.mockito.Matchers.argThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("rawtypes")
 public class NotesListPresenterTest {
 
   private NotesListPresenter mNotesListPresenter;
@@ -25,10 +27,13 @@ public class NotesListPresenterTest {
 
   private Note mNote2;
 
+  private NotesListPresenter.OnNoteClickedListener mOnNoteClickedListener;
+
   @Before
   public void setUp() {
     mNoteRepository = spy(new MemoryNoteRepository());
-    mNotesListPresenter = new NotesListPresenter(mNoteRepository);
+    mOnNoteClickedListener = mock(NotesListPresenter.OnNoteClickedListener.class);
+    mNotesListPresenter = new NotesListPresenter(mNoteRepository, mOnNoteClickedListener);
 
     mNote1 = new Note();
     mNoteRepository.create(mNote1);
@@ -49,7 +54,7 @@ public class NotesListPresenterTest {
   }
 
   @Test
-  public void onControlGained_setsNotesToContainer() {
+  public void onControlGained_setsNotePresentersToContainer() {
     /* Given */
     NotesListContainer containerMock = mock(NotesListContainer.class);
 
@@ -57,20 +62,22 @@ public class NotesListPresenterTest {
     mNotesListPresenter.onControlGained(containerMock, new ActivityComponent());
 
     /* Then */
-    verify(containerMock).setNotes((List<Note>) argThat(contains(mNote1, mNote2)));
+    ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+    verify(containerMock).setNotes((List<NotePresenter>) captor.capture());
+
+    List<NotePresenter> notePresenters = captor.getValue();
+    assertThat(notePresenters.size(), is(2));
   }
 
   @Test
   public void onNoteClicked_notifiesListener() {
     /* Given */
-    NotesListPresenter.OnNoteClickedListener listenerMock = mock(NotesListPresenter.OnNoteClickedListener.class);
-    mNotesListPresenter.setNoteClickedListener(listenerMock);
     mNotesListPresenter.acquire(mock(NotesListContainer.class), mock(ActivityComponent.class));
 
     /* When */
     mNotesListPresenter.onNoteClicked(0);
 
     /* Then */
-    verify(listenerMock).onNoteClicked(mNote1);
+    verify(mOnNoteClickedListener).onNoteClicked(mNote1);
   }
 }

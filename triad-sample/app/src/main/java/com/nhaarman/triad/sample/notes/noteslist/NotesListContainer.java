@@ -18,10 +18,9 @@ package com.nhaarman.triad.sample.notes.noteslist;
 
 import android.support.annotation.NonNull;
 import com.nhaarman.triad.Container;
-import com.nhaarman.triad.sample.Note;
 import java.util.List;
 
 public interface NotesListContainer extends Container {
 
-  void setNotes(@NonNull List<Note> notes);
+  void setNotes(@NonNull List<NotePresenter> notes);
 }

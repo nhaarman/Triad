@@ -22,6 +22,7 @@ import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteRepository;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotesListPresenter extends Presenter<ActivityComponent, NotesListContainer> {
@@ -29,36 +30,36 @@ public class NotesListPresenter extends Presenter<ActivityComponent, NotesListCo
   @NonNull
   private final NoteRepository mNoteRepository;
 
-  @Nullable
-  private List<Note> mNotes;
+  @NonNull
+  private final OnNoteClickedListener mListener;
 
   @Nullable
-  private OnNoteClickedListener mListener;
+  private List<NotePresenter> mNotePresenters;
 
-  public NotesListPresenter(@NonNull final NoteRepository noteRepository) {
+  public NotesListPresenter(@NonNull final NoteRepository noteRepository,
+                            @NonNull final OnNoteClickedListener listener) {
     mNoteRepository = noteRepository;
+    mListener = listener;
   }
 
   @Override
   protected void onControlGained(@NonNull final NotesListContainer container, @NonNull final ActivityComponent activityComponent) {
-    mNotes = mNoteRepository.findAll();
-    container.setNotes(mNotes);
-  }
+    List<Note> notes = mNoteRepository.findAll();
 
-  public void setNoteClickedListener(final OnNoteClickedListener listener) {
-    mListener = listener;
+    mNotePresenters = new ArrayList<>();
+    for (Note note : notes) {
+      mNotePresenters.add(new NotePresenter(note));
+    }
+
+    container.setNotes(mNotePresenters);
   }
 
   public void onNoteClicked(final int position) {
-    if (mNotes == null || mListener == null) {
+    if (mNotePresenters == null) {
       return;
     }
 
-    mListener.onNoteClicked(mNotes.get(position));
-  }
-
-  public NotePresenter createNotePresenter() {
-    return new NotePresenter();
+    mListener.onNoteClicked(mNotePresenters.get(position).getNote());
   }
 
   public interface OnNoteClickedListener {

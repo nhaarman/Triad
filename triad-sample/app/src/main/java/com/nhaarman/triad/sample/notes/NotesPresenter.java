@@ -25,10 +25,6 @@ import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
 class NotesPresenter extends Presenter<ActivityComponent, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
 
-  NotesPresenter(@NonNull final NotesListPresenter notesListPresenter) {
-    notesListPresenter.setNoteClickedListener(this);
-  }
-
   public void onCreateNoteClicked() {
     getTriad().goTo(new EditNoteScreen());
   }

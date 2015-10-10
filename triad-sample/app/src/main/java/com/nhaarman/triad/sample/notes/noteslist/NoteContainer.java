@@ -25,6 +25,6 @@ public interface NoteContainer extends Container {
 
   void setContents(@NonNull String contents);
 
-  @NonNull
-  NotePresenter getPresenter();
+  void setPresenter(@NonNull NotePresenter notePresenter);
+
 }

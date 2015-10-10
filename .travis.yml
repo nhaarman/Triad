@@ -14,7 +14,7 @@ before_install:
  - git fetch --tags
 
 script:
- - ./gradlew clean build assemble test --stacktrace
+ - ./gradlew build assemble test --stacktrace
 
 after_success:
  - ./gradlew artifactoryPublish

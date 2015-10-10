@@ -17,31 +17,27 @@
 package com.nhaarman.triad.sample.notes.noteslist;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 
 public class NotePresenter extends Presenter<ActivityComponent, NoteContainer> {
 
-  @Nullable
-  private Note mNote;
+  @NonNull
+  private final Note mNote;
+
+  public NotePresenter(@NonNull final Note note) {
+    mNote = note;
+  }
+
+  @NonNull
+  public Note getNote() {
+    return mNote;
+  }
 
   @Override
   protected void onControlGained(@NonNull final NoteContainer container, @NonNull final ActivityComponent activityComponent) {
-    if (mNote != null) {
-      setNote(mNote);
-    }
-  }
-
-  public void setNote(@NonNull final Note note) {
-    mNote = note;
-
-    if (!container().isPresent()) {
-      return;
-    }
-
-    container().get().setTitle(note.getTitle());
-    container().get().setContents(note.getContents());
+    container.setTitle(mNote.getTitle());
+    container.setContents(mNote.getContents());
   }
 }

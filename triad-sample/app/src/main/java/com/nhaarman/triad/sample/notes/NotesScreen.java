@@ -21,7 +21,6 @@ import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.sample.ApplicationComponent;
 import com.nhaarman.triad.sample.R;
-import com.nhaarman.triad.sample.notes.noteslist.NotePresenter;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
 public class NotesScreen extends Screen<ApplicationComponent> {
@@ -35,15 +34,14 @@ public class NotesScreen extends Screen<ApplicationComponent> {
   @Override
   protected <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
     if (presenterClass.equals(NotesPresenter.class)) {
-      return new NotesPresenter((NotesListPresenter) getPresenter(NotesListPresenter.class));
+      return new NotesPresenter();
     }
 
     if (presenterClass.equals(NotesListPresenter.class)) {
-      return new NotesListPresenter(applicationComponent().noteRepository());
-    }
-
-    if (presenterClass.equals(NotePresenter.class)) {
-      return new NotePresenter();
+      return new NotesListPresenter(
+          applicationComponent().noteRepository(),
+          (NotesListPresenter.OnNoteClickedListener) getPresenter(NotesPresenter.class)
+      );
     }
 
     throw new AssertionError("Unknown presenter class: " + presenterClass);
