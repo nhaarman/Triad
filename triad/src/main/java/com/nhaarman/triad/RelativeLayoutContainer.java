@@ -62,6 +62,11 @@ public abstract class RelativeLayoutContainer<
         return mPresenter;
     }
 
+    @NonNull
+    public ActivityComponent getActivityComponent() {
+        return mActivityComponent;
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
