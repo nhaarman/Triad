@@ -21,8 +21,8 @@ import static com.nhaarman.triad.Preconditions.checkState;
 public abstract class AdapterRelativeLayoutContainer<
     ActivityComponent,
     P extends Presenter<ActivityComponent, C>,
-    C extends Container
-    > extends RelativeLayout implements Container {
+    C extends AdapterContainer<P>
+    > extends RelativeLayout implements AdapterContainer<P> {
 
   @NonNull
   private final ActivityComponent mActivityComponent;
@@ -52,6 +52,7 @@ public abstract class AdapterRelativeLayoutContainer<
     return mPresenter;
   }
 
+  @Override
   public void setPresenter(@NonNull final P presenter) {
     mPresenter = presenter;
     mPresenter.setTriad(((TriadProvider) getContext().getApplicationContext()).getTriad());

@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package com.nhaarman.triad.sample.notes.noteslist;
+package com.nhaarman.triad;
 
 import android.support.annotation.NonNull;
-import com.nhaarman.triad.AdapterContainer;
-import com.nhaarman.triad.Container;
 
-public interface NoteContainer extends AdapterContainer<NotePresenter> {
+public interface AdapterContainer<P extends Presenter<?, ?>> extends Container {
 
-  void setTitle(@NonNull String title);
-
-  void setContents(@NonNull String contents);
-
+  void setPresenter(@NonNull P presenter);
 }
