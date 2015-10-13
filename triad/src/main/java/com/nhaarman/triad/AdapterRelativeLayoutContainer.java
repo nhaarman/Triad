@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
 
 import static com.nhaarman.triad.Preconditions.checkState;
+import static com.nhaarman.triad.TriadUtil.findActivityComponent;
 
 /**
  * An abstract RelativeLayout {@link Container} instance that handles {@link Presenter} management
@@ -39,8 +40,8 @@ public abstract class AdapterRelativeLayoutContainer<
   public AdapterRelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
 
-    mActivityComponent = ((ActivityComponentProvider<ActivityComponent>) context).getActivityComponent();
-  }
+    mActivityComponent = findActivityComponent(context);
+ }
 
   /**
    * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.

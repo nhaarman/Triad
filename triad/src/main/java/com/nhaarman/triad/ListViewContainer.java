@@ -22,6 +22,9 @@ import android.util.AttributeSet;
 import android.widget.ListView;
 import butterknife.ButterKnife;
 
+import static com.nhaarman.triad.TriadUtil.findActivityComponent;
+import static com.nhaarman.triad.TriadUtil.findPresenter;
+
 /**
  * An abstract ListView {@link Container} instance that handles {@link Presenter} management,
  * and uses Butter Knife to bind view fields in implementing classes.
@@ -48,8 +51,8 @@ public abstract class ListViewContainer<
   public ListViewContainer(final Context context, final AttributeSet attrs, final int defStyle, final Class<P> presenterClass) {
     super(context, attrs, defStyle);
 
-    mActivityComponent = ((ActivityComponentProvider<ActivityComponent>) context).getActivityComponent();
-    mPresenter = (P) ((ScreenProvider<?>) context).getCurrentScreen().getPresenter(presenterClass);
+    mActivityComponent = findActivityComponent(context);
+    mPresenter = findPresenter(context, presenterClass);
     mPresenter.setTriad(((TriadProvider) context.getApplicationContext()).getTriad());
   }
 

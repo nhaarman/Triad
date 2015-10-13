@@ -20,8 +20,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
-
 import butterknife.ButterKnife;
+
+import static com.nhaarman.triad.TriadUtil.findActivityComponent;
+import static com.nhaarman.triad.TriadUtil.findPresenter;
 
 /**
  * An abstract {@link Container} instance that handles {@link Presenter} management,
@@ -31,60 +33,60 @@ import butterknife.ButterKnife;
  * @param <C> The specialized {@link Container} type.
  */
 public abstract class RelativeLayoutContainer<
-        ActivityComponent,
-        P extends Presenter<ActivityComponent, C>,
-        C extends Container
-        > extends RelativeLayout implements Container {
+    ActivityComponent,
+    P extends Presenter<ActivityComponent, C>,
+    C extends Container
+    > extends RelativeLayout implements Container {
 
-    @NonNull
-    private final P mPresenter;
+  @NonNull
+  private final P mPresenter;
 
-    @NonNull
-    private final ActivityComponent mActivityComponent;
+  @NonNull
+  private final ActivityComponent mActivityComponent;
 
-    public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final Class<P> presenterClass) {
-        this(context, attrs, 0, presenterClass);
-    }
+  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final Class<P> presenterClass) {
+    this(context, attrs, 0, presenterClass);
+  }
 
-    public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle, final Class<P> presenterClass) {
-        super(context, attrs, defStyle);
+  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle, final Class<P> presenterClass) {
+    super(context, attrs, defStyle);
 
-        mActivityComponent = ((ActivityComponentProvider<ActivityComponent>) context).getActivityComponent();
-        mPresenter = (P) ((ScreenProvider<?>) context).getCurrentScreen().getPresenter(presenterClass);
-        mPresenter.setTriad(((TriadProvider) context.getApplicationContext()).getTriad());
-    }
+    mActivityComponent = findActivityComponent(context);
+    mPresenter = findPresenter(context, presenterClass);
+    mPresenter.setTriad(((TriadProvider) context.getApplicationContext()).getTriad());
+  }
 
-    /**
-     * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
-     */
-    @NonNull
-    public P getPresenter() {
-        return mPresenter;
-    }
+  /**
+   * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
+   */
+  @NonNull
+  public P getPresenter() {
+    return mPresenter;
+  }
 
-    @NonNull
-    public ActivityComponent getActivityComponent() {
-        return mActivityComponent;
-    }
+  @NonNull
+  public ActivityComponent getActivityComponent() {
+    return mActivityComponent;
+  }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+  @Override
+  protected void onFinishInflate() {
+    super.onFinishInflate();
 
-        ButterKnife.bind(this);
-    }
+    ButterKnife.bind(this);
+  }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
+  @Override
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
 
-        mPresenter.acquire((C) this, mActivityComponent);
-    }
+    mPresenter.acquire((C) this, mActivityComponent);
+  }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
 
-        mPresenter.releaseContainer();
-    }
+    mPresenter.releaseContainer();
+  }
 }
