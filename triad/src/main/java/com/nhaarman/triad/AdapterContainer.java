@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package com.nhaarman.triad.sample;
+package com.nhaarman.triad;
 
-import com.nhaarman.triad.Container;
-import com.nhaarman.triad.Presenter;
-import com.nhaarman.triad.Screen;
+import android.support.annotation.NonNull;
 
-public abstract class SampleScreen<
-    P extends Presenter<ActivityComponent, P, C>,
-    C extends Container<ActivityComponent, P, C>
-    > extends Screen<ApplicationComponent, ActivityComponent, P, C> {
+public interface AdapterContainer<P extends Presenter<?, ?>> extends Container {
 
+  void setPresenter(@NonNull P presenter);
 }

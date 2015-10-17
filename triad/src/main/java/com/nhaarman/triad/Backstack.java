@@ -28,20 +28,20 @@ import java.util.Iterator;
 /**
  * Describes the history of a {@link Triad} at a specific point in time.
  */
-public final class Backstack implements Iterable<Screen<?, ?, ?, ?>> {
+public final class Backstack implements Iterable<Screen<?>> {
 
-  private final Deque<Screen<?, ?, ?, ?>> mBackstack;
+  private final Deque<Screen<?>> mBackstack;
 
-  private Backstack(final Deque<Screen<?, ?, ?, ?>> backstack) {
+  private Backstack(final Deque<Screen<?>> backstack) {
     mBackstack = backstack;
   }
 
   @Override
-  public Iterator<Screen<?, ?, ?, ?>> iterator() {
+  public Iterator<Screen<?>> iterator() {
     return new ReadIterator<>(mBackstack.iterator());
   }
 
-  public Iterator<Screen<?, ?, ?, ?>> reverseIterator() {
+  public Iterator<Screen<?>> reverseIterator() {
     return new ReadIterator<>(mBackstack.descendingIterator());
   }
 
@@ -50,7 +50,7 @@ public final class Backstack implements Iterable<Screen<?, ?, ?, ?>> {
   }
 
   @Nullable
-  public Screen<?, ?, ?, ?> current() {
+  public Screen<?> current() {
     return mBackstack.peek();
   }
 
@@ -67,35 +67,35 @@ public final class Backstack implements Iterable<Screen<?, ?, ?, ?>> {
   }
 
   public static Builder emptyBuilder() {
-    return new Builder(Collections.<Screen<?, ?, ?, ?>>emptyList());
+    return new Builder(Collections.<Screen<?>>emptyList());
   }
 
   /**
    * Create a backstack that contains a single screen.
    */
-  public static Backstack single(final Screen<?, ?, ?, ?> screen) {
+  public static Backstack single(final Screen<?> screen) {
     return emptyBuilder().push(screen).build();
   }
 
   public static final class Builder {
 
     @NonNull
-    private final Deque<Screen<?, ?, ?, ?>> mBackstack;
+    private final Deque<Screen<?>> mBackstack;
 
-    Builder(@NonNull final Collection<Screen<?, ?, ?, ?>> backstack) {
+    Builder(@NonNull final Collection<Screen<?>> backstack) {
       mBackstack = new ArrayDeque<>(backstack);
     }
 
     @NonNull
-    public Builder push(@NonNull final Screen<?, ?, ?, ?> screen) {
+    public Builder push(@NonNull final Screen<?> screen) {
       mBackstack.push(screen);
 
       return this;
     }
 
     @NonNull
-    public Builder addAll(@NonNull final Collection<Screen<?, ?, ?, ?>> screens) {
-      for (Screen<?, ?, ?, ?> screen : screens) {
+    public Builder addAll(@NonNull final Collection<Screen<?>> screens) {
+      for (Screen<?> screen : screens) {
         mBackstack.push(screen);
       }
 
@@ -103,12 +103,12 @@ public final class Backstack implements Iterable<Screen<?, ?, ?, ?>> {
     }
 
     @Nullable
-    public Screen<?, ?, ?, ?> peek() {
+    public Screen<?> peek() {
       return mBackstack.peek();
     }
 
     @Nullable
-    public Screen<?, ?, ?, ?> pop() {
+    public Screen<?> pop() {
       return mBackstack.pop();
     }
 

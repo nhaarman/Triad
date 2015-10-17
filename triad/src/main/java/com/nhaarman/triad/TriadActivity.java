@@ -26,9 +26,10 @@ import android.support.annotation.Nullable;
  * An {@link Activity} which is the root of an application that uses Triad.
  *
  * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code Presenter} creation.
- * @param <ActivityComponent> The {@code ActivityComponent} to supply to {@code Presenters}.
+ * @param <ActivityComponent>    The {@code ActivityComponent} to supply to {@code Presenters}.
  */
-public abstract class TriadActivity<ApplicationComponent, ActivityComponent> extends Activity {
+public abstract class TriadActivity<ApplicationComponent, ActivityComponent> extends Activity
+    implements ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
 
   @NonNull
   private final TriadDelegate<ApplicationComponent, ActivityComponent> mDelegate;
@@ -37,7 +38,7 @@ public abstract class TriadActivity<ApplicationComponent, ActivityComponent> ext
   private ActivityComponent mActivityComponent;
 
   public TriadActivity() {
-    mDelegate = new TriadDelegate<>(this);
+    mDelegate = TriadDelegate.createFor(this);
   }
 
   @Override
@@ -46,8 +47,9 @@ public abstract class TriadActivity<ApplicationComponent, ActivityComponent> ext
     mDelegate.onCreate(getActivityComponent());
   }
 
+  @Override
   @NonNull
-  protected synchronized ActivityComponent getActivityComponent() {
+  public synchronized ActivityComponent getActivityComponent() {
     if (mActivityComponent == null) {
       mActivityComponent = createActivityComponent();
     }
@@ -63,22 +65,10 @@ public abstract class TriadActivity<ApplicationComponent, ActivityComponent> ext
   @NonNull
   protected abstract ActivityComponent createActivityComponent();
 
+  @NonNull
   @Override
-  protected void onStart() {
-    super.onStart();
-    mDelegate.onStart();
-  }
-
-  @Override
-  protected void onPostCreate(final Bundle savedInstanceState) {
-    super.onPostCreate(savedInstanceState);
-    mDelegate.onPostCreate();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mDelegate.onStop();
+  public Screen<ApplicationComponent> getCurrentScreen() {
+    return mDelegate.getCurrentScreen();
   }
 
   @Override
@@ -101,7 +91,7 @@ public abstract class TriadActivity<ApplicationComponent, ActivityComponent> ext
     return mDelegate.getTriad();
   }
 
-  protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<ApplicationComponent, ActivityComponent> onScreenChangedListener) {
+  protected void setOnScreenChangedListener(@Nullable final OnScreenChangedListener<ApplicationComponent> onScreenChangedListener) {
     mDelegate.setOnScreenChangedListener(onScreenChangedListener);
   }
 }

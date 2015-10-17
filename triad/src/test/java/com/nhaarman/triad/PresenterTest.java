@@ -18,8 +18,13 @@ public class PresenterTest {
   }
 
   @Test
-  public void initially_theContainerIsPresent() {
-    assertThat(mPresenter.getContainer().isPresent(), is(false));
+  public void initially_theContainerIsNotPresent() {
+    assertThat(mPresenter.container().isPresent(), is(false));
+  }
+
+  @Test
+  public void initially_theActivityComponentIsNotPresent() {
+    assertThat(mPresenter.activityComponent().isPresent(), is(false));
   }
 
   @Test
@@ -31,20 +36,43 @@ public class PresenterTest {
     mPresenter.acquire(container, mock(ActivityComponent.class));
 
     /* Then */
-    assertThat(mPresenter.getContainer().isPresent(), is(true));
+    assertThat(mPresenter.container().isPresent(), is(true));
+  }
+
+  @Test
+  public void afterAcquiringActivityComponent_theActivityComponentIsPresent() {
+    /* Given */
+    ActivityComponent activityComponent = mock(ActivityComponent.class);
+
+    /* When */
+    mPresenter.acquire(mock(TestRelativeLayoutContainer.class), activityComponent);
+
+    /* Then */
+    assertThat(mPresenter.activityComponent().isPresent(), is(true));
   }
 
   @Test
   public void afterReleasingContainer_theContainerIsNotPresent() {
     /* Given */
-    TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
-    mPresenter.acquire(container, mock(ActivityComponent.class));
+    mPresenter.acquire(mock(TestRelativeLayoutContainer.class), mock(ActivityComponent.class));
 
     /* When */
     mPresenter.releaseContainer();
 
     /* Then */
-    assertThat(mPresenter.getContainer().isPresent(), is(false));
+    assertThat(mPresenter.container().isPresent(), is(false));
+  }
+
+  @Test
+  public void afterReleasingContainer_theActivityComponentIsNotPresent() {
+    /* Given */
+    mPresenter.acquire(mock(TestRelativeLayoutContainer.class), mock(ActivityComponent.class));
+
+    /* When */
+    mPresenter.releaseContainer();
+
+    /* Then */
+    assertThat(mPresenter.activityComponent().isPresent(), is(false));
   }
 
   @Test

@@ -20,6 +20,7 @@ import android.content.res.Resources;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -27,20 +28,15 @@ import static com.nhaarman.triad.Preconditions.checkState;
  * The Presenter class.
  *
  * @param <ActivityComponent> The activity component.
- * @param <P>                 The specialized type of the {@link Presenter}.
  * @param <C>                 The specialized type of the {@link Container}.
  */
-public class Presenter<
-    ActivityComponent,
-    P extends Presenter<ActivityComponent, P, C>,
-    C extends Container<ActivityComponent, P, C>
-    > {
+public class Presenter<ActivityComponent, C extends Container> {
 
   /**
    * The {@link C} this {@link Presenter} controls.
    */
   @Nullable
-  C mContainer;
+  private C mContainer;
 
   @Nullable
   private ActivityComponent mActivityComponent;
@@ -69,6 +65,11 @@ public class Presenter<
     onControlGained(container, activityComponent);
   }
 
+  @VisibleForTesting
+  public void setContainer(@Nullable final C container) {
+    mContainer = container;
+  }
+
   /**
    * Releases the {@link C} this {@code Presenter} controls, and calls {@link #onControlLost()}
    * to notify implementers of this class that the {@link C} is no longer available.
@@ -87,7 +88,7 @@ public class Presenter<
   /**
    * Called when the {@link Container} for this {@code Presenter} is attached to the window
    * and ready to display the state.
-   * From this point on, {@link #getContainer()} will return the {@link C} instance, until {@link #onControlLost()} is called.
+   * From this point on, {@link #container()} will return the {@link C} instance, until {@link #onControlLost()} is called.
    *
    * @param container The {@link C} to gain control over.
    */
@@ -98,7 +99,7 @@ public class Presenter<
 
   /**
    * Called when this {@code Presenter} no longer controls the {@link C}.
-   * From this point on, {@link #getContainer()} will return {@link null}.
+   * From this point on, {@link #container()} will return {@link null}.
    */
   @MainThread
   protected void onControlLost() {
@@ -108,7 +109,7 @@ public class Presenter<
    * Returns the {@link C} instance this {@code Presenter} controls.
    */
   @NonNull
-  public Optional<C> getContainer() {
+  public Optional<C> container() {
     return Optional.of(mContainer);
   }
 
@@ -116,7 +117,7 @@ public class Presenter<
    * Returns the {@link ActivityComponent}.
    */
   @NonNull
-  public Optional<ActivityComponent> getActivityComponent() {
+  public Optional<ActivityComponent> activityComponent() {
     return Optional.of(mActivityComponent);
   }
 

@@ -21,11 +21,11 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.TextView;
 import butterknife.Bind;
-import com.nhaarman.triad.RelativeLayoutContainer;
+import com.nhaarman.triad.AdapterRelativeLayoutContainer;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
 
-public class NoteView extends RelativeLayoutContainer<ActivityComponent, NotePresenter, NoteContainer> implements NoteContainer {
+public class NoteView extends AdapterRelativeLayoutContainer<ActivityComponent, NotePresenter, NoteContainer> implements NoteContainer {
 
   @Bind(R.id.view_note_titletv)
   protected TextView mTitleTV;

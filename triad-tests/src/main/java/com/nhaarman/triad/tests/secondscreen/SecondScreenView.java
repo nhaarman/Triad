@@ -24,14 +24,10 @@ import com.nhaarman.triad.tests.ActivityComponent;
 public class SecondScreenView extends RelativeLayoutContainer<ActivityComponent, SecondScreenPresenter, SecondScreenContainer> implements SecondScreenContainer {
 
   public SecondScreenView(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
+    super(context, attrs, SecondScreenPresenter.class);
   }
 
   public SecondScreenView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
-  }
-
-  public SecondScreenView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
+    super(context, attrs, defStyle, SecondScreenPresenter.class);
   }
 }

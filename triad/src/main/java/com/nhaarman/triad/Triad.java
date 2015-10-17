@@ -76,23 +76,23 @@ public class Triad {
     return mBackstack;
   }
 
-  public void startWith(@NonNull final Screen<?, ?, ?, ?> screen) {
+  public void startWith(@NonNull final Screen<?> screen) {
     if (mBackstack.size() == 0 && mTransition == null) {
       move(new GoToTransition(screen));
     }
   }
 
-  public void goTo(@NonNull final Screen<?, ?, ?, ?> screen) {
+  public void goTo(@NonNull final Screen<?> screen) {
     checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
 
     move(new GoToTransition(screen));
   }
 
-  public void popTo(@NonNull final Screen<?, ?, ?, ?> screen) {
+  public void popTo(@NonNull final Screen<?> screen) {
     move(new PopToTransition(screen));
   }
 
-  public void replaceWith(@NonNull final Screen<?, ?, ?, ?> screen) {
+  public void replaceWith(@NonNull final Screen<?> screen) {
     move(new ReplaceWithTransition(screen));
   }
 
@@ -251,9 +251,9 @@ public class Triad {
   private class ReplaceWithTransition extends Transition {
 
     @NonNull
-    private final Screen<?, ?, ?, ?> mScreen;
+    private final Screen<?> mScreen;
 
-    private ReplaceWithTransition(@NonNull final Screen<?, ?, ?, ?> screen) {
+    private ReplaceWithTransition(@NonNull final Screen<?> screen) {
       mScreen = screen;
     }
 
@@ -286,9 +286,9 @@ public class Triad {
   private class PopToTransition extends Transition {
 
     @NonNull
-    private final Screen<?, ?, ?, ?> mScreen;
+    private final Screen<?> mScreen;
 
-    private PopToTransition(@NonNull final Screen<?, ?, ?, ?> screen) {
+    private PopToTransition(@NonNull final Screen<?> screen) {
       mScreen = screen;
     }
 
@@ -299,9 +299,9 @@ public class Triad {
       // Take care to leave the original screen instance on the stack, if we find it.  This enables
       // some arguably bad behavior on the part of clients, but it's still probably the right thing
       // to do.
-      Screen<?, ?, ?, ?> lastPopped = null;
-      for (Iterator<Screen<?, ?, ?, ?>> it = mBackstack.reverseIterator(); it.hasNext(); ) {
-        Screen<?, ?, ?, ?> screen = it.next();
+      Screen<?> lastPopped = null;
+      for (Iterator<Screen<?>> it = mBackstack.reverseIterator(); it.hasNext(); ) {
+        Screen<?> screen = it.next();
 
         if (screen.equals(mScreen)) {
           // Clear up to the target screen.
@@ -330,9 +330,9 @@ public class Triad {
   private class GoToTransition extends Transition {
 
     @NonNull
-    private final Screen<?, ?, ?, ?> mScreen;
+    private final Screen<?> mScreen;
 
-    private GoToTransition(@NonNull final Screen<?, ?, ?, ?> screen) {
+    private GoToTransition(@NonNull final Screen<?> screen) {
       mScreen = screen;
     }
 

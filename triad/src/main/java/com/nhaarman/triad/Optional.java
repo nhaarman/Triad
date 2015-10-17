@@ -25,12 +25,14 @@ public class Optional<T> {
 
   private static final Optional<?> EMPTY = new Optional<>();
 
+  @Nullable
   private final T mValue;
 
   private Optional() {
     mValue = null;
   }
 
+  @SuppressWarnings("NullableProblems")
   private Optional(@NonNull final T value) {
     checkNotNull(value, "value is null.");
     mValue = value;

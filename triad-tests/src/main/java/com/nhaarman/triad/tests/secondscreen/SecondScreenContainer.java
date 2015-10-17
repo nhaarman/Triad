@@ -17,8 +17,7 @@
 package com.nhaarman.triad.tests.secondscreen;
 
 import com.nhaarman.triad.Container;
-import com.nhaarman.triad.tests.ActivityComponent;
 
-public interface SecondScreenContainer extends Container<ActivityComponent, SecondScreenPresenter, SecondScreenContainer> {
+public interface SecondScreenContainer extends Container {
 
 }

@@ -23,10 +23,10 @@ dependencies {
   compile project(':triad')
 
   /*  AppCompat v7 */
-  compile 'com.android.support:appcompat-v7:23.0.0'
+  compile 'com.android.support:appcompat-v7:23.1.0'
 
   /* Annotations library */
-  provided 'com.android.support:support-annotations:23.0.0'
+  provided 'com.android.support:support-annotations:23.1.0'
 
   /* Tests */
   testCompile 'junit:junit:4.12'

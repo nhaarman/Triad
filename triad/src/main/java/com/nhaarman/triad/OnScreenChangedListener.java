@@ -20,15 +20,13 @@ import android.support.annotation.NonNull;
 
 /**
  * An interface to provide a callback when a new screen is presented.
- *
- * @param <ActivityComponent> The MainComponent in the application.
  */
-public interface OnScreenChangedListener<ApplicationComponent, ActivityComponent> {
+public interface OnScreenChangedListener<ApplicationComponent> {
 
   /**
    * Callback method which is called when a new screen is presented.
    *
    * @param screen The newly added screen.
    */
-  void onScreenChanged(@NonNull Screen<ApplicationComponent, ActivityComponent, ?, ?> screen);
+  void onScreenChanged(@NonNull Screen<ApplicationComponent> screen);
 }

@@ -17,15 +17,13 @@
 package com.nhaarman.triad.sample.notes.noteslist;
 
 import android.support.annotation.NonNull;
+import com.nhaarman.triad.AdapterContainer;
 import com.nhaarman.triad.Container;
-import com.nhaarman.triad.sample.ActivityComponent;
 
-public interface NoteContainer extends Container<ActivityComponent, NotePresenter, NoteContainer> {
+public interface NoteContainer extends AdapterContainer<NotePresenter> {
 
   void setTitle(@NonNull String title);
 
   void setContents(@NonNull String contents);
 
-  @NonNull
-  NotePresenter getPresenter();
 }

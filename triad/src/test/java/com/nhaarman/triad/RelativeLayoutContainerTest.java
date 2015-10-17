@@ -1,66 +1,64 @@
 package com.nhaarman.triad;
 
-import android.content.Context;
+import android.app.Activity;
+import android.app.Application;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 public class RelativeLayoutContainerTest {
 
   private TestRelativeLayoutContainer mRelativeLayoutContainer;
 
+  private Presenter<ActivityComponent, TestRelativeLayoutContainer> mPresenterMock;
+
+  private ActivityComponent mActivityComponentMock;
+
   @Before
   public void setUp() {
-    Context context = mock(Context.class);
-    mRelativeLayoutContainer = new TestRelativeLayoutContainer(context);
-  }
+    Activity activity = mock(Activity.class, withSettings().extraInterfaces(ActivityComponentProvider.class, ScreenProvider.class));
+    Application application = mock(Application.class, withSettings().extraInterfaces(TriadProvider.class));
+    when(activity.getApplicationContext()).thenReturn(application);
 
-  @Test(expected = NullPointerException.class)
-  public void initially_getPresenterThrowsANullPointerException() {
-    mRelativeLayoutContainer.getPresenter();
+    Screen<ApplicationComponent> screen = mock(Screen.class);
+    mPresenterMock = mock(Presenter.class);
+    when(screen.getPresenter(any(Class.class))).thenReturn(mPresenterMock);
+
+    when(((ScreenProvider<ApplicationComponent>) activity).getCurrentScreen()).thenReturn(screen);
+    mActivityComponentMock = mock(ActivityComponent.class);
+    when(((ActivityComponentProvider<ActivityComponent>) activity).getActivityComponent()).thenReturn(mActivityComponentMock);
+
+    mRelativeLayoutContainer = new TestRelativeLayoutContainer(activity, null, 0);
   }
 
   @Test
-  public void afterSettingPresenter_getPresenterReturnsThatPresenter() {
-    /* Given */
-    TestPresenter presenter = mock(TestPresenter.class);
-
-    /* When */
-    mRelativeLayoutContainer.setPresenterAndActivityComponent(presenter, new ActivityComponent());
-
+  public void getPresenter_returnsProperPresenter() {
     /* Then */
-    assertThat(mRelativeLayoutContainer.getPresenter(), is(presenter));
+    assertThat(mRelativeLayoutContainer.getPresenter(), is(mPresenterMock));
   }
 
   @Test
   public void onAttachedToWindow_givesControlToPresenter() {
-    /* Given */
-    TestPresenter presenter = mock(TestPresenter.class);
-    ActivityComponent activityComponent = mock(ActivityComponent.class);
-    mRelativeLayoutContainer.setPresenterAndActivityComponent(presenter, activityComponent);
-
     /* When */
     mRelativeLayoutContainer.onAttachedToWindow();
 
     /* Then */
-    verify(presenter).acquire(mRelativeLayoutContainer, activityComponent);
+    verify(mPresenterMock).acquire(mRelativeLayoutContainer, mActivityComponentMock);
   }
 
   @Test
   public void onDetachedFromWindow_releasesPresenterControl() {
-    /* Given */
-    TestPresenter presenter = mock(TestPresenter.class);
-    mRelativeLayoutContainer.setPresenterAndActivityComponent(presenter, new ActivityComponent());
-    mRelativeLayoutContainer.onAttachedToWindow();
-
     /* When */
     mRelativeLayoutContainer.onDetachedFromWindow();
 
     /* Then */
-    verify(presenter).releaseContainer();
+    verify(mPresenterMock).releaseContainer();
   }
 }

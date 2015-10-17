@@ -24,13 +24,14 @@ import android.view.View;
 import android.view.ViewManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.Screen;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.ApplicationComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.R;
-import com.nhaarman.triad.sample.SampleScreen;
 
-public class EditNoteScreen extends SampleScreen<EditNotePresenter, EditNoteContainer> {
+public class EditNoteScreen extends Screen<ApplicationComponent> {
 
   @Nullable
   private final Note mNote;
@@ -43,11 +44,6 @@ public class EditNoteScreen extends SampleScreen<EditNotePresenter, EditNoteCont
     mNote = note;
   }
 
-  @Nullable
-  public Note getNote() {
-    return mNote;
-  }
-
   @Override
   protected int getLayoutResId() {
     return R.layout.view_editnote;
@@ -55,13 +51,17 @@ public class EditNoteScreen extends SampleScreen<EditNotePresenter, EditNoteCont
 
   @NonNull
   @Override
-  protected EditNotePresenter createPresenter(@NonNull final ApplicationComponent applicationComponent) {
-    return new EditNotePresenter(
-        mNote,
-        applicationComponent.noteValidator(),
-        applicationComponent.noteCreator(),
-        applicationComponent.noteRepository()
-    );
+  protected <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
+    if (presenterClass.equals(EditNotePresenter.class)) {
+      return new EditNotePresenter(
+          mNote,
+          applicationComponent().noteValidator(),
+          applicationComponent().noteCreator(),
+          applicationComponent().noteRepository()
+      );
+    }
+
+    throw new AssertionError("Unknown class: " + presenterClass);
   }
 
   @Override
@@ -69,7 +69,9 @@ public class EditNoteScreen extends SampleScreen<EditNotePresenter, EditNoteCont
                                    @NonNull final View newView,
                                    @NonNull final Triad.Direction direction,
                                    @NonNull final Triad.Callback callback) {
-    assert oldView != null;
+    if (oldView == null) {
+      return false;
+    }
 
     oldView.animate().x(-oldView.getWidth()).setInterpolator(new AccelerateInterpolator());
     newView.setX(((View) newView.getParent()).getWidth());

@@ -24,32 +24,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
-import butterknife.Bind;
 import butterknife.OnItemClick;
-import com.nhaarman.triad.RelativeLayoutContainer;
+import com.nhaarman.triad.ListViewContainer;
 import com.nhaarman.triad.sample.ActivityComponent;
-import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.R;
 import java.util.List;
 
-public class NotesListView extends RelativeLayoutContainer<ActivityComponent, NotesListPresenter, NotesListContainer> implements NotesListContainer {
+public class NotesListView extends ListViewContainer<ActivityComponent, NotesListPresenter, NotesListContainer> implements NotesListContainer {
 
   @NonNull
   private final MyAdapter mAdapter;
 
-  @Bind(R.id.view_notes_listview)
-  protected ListView mListView;
-
   @Nullable
-  private List<Note> mNotes;
+  private List<NotePresenter> mNotes;
 
   public NotesListView(final Context context, final AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
   public NotesListView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
+    super(context, attrs, defStyle, NotesListPresenter.class);
     mAdapter = new MyAdapter();
   }
 
@@ -57,17 +51,17 @@ public class NotesListView extends RelativeLayoutContainer<ActivityComponent, No
   protected void onFinishInflate() {
     super.onFinishInflate();
     if (!isInEditMode()) {
-      mListView.setAdapter(mAdapter);
+      setAdapter(mAdapter);
     }
   }
 
   @Override
-  public void setNotes(@NonNull final List<Note> notes) {
+  public void setNotes(@NonNull final List<NotePresenter> notes) {
     mNotes = notes;
     mAdapter.notifyDataSetChanged();
   }
 
-  @OnItemClick(R.id.view_notes_listview)
+  @OnItemClick
   public void onItemClicked(final int position) {
     getPresenter().onNoteClicked(position);
   }
@@ -80,7 +74,7 @@ public class NotesListView extends RelativeLayoutContainer<ActivityComponent, No
     }
 
     @Override
-    public Note getItem(final int position) {
+    public NotePresenter getItem(final int position) {
       return mNotes == null ? null : mNotes.get(position);
     }
 
@@ -94,10 +88,9 @@ public class NotesListView extends RelativeLayoutContainer<ActivityComponent, No
       NoteContainer noteContainer = (NoteContainer) convertView;
       if (noteContainer == null) {
         noteContainer = (NoteContainer) LayoutInflater.from(getContext()).inflate(R.layout.view_note, parent, false);
-        noteContainer.setPresenterAndActivityComponent(getPresenter().createNotePresenter(), getActivityComponent());
       }
 
-      noteContainer.getPresenter().setNote(getItem(position));
+      noteContainer.setPresenter(getItem(position));
 
       return (View) noteContainer;
     }

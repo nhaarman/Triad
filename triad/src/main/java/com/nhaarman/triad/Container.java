@@ -19,25 +19,7 @@ package com.nhaarman.triad;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-/**
- * The Container interface.
- *
- * @param <P> The specialized type of the {@link Presenter} for this {@link Container}.
- * @param <C> The specialized type of the {@link Container}.
- */
-public interface Container<
-    ActivityComponent,
-    P extends Presenter<ActivityComponent, P, C>,
-    C extends Container<ActivityComponent, P, C>> {
-
-  /**
-   * Sets the {@link Presenter} that should control this {@code Container}.
-   * Implementers must ensure that {@link Presenter#acquire(Container, Object)}  and {@link Presenter#releaseContainer()}
-   * are called at proper times.
-   *
-   * @param presenter The {@link Presenter} instance.
-   */
-  void setPresenterAndActivityComponent(@NonNull P presenter, @NonNull ActivityComponent activityComponent);
+public interface Container {
 
   /**
    * Returns the context the container is running in, through which it can

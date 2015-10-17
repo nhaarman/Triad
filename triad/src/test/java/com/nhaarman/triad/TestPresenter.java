@@ -2,7 +2,7 @@ package com.nhaarman.triad;
 
 import android.support.annotation.NonNull;
 
-public class TestPresenter extends Presenter<ActivityComponent, TestPresenter, TestRelativeLayoutContainer> {
+public class TestPresenter extends Presenter<ActivityComponent, TestRelativeLayoutContainer> {
 
   public boolean onControlGainedCalled;
 

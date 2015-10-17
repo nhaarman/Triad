@@ -17,11 +17,10 @@
 package com.nhaarman.triad.tests.firstscreen;
 
 import android.support.annotation.NonNull;
-import com.nhaarman.triad.Optional;
 import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public class FirstScreenPresenter extends Presenter<ActivityComponent, FirstScreenPresenter, FirstScreenContainer> {
+public class FirstScreenPresenter extends Presenter<ActivityComponent, FirstScreenContainer> {
 
   private int mCounter;
 
@@ -32,11 +31,11 @@ public class FirstScreenPresenter extends Presenter<ActivityComponent, FirstScre
 
   public void onButtonClicked() {
     mCounter++;
-    getContainer().ifPresent(new Optional.Consumer<FirstScreenContainer>() {
-      @Override
-      public void accept(@NonNull final FirstScreenContainer firstContainer) {
-        firstContainer.setText(String.valueOf(mCounter));
-      }
-    });
+
+    if (!container().isPresent()) {
+      return;
+    }
+
+    container().get().setText(String.valueOf(mCounter));
   }
 }

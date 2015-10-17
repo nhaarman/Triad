@@ -23,20 +23,7 @@ import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
-class NotesPresenter extends Presenter<ActivityComponent, NotesPresenter, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
-
-  @NonNull
-  private final NotesListPresenter mNotesListPresenter;
-
-  NotesPresenter(@NonNull final NotesListPresenter notesListPresenter) {
-    mNotesListPresenter = notesListPresenter;
-    mNotesListPresenter.setNoteClickedListener(this);
-  }
-
-  @Override
-  protected void onControlGained(@NonNull final NotesContainer container, @NonNull final ActivityComponent activityComponent) {
-    container.getNotesListContainer().setPresenterAndActivityComponent(mNotesListPresenter, activityComponent);
-  }
+class NotesPresenter extends Presenter<ActivityComponent, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
 
   public void onCreateNoteClicked() {
     getTriad().goTo(new EditNoteScreen());

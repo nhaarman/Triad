@@ -22,7 +22,8 @@ import android.support.annotation.Nullable;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
-public abstract class TriadApplication<ApplicationComponent> extends Application implements TriadProvider, ApplicationComponentProvider<ApplicationComponent> {
+public abstract class TriadApplication<ApplicationComponent> extends Application
+    implements TriadProvider, ApplicationComponentProvider<ApplicationComponent> {
 
   @Nullable
   private Triad mTriad;

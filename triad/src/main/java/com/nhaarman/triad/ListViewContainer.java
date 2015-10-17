@@ -19,24 +19,24 @@ package com.nhaarman.triad;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
 import butterknife.ButterKnife;
 
 import static com.nhaarman.triad.TriadUtil.findActivityComponent;
 import static com.nhaarman.triad.TriadUtil.findPresenter;
 
 /**
- * An abstract {@link Container} instance that handles {@link Presenter} management,
+ * An abstract ListView {@link Container} instance that handles {@link Presenter} management,
  * and uses Butter Knife to bind view fields in implementing classes.
  *
  * @param <P> The specialized {@link Presenter} type.
  * @param <C> The specialized {@link Container} type.
  */
-public abstract class RelativeLayoutContainer<
+public abstract class ListViewContainer<
     ActivityComponent,
     P extends Presenter<ActivityComponent, C>,
     C extends Container
-    > extends RelativeLayout implements Container {
+    > extends ListView implements Container {
 
   @NonNull
   private final P mPresenter;
@@ -44,11 +44,11 @@ public abstract class RelativeLayoutContainer<
   @NonNull
   private final ActivityComponent mActivityComponent;
 
-  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final Class<P> presenterClass) {
+  public ListViewContainer(final Context context, final AttributeSet attrs, final Class<P> presenterClass) {
     this(context, attrs, 0, presenterClass);
   }
 
-  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle, final Class<P> presenterClass) {
+  public ListViewContainer(final Context context, final AttributeSet attrs, final int defStyle, final Class<P> presenterClass) {
     super(context, attrs, defStyle);
 
     mActivityComponent = findActivityComponent(context);
@@ -62,11 +62,6 @@ public abstract class RelativeLayoutContainer<
   @NonNull
   public P getPresenter() {
     return mPresenter;
-  }
-
-  @NonNull
-  public ActivityComponent getActivityComponent() {
-    return mActivityComponent;
   }
 
   @Override

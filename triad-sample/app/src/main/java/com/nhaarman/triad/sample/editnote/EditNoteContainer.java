@@ -19,9 +19,8 @@ package com.nhaarman.triad.sample.editnote;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.nhaarman.triad.Container;
-import com.nhaarman.triad.sample.ActivityComponent;
 
-public interface EditNoteContainer extends Container<ActivityComponent, EditNotePresenter, EditNoteContainer> {
+public interface EditNoteContainer extends Container {
 
   @NonNull
   String getTitle();
