@@ -1,5 +1,11 @@
 # Changelog
 
+Version 0.12.0 *(2015-10-17)*
+-----------------------------------
+
+ * Container views now request an instance of their Presenter on their own using the Screen;
+ * Added an `AdapterRelativeLayoutContainer` for use with `ListViews`.
+
 Version 0.11.2 *(2015-08-27)*
 -----------------------------------
 
