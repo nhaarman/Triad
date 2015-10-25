@@ -23,7 +23,7 @@ import butterknife.OnClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public class FirstScreenView extends RelativeLayoutContainer<ActivityComponent, FirstScreenPresenter, FirstScreenContainer>
+public class FirstScreenView extends RelativeLayoutContainer<ActivityComponent, FirstScreenPresenter>
     implements FirstScreenContainer {
 
   public FirstScreenView(final Context context, final AttributeSet attrs) {

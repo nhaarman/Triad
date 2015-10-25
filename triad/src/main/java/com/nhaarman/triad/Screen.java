@@ -44,7 +44,7 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
   }
 
   @NonNull
-  public <P extends Presenter<?, ?>> Presenter<?, ?> getPresenter(@NonNull final Class<P> presenterClass) {
+  public Presenter<?, ?> getPresenter(@NonNull final Class<? extends Presenter<?, ?>> presenterClass) {
     if (!mPresenters.containsKey(presenterClass)) {
       mPresenters.put(presenterClass, createPresenter(presenterClass));
     }
@@ -53,7 +53,7 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
   }
 
   @NonNull
-  protected abstract <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull Class<P> presenterClass);
+  protected abstract Presenter<?, ?> createPresenter(@NonNull Class<? extends Presenter<?, ?>> presenterClass);
 
   @Override
   public boolean animateTransition(@Nullable final View oldView,

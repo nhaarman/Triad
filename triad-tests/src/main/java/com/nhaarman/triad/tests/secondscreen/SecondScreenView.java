@@ -21,7 +21,7 @@ import android.util.AttributeSet;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public class SecondScreenView extends RelativeLayoutContainer<ActivityComponent, SecondScreenPresenter, SecondScreenContainer> implements SecondScreenContainer {
+public class SecondScreenView extends RelativeLayoutContainer<ActivityComponent, SecondScreenPresenter> implements SecondScreenContainer {
 
   public SecondScreenView(final Context context, final AttributeSet attrs) {
     super(context, attrs, SecondScreenPresenter.class);

@@ -30,16 +30,16 @@ import static com.nhaarman.triad.TriadUtil.findPresenter;
  * and uses Butter Knife to bind view fields in implementing classes.
  *
  * @param <P> The specialized {@link Presenter} type.
- * @param <C> The specialized {@link Container} type.
  */
 public abstract class ListViewContainer<
     ActivityComponent,
-    P extends Presenter<ActivityComponent, C>,
-    C extends Container
+    P extends Presenter<ActivityComponent, ?>
     > extends ListView implements Container {
 
+  /* Use a raw type in favor of an easier API. */
+  @SuppressWarnings("rawtypes")
   @NonNull
-  private final P mPresenter;
+  private final Presenter mPresenter;
 
   @NonNull
   private final ActivityComponent mActivityComponent;
@@ -60,7 +60,7 @@ public abstract class ListViewContainer<
    */
   @NonNull
   public P getPresenter() {
-    return mPresenter;
+    return (P) mPresenter;
   }
 
   @Override
@@ -78,7 +78,7 @@ public abstract class ListViewContainer<
       return;
     }
 
-    mPresenter.acquire((C) this, mActivityComponent);
+    mPresenter.acquire(this, mActivityComponent);
   }
 
   @Override

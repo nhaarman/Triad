@@ -17,7 +17,8 @@ public class RelativeLayoutContainerTest {
 
   private TestRelativeLayoutContainer mRelativeLayoutContainer;
 
-  private Presenter<ActivityComponent, TestRelativeLayoutContainer> mPresenterMock;
+  @SuppressWarnings("rawtypes")
+  private Presenter mPresenterMock;
 
   private ActivityComponent mActivityComponentMock;
 

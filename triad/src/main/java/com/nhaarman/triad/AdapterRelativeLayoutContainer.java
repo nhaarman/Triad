@@ -17,19 +17,19 @@ import static com.nhaarman.triad.TriadUtil.findActivityComponent;
  * and uses Butter Knife to bind view fields in implementing classes.
  *
  * @param <P> The specialized {@link Presenter} type.
- * @param <C> The specialized {@link Container} type.
  */
 public abstract class AdapterRelativeLayoutContainer<
     ActivityComponent,
-    P extends Presenter<ActivityComponent, C>,
-    C extends AdapterContainer<P>
+    P extends Presenter<ActivityComponent, ?>
     > extends RelativeLayout implements AdapterContainer<P> {
 
   @NonNull
   private final ActivityComponent mActivityComponent;
 
+  /* Use a raw type in favor of an easier API. */
+  @SuppressWarnings("rawtypes")
   @Nullable
-  private P mPresenter;
+  private Presenter mPresenter;
 
   private boolean mIsAttachedToWindow;
 
@@ -50,7 +50,7 @@ public abstract class AdapterRelativeLayoutContainer<
   public P getPresenter() {
     checkState(mPresenter != null, "Presenter is null");
 
-    return mPresenter;
+    return (P) mPresenter;
   }
 
   @Override
@@ -59,7 +59,7 @@ public abstract class AdapterRelativeLayoutContainer<
 
     if (mIsAttachedToWindow) {
       mPresenter.releaseContainer();
-      mPresenter.acquire((C) this, mActivityComponent);
+      mPresenter.acquire(this, mActivityComponent);
     }
   }
 
@@ -75,7 +75,7 @@ public abstract class AdapterRelativeLayoutContainer<
     super.onAttachedToWindow();
 
     if (mPresenter != null) {
-      mPresenter.acquire((C) this, mActivityComponent);
+      mPresenter.acquire(this, mActivityComponent);
     }
 
     mIsAttachedToWindow = true;

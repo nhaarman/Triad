@@ -28,7 +28,7 @@ import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
 
-public class EditNoteView extends RelativeLayoutContainer<ActivityComponent, EditNotePresenter, EditNoteContainer> implements EditNoteContainer {
+public class EditNoteView extends RelativeLayoutContainer<ActivityComponent, EditNotePresenter> implements EditNoteContainer {
 
   @Bind(R.id.view_editnote_titleet)
   protected EditText mTitleET;
