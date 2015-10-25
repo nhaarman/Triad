@@ -22,8 +22,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
-import static com.nhaarman.triad.Preconditions.checkState;
-
 /**
  * The Presenter class.
  *
@@ -40,9 +38,6 @@ public class Presenter<ActivityComponent, C extends Container> {
 
   @Nullable
   private ActivityComponent mActivityComponent;
-
-  @Nullable
-  private Triad mTriad;
 
   /**
    * Sets the {@link C} this {@code Presenter} controls, and calls {@link #onControlGained(Container, Object)} )}
@@ -119,23 +114,6 @@ public class Presenter<ActivityComponent, C extends Container> {
   @NonNull
   public Optional<ActivityComponent> activityComponent() {
     return Optional.of(mActivityComponent);
-  }
-
-  /**
-   * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
-   */
-  @NonNull
-  protected Triad getTriad() {
-    checkState(mTriad != null, "Triad is null. Make sure setTriad(Triad) has been called with a valid instance.");
-
-    return mTriad;
-  }
-
-  /**
-   * Sets the {@link Triad} instance to be used to navigate between {@link Screen}s.
-   */
-  public final void setTriad(@NonNull final Triad triad) {
-    mTriad = triad;
   }
 
   /**

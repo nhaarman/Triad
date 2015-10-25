@@ -17,10 +17,4 @@ public class TestPresenter extends Presenter<ActivityComponent, TestRelativeLayo
   protected void onControlLost() {
     onControlLostCalled = true;
   }
-
-  @NonNull
-  @Override
-  public Triad getTriad() {
-    return super.getTriad();
-  }
 }

@@ -136,23 +136,4 @@ public class PresenterTest {
     assertThat(mPresenter.onControlLostCalled, is(true));
     assertThat(mPresenter.onControlGainedCalled, is(true));
   }
-
-  @Test
-  public void getFlow_returnsSettedFlow() {
-    /* Given */
-    Triad triad = Triad.emptyInstance();
-    mPresenter.setTriad(triad);
-
-    /* When */
-    Triad result = mPresenter.getTriad();
-
-    /* Then */
-    assertThat(result, is(triad));
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void getFlow_withoutSettedFlow_throwsException() {
-    /* When */
-    mPresenter.getTriad();
-  }
 }

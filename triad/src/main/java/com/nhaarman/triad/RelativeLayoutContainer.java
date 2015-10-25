@@ -53,7 +53,6 @@ public abstract class RelativeLayoutContainer<
 
     mActivityComponent = findActivityComponent(context);
     mPresenter = findPresenter(context, presenterClass);
-    mPresenter.setTriad(((TriadProvider) context.getApplicationContext()).getTriad());
   }
 
   /**
@@ -79,6 +78,10 @@ public abstract class RelativeLayoutContainer<
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
+
+    if (isInEditMode()) {
+      return;
+    }
 
     mPresenter.acquire((C) this, mActivityComponent);
   }

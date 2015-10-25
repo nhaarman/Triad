@@ -57,7 +57,8 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
           mNote,
           applicationComponent().noteValidator(),
           applicationComponent().noteCreator(),
-          applicationComponent().noteRepository()
+          applicationComponent().noteRepository(),
+          applicationComponent().triad()
       );
     }
 

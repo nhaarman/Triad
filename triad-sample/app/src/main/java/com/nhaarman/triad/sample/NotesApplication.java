@@ -29,7 +29,9 @@ public class NotesApplication extends TriadApplication<ApplicationComponent> {
   @Override
   public ApplicationComponent getApplicationComponent() {
     if (mApplicationComponent == null) {
-      mApplicationComponent = new ApplicationComponent();
+      mApplicationComponent = new ApplicationComponent(
+          getTriad()
+      );
     }
     return mApplicationComponent;
   }

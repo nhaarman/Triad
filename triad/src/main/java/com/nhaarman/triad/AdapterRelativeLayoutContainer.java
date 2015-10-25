@@ -41,7 +41,7 @@ public abstract class AdapterRelativeLayoutContainer<
     super(context, attrs, defStyle);
 
     mActivityComponent = findActivityComponent(context);
- }
+  }
 
   /**
    * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
@@ -56,7 +56,6 @@ public abstract class AdapterRelativeLayoutContainer<
   @Override
   public void setPresenter(@NonNull final P presenter) {
     mPresenter = presenter;
-    mPresenter.setTriad(((TriadProvider) getContext().getApplicationContext()).getTriad());
 
     if (mIsAttachedToWindow) {
       mPresenter.releaseContainer();
@@ -89,7 +88,7 @@ public abstract class AdapterRelativeLayoutContainer<
     if (mPresenter != null) {
       mPresenter.releaseContainer();
     }
-    
+
     mIsAttachedToWindow = false;
   }
 }

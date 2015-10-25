@@ -34,7 +34,9 @@ public class NotesScreen extends Screen<ApplicationComponent> {
   @Override
   protected <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
     if (presenterClass.equals(NotesPresenter.class)) {
-      return new NotesPresenter();
+      return new NotesPresenter(
+          applicationComponent().triad()
+      );
     }
 
     if (presenterClass.equals(NotesListPresenter.class)) {

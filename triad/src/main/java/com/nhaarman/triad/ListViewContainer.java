@@ -53,7 +53,6 @@ public abstract class ListViewContainer<
 
     mActivityComponent = findActivityComponent(context);
     mPresenter = findPresenter(context, presenterClass);
-    mPresenter.setTriad(((TriadProvider) context.getApplicationContext()).getTriad());
   }
 
   /**
@@ -74,6 +73,10 @@ public abstract class ListViewContainer<
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
+
+    if (isInEditMode()) {
+      return;
+    }
 
     mPresenter.acquire((C) this, mActivityComponent);
   }
