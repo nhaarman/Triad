@@ -51,13 +51,14 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
 
   @NonNull
   @Override
-  protected <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
+  protected Presenter<?, ?> createPresenter(@NonNull final Class<? extends Presenter<?, ?>> presenterClass) {
     if (presenterClass.equals(EditNotePresenter.class)) {
       return new EditNotePresenter(
           mNote,
           applicationComponent().noteValidator(),
           applicationComponent().noteCreator(),
-          applicationComponent().noteRepository()
+          applicationComponent().noteRepository(),
+          applicationComponent().triad()
       );
     }
 

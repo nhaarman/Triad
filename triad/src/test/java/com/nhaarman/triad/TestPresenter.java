@@ -2,7 +2,7 @@ package com.nhaarman.triad;
 
 import android.support.annotation.NonNull;
 
-public class TestPresenter extends Presenter<ActivityComponent, TestRelativeLayoutContainer> {
+public class TestPresenter extends Presenter<TestRelativeLayoutContainer, ActivityComponent> {
 
   public boolean onControlGainedCalled;
 
@@ -16,11 +16,5 @@ public class TestPresenter extends Presenter<ActivityComponent, TestRelativeLayo
   @Override
   protected void onControlLost() {
     onControlLostCalled = true;
-  }
-
-  @NonNull
-  @Override
-  public Triad getTriad() {
-    return super.getTriad();
   }
 }

@@ -21,7 +21,7 @@ import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 
-public class NotePresenter extends Presenter<ActivityComponent, NoteContainer> {
+public class NotePresenter extends Presenter<NoteContainer, ActivityComponent> {
 
   @NonNull
   private final Note mNote;

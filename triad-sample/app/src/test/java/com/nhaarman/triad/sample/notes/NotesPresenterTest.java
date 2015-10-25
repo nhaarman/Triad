@@ -20,8 +20,7 @@ public class NotesPresenterTest {
   public void setUp() {
     mTriad = mock(Triad.class);
 
-    mNotesPresenter = new NotesPresenter();
-    mNotesPresenter.setTriad(mTriad);
+    mNotesPresenter = new NotesPresenter(mTriad);
   }
 
   @Test

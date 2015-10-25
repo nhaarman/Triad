@@ -21,7 +21,9 @@ public class TriadUtil {
       //noinspection unchecked
       return ((ActivityComponentProvider<ActivityComponent>) baseContext).getActivityComponent();
     } else {
-      throw new IllegalStateException(baseContext.getClass().getCanonicalName() + " does not implement ActivityComponentProvider.");
+      /* We return null, since the layout editor can not return the Activity Component. */
+      //noinspection ConstantConditions
+      return null;
     }
   }
 
@@ -36,7 +38,9 @@ public class TriadUtil {
       //noinspection unchecked
       return (P) ((ScreenProvider) baseContext).getCurrentScreen().getPresenter(presenterClass);
     } else {
-      throw new IllegalStateException(baseContext.getClass().getCanonicalName() + " does not implement ScreenProvider.");
+       /* We return null, since the layout editor can not return the ScreenProvider. */
+      //noinspection ConstantConditions
+      return null;
     }
   }
 }

@@ -19,6 +19,7 @@ package com.nhaarman.triad.sample.editnote;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteCreator;
@@ -26,7 +27,7 @@ import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
 
-public class EditNotePresenter extends Presenter<ActivityComponent, EditNoteContainer> {
+public class EditNotePresenter extends Presenter<EditNoteContainer, ActivityComponent> {
 
   @Nullable
   private final Note mNote;
@@ -40,14 +41,19 @@ public class EditNotePresenter extends Presenter<ActivityComponent, EditNoteCont
   @NonNull
   private final NoteRepository mNoteRepository;
 
+  @NonNull
+  private final Triad mTriad;
+
   public EditNotePresenter(@Nullable final Note note,
                            @NonNull final NoteValidator noteValidator,
                            @NonNull final NoteCreator noteCreatorMock,
-                           @NonNull final NoteRepository noteRepository) {
+                           @NonNull final NoteRepository noteRepository,
+                           @NonNull final Triad triad) {
     mNote = note;
     mNoteValidator = noteValidator;
     mNoteCreatorMock = noteCreatorMock;
     mNoteRepository = noteRepository;
+    mTriad = triad;
   }
 
   @Override
@@ -90,6 +96,6 @@ public class EditNotePresenter extends Presenter<ActivityComponent, EditNoteCont
       mNoteRepository.update(mNote);
     }
 
-    getTriad().goBack();
+    mTriad.goBack();
   }
 }

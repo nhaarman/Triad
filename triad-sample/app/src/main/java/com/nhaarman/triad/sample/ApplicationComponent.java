@@ -17,8 +17,12 @@
 package com.nhaarman.triad.sample;
 
 import android.support.annotation.NonNull;
+import com.nhaarman.triad.Triad;
 
 public class ApplicationComponent {
+
+  @NonNull
+  private final Triad mTriad;
 
   @NonNull
   private final NoteRepository mNoteRepository;
@@ -29,7 +33,8 @@ public class ApplicationComponent {
   @NonNull
   private final NoteValidator mNoteValidator;
 
-  public ApplicationComponent() {
+  public ApplicationComponent(@NonNull final Triad triad) {
+    mTriad = triad;
     mNoteRepository = new MemoryNoteRepository();
     mNoteCreator = new NoteCreator(mNoteRepository);
     mNoteValidator = new NoteValidator();
@@ -45,7 +50,13 @@ public class ApplicationComponent {
     return mNoteCreator;
   }
 
+  @NonNull
   public NoteValidator noteValidator() {
     return mNoteValidator;
+  }
+
+  @NonNull
+  public Triad triad() {
+    return mTriad;
   }
 }

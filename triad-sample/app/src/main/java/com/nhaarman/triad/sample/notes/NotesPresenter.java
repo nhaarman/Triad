@@ -18,19 +18,27 @@ package com.nhaarman.triad.sample.notes;
 
 import android.support.annotation.NonNull;
 import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
-class NotesPresenter extends Presenter<ActivityComponent, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
+class NotesPresenter extends Presenter<NotesContainer, ActivityComponent> implements NotesListPresenter.OnNoteClickedListener {
+
+  @NonNull
+  private final Triad mTriad;
+
+  NotesPresenter(@NonNull final Triad triad) {
+    mTriad = triad;
+  }
 
   public void onCreateNoteClicked() {
-    getTriad().goTo(new EditNoteScreen());
+    mTriad.goTo(new EditNoteScreen());
   }
 
   @Override
   public void onNoteClicked(@NonNull final Note note) {
-    getTriad().goTo(new EditNoteScreen(note));
+    mTriad.goTo(new EditNoteScreen(note));
   }
 }
