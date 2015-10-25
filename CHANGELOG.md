@@ -1,5 +1,13 @@
 # Changelog
 
+Version 0.13.0 *(2015-10-25)*
+-----------------------------------
+
+ * Removed `getTriad()` from `Presenter` in favor of dependency injection.
+ * `RelativeLayoutContainer`, `ListViewContainer` and `AdapterRelativeLayoutContainer` don't require third `Container` type parameter anymore.
+ * Use a more intuitive order of generic type parameters.
+ * Fixed crash in design tools.
+
 Version 0.12.0 *(2015-10-17)*
 -----------------------------------
 
