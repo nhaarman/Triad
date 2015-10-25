@@ -27,7 +27,7 @@ import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
 
-public class EditNotePresenter extends Presenter<ActivityComponent, EditNoteContainer> {
+public class EditNotePresenter extends Presenter<EditNoteContainer, ActivityComponent> {
 
   @Nullable
   private final Note mNote;

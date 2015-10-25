@@ -28,7 +28,7 @@ import android.support.annotation.VisibleForTesting;
  * @param <ActivityComponent> The activity component.
  * @param <C>                 The specialized type of the {@link Container}.
  */
-public class Presenter<ActivityComponent, C extends Container> {
+public class Presenter<C extends Container, ActivityComponent> {
 
   /**
    * The {@link C} this {@link Presenter} controls.

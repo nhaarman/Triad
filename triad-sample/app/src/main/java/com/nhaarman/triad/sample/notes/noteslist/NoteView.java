@@ -25,7 +25,7 @@ import com.nhaarman.triad.AdapterRelativeLayoutContainer;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
 
-public class NoteView extends AdapterRelativeLayoutContainer<ActivityComponent, NotePresenter> implements NoteContainer {
+public class NoteView extends AdapterRelativeLayoutContainer<NotePresenter, ActivityComponent> implements NoteContainer {
 
   @Bind(R.id.view_note_titletv)
   protected TextView mTitleTV;

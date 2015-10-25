@@ -20,7 +20,7 @@ import android.support.annotation.NonNull;
 import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public class FirstScreenPresenter extends Presenter<ActivityComponent, FirstScreenContainer> {
+public class FirstScreenPresenter extends Presenter<FirstScreenContainer, ActivityComponent> {
 
   private int mCounter;
 

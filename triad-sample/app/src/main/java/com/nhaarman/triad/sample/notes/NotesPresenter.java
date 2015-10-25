@@ -24,7 +24,7 @@ import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
-class NotesPresenter extends Presenter<ActivityComponent, NotesContainer> implements NotesListPresenter.OnNoteClickedListener {
+class NotesPresenter extends Presenter<NotesContainer, ActivityComponent> implements NotesListPresenter.OnNoteClickedListener {
 
   @NonNull
   private final Triad mTriad;

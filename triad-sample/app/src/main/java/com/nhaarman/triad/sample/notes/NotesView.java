@@ -25,7 +25,7 @@ import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.R;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListView;
 
-public class NotesView extends RelativeLayoutContainer<ActivityComponent, NotesPresenter> implements NotesContainer {
+public class NotesView extends RelativeLayoutContainer<NotesPresenter, ActivityComponent> implements NotesContainer {
 
   @Bind(R.id.view_notes_noteslistview)
   protected NotesListView mNotesListView;

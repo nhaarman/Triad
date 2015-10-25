@@ -32,8 +32,8 @@ import static com.nhaarman.triad.TriadUtil.findPresenter;
  * @param <P> The specialized {@link Presenter} type.
  */
 public abstract class ListViewContainer<
-    ActivityComponent,
-    P extends Presenter<ActivityComponent, ?>
+    P extends Presenter<?, ActivityComponent>,
+    ActivityComponent
     > extends ListView implements Container {
 
   /* Use a raw type in favor of an easier API. */
