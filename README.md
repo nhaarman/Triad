@@ -41,7 +41,7 @@ public class MyScreen extends Screen<ApplicationComponent> {
   }
 
   @Override
-  public <P extends Presenter<?, ?>> Presenter<?, ?> createPresenter(@NonNull final Class<P> presenterClass) {
+  public Presenter<?, ?> createPresenter(@NonNull final Class<? extends Presenter<?,?>> presenterClass) {
     if (presenterClass.equals(MyPresenter.class) {
       return new MyPresenter();
     }
@@ -53,7 +53,7 @@ public class MyScreen extends Screen<ApplicationComponent> {
 ### View
 
 ```java
-public class MyView extends RelativeLayoutContainer<ActivityComponent, MyPresenter, MyContainer> implements MyContainer {
+public class MyView extends RelativeLayoutContainer<MyPresenter, ActivityComponent> implements MyContainer {
 
   @InjectView(R.id.view_my_textview)
   protected TextView mTextView;
@@ -100,7 +100,7 @@ interface MyContainer extends Container {
 ### Presenter
 
 ```java
-class MyPresenter extends Presenter<ActivityComponent, MyContainer> {
+class MyPresenter extends Presenter<MyContainer, ActivityComponent> {
 
   @Override
   public void onControlGained(MyContainer container, ActivityComponent activityComponent) {
