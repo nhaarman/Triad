@@ -55,10 +55,13 @@ public abstract class AdapterRelativeLayoutContainer<
 
   @Override
   public void setPresenter(@NonNull final P presenter) {
+    if (mPresenter != null) {
+      mPresenter.releaseContainer();
+    }
+
     mPresenter = presenter;
 
     if (mIsAttachedToWindow) {
-      mPresenter.releaseContainer();
       mPresenter.acquire(this, mActivityComponent);
     }
   }
