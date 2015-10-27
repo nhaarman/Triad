@@ -59,7 +59,7 @@ public class Presenter<C extends Container, ActivityComponent> {
     }
 
     mContainer = Optional.of(container);
-    mResources = Optional.of(container.getContext().getResources());
+    mResources = getResources(container);
     mActivityComponent = activityComponent;
     onControlGained(container, activityComponent);
   }
@@ -67,7 +67,17 @@ public class Presenter<C extends Container, ActivityComponent> {
   @VisibleForTesting
   public void setContainer(@NonNull final C container) {
     mContainer = Optional.of(container);
-    mResources = Optional.of(container.getContext().getResources());
+    mResources = getResources(container);
+  }
+
+  /* Perform null checks to avoid unit tests from failing. */
+  private Optional<Resources> getResources(@NonNull final C container) {
+    //noinspection ConstantConditions
+    if (container.getContext() != null && container.getContext().getResources() != null) {
+      return Optional.of(container.getContext().getResources());
+    }
+
+    return Optional.empty();
   }
 
   /**
