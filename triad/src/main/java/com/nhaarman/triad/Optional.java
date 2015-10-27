@@ -21,6 +21,9 @@ import android.support.annotation.Nullable;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
 
+/**
+ * A class that wraps a nullable type.
+ */
 public class Optional<T> {
 
   private static final Optional<?> EMPTY = new Optional<>();
@@ -34,32 +37,52 @@ public class Optional<T> {
 
   @SuppressWarnings("NullableProblems")
   private Optional(@NonNull final T value) {
-    checkNotNull(value, "value is null.");
-    mValue = value;
+    mValue = checkNotNull(value, "value is null.");
   }
 
+  /**
+   * Invokes the {@link Consumer}'s {@link Consumer#accept(Object)} method if and only if the value is present.
+   */
   public void ifPresent(@NonNull final Consumer<? super T> consumer) {
     if (mValue != null) {
       consumer.accept(mValue);
     }
   }
 
+  /**
+   * Returns {@code true} if and only if the value can safely be retrieved using {@link #get()}.
+   */
   public boolean isPresent() {
     return mValue != null;
   }
 
+  /**
+   * Returns this Optional's value.
+   * Make sure the value is present using {@link #isPresent()} before calling this method.
+   *
+   * @throws NullPointerException if the value is not present.
+   */
   public T get() {
     return checkNotNull(mValue, "value not present.");
   }
 
+  /**
+   * Creates a new Optional of a nullable value.
+   */
   public static <T> Optional<T> of(@Nullable final T value) {
     return value == null ? (Optional<T>) EMPTY : new Optional<>(value);
   }
 
+  /**
+   * Returns an empty Optional.
+   */
   public static <T> Optional<T> empty() {
     return (Optional<T>) EMPTY;
   }
 
+  /**
+   * An interface which can be invoked with {@link #ifPresent(Consumer)}.
+   */
   public interface Consumer<T> {
 
     void accept(@NonNull T t);
