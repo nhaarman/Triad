@@ -1,5 +1,10 @@
 # Changelog
 
+Version 0.13.1 *(2015-10-27)*
+-----------------------------------
+
+ * Fixed recycling issue in `AdapterRelativeLayoutContainer`.
+
 Version 0.13.0 *(2015-10-25)*
 -----------------------------------
 
