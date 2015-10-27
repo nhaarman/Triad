@@ -31,10 +31,13 @@ import android.support.annotation.VisibleForTesting;
 public class Presenter<C extends Container, ActivityComponent> {
 
   /**
-   * The {@link C} this {@link Presenter} controls.
+   * The {@link Container} this {@link Presenter} controls.
    */
-  @Nullable
-  private C mContainer;
+  @NonNull
+  private Optional<C> mContainer = Optional.empty();
+
+  @NonNull
+  private Optional<Resources> mResources = Optional.empty();
 
   @Nullable
   private ActivityComponent mActivityComponent;
@@ -47,22 +50,34 @@ public class Presenter<C extends Container, ActivityComponent> {
    */
   @MainThread
   public void acquire(@NonNull final C container, @NonNull final ActivityComponent activityComponent) {
-    if (container.equals(mContainer)) {
+    if (mContainer.isPresent() && container.equals(mContainer.get())) {
       return;
     }
 
-    if (mContainer != null) {
+    if (mContainer.isPresent()) {
       onControlLost();
     }
 
-    mContainer = container;
+    mContainer = Optional.of(container);
+    mResources = getResources(container);
     mActivityComponent = activityComponent;
     onControlGained(container, activityComponent);
   }
 
   @VisibleForTesting
-  public void setContainer(@Nullable final C container) {
-    mContainer = container;
+  public void setContainer(@NonNull final C container) {
+    mContainer = Optional.of(container);
+    mResources = getResources(container);
+  }
+
+  /* Perform null checks to avoid unit tests from failing. */
+  private Optional<Resources> getResources(@NonNull final C container) {
+    //noinspection ConstantConditions
+    if (container.getContext() != null && container.getContext().getResources() != null) {
+      return Optional.of(container.getContext().getResources());
+    }
+
+    return Optional.empty();
   }
 
   /**
@@ -71,11 +86,12 @@ public class Presenter<C extends Container, ActivityComponent> {
    */
   @MainThread
   public void releaseContainer() {
-    if (mContainer == null) {
+    if (!mContainer.isPresent()) {
       return;
     }
 
-    mContainer = null;
+    mContainer = Optional.empty();
+    mResources = Optional.empty();
     mActivityComponent = null;
     onControlLost();
   }
@@ -105,7 +121,7 @@ public class Presenter<C extends Container, ActivityComponent> {
    */
   @NonNull
   public Optional<C> container() {
-    return Optional.of(mContainer);
+    return mContainer;
   }
 
   /**
@@ -121,10 +137,6 @@ public class Presenter<C extends Container, ActivityComponent> {
    */
   @NonNull
   public Optional<Resources> getResources() {
-    if (mContainer == null) {
-      return Optional.of(null);
-    } else {
-      return Optional.of(mContainer.getContext().getResources());
-    }
+    return mResources;
   }
 }
