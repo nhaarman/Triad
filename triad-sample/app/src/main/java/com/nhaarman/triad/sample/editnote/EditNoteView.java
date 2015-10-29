@@ -37,11 +37,11 @@ public class EditNoteView extends RelativeLayoutContainer<EditNotePresenter, Act
   protected EditText mContentsET;
 
   public EditNoteView(final Context context, final AttributeSet attrs) {
-    super(context, attrs, EditNotePresenter.class);
+    super(context, attrs);
   }
 
   public EditNoteView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle, EditNotePresenter.class);
+    super(context, attrs, defStyle);
   }
 
   @OnClick(R.id.view_editnote_savebutton)

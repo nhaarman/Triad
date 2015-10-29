@@ -44,15 +44,15 @@ public abstract class ListViewContainer<
   @NonNull
   private final ActivityComponent mActivityComponent;
 
-  public ListViewContainer(final Context context, final AttributeSet attrs, final Class<P> presenterClass) {
-    this(context, attrs, 0, presenterClass);
+  public ListViewContainer(final Context context, final AttributeSet attrs) {
+    this(context, attrs, 0);
   }
 
-  public ListViewContainer(final Context context, final AttributeSet attrs, final int defStyle, final Class<P> presenterClass) {
+  public ListViewContainer(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
 
     mActivityComponent = findActivityComponent(context);
-    mPresenter = findPresenter(context, presenterClass);
+    mPresenter = findPresenter(context, getId());
   }
 
   /**

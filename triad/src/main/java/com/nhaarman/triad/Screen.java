@@ -19,18 +19,17 @@ package com.nhaarman.triad;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
 
 public abstract class Screen<ApplicationComponent> implements TransitionAnimator {
 
   @NonNull
-  private final Map<Class<?>, Presenter<?, ?>> mPresenters = new HashMap<>();
+  private final SparseArray<Presenter<?, ?>> mPresenters = new SparseArray<>();
 
   @Nullable
   private ApplicationComponent mApplicationComponent;
@@ -44,16 +43,16 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
   }
 
   @NonNull
-  public Presenter<?, ?> getPresenter(@NonNull final Class<? extends Presenter<?, ?>> presenterClass) {
-    if (!mPresenters.containsKey(presenterClass)) {
-      mPresenters.put(presenterClass, createPresenter(presenterClass));
+  public Presenter<?, ?> getPresenter(final int viewId) {
+    if (mPresenters.valueAt(viewId) == null) {
+      mPresenters.put(viewId, createPresenter(viewId));
     }
 
-    return mPresenters.get(presenterClass);
+    return mPresenters.get(viewId);
   }
 
   @NonNull
-  protected abstract Presenter<?, ?> createPresenter(@NonNull Class<? extends Presenter<?, ?>> presenterClass);
+  protected abstract Presenter<?, ?> createPresenter(int viewId);
 
   @Override
   public boolean animateTransition(@Nullable final View oldView,

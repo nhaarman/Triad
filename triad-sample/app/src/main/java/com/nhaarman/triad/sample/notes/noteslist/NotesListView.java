@@ -43,7 +43,7 @@ public class NotesListView extends ListViewContainer<NotesListPresenter, Activit
   }
 
   public NotesListView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle, NotesListPresenter.class);
+    super(context, attrs, defStyle);
     mAdapter = new MyAdapter();
   }
 

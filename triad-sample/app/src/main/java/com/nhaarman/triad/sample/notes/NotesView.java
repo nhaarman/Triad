@@ -31,11 +31,11 @@ public class NotesView extends RelativeLayoutContainer<NotesPresenter, ActivityC
   protected NotesListView mNotesListView;
 
   public NotesView(final Context context, final AttributeSet attrs) {
-    super(context, attrs, NotesPresenter.class);
+    super(context, attrs);
   }
 
   public NotesView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle, NotesPresenter.class);
+    super(context, attrs, defStyle);
   }
 
   @OnClick(R.id.view_notes_createnotebutton)

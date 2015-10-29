@@ -31,7 +31,7 @@ public class SecondScreen extends Screen<ApplicationComponent> {
 
   @NonNull
   @Override
-  protected Presenter<?, ?> createPresenter(@NonNull final Class<? extends Presenter<?, ?>> presenterClass) {
+  protected Presenter<?, ?> createPresenter(final int viewId) {
     return new SecondScreenPresenter();
   }
 }

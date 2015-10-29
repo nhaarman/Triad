@@ -51,18 +51,14 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
 
   @NonNull
   @Override
-  protected Presenter<?, ?> createPresenter(@NonNull final Class<? extends Presenter<?, ?>> presenterClass) {
-    if (presenterClass.equals(EditNotePresenter.class)) {
-      return new EditNotePresenter(
-          mNote,
-          applicationComponent().noteValidator(),
-          applicationComponent().noteCreator(),
-          applicationComponent().noteRepository(),
-          applicationComponent().triad()
-      );
-    }
-
-    throw new AssertionError("Unknown class: " + presenterClass);
+  protected Presenter<?, ?> createPresenter(final int viewId) {
+    return new EditNotePresenter(
+        mNote,
+        applicationComponent().noteValidator(),
+        applicationComponent().noteCreator(),
+        applicationComponent().noteRepository(),
+        applicationComponent().triad()
+    );
   }
 
   @Override
