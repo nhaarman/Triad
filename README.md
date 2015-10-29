@@ -26,24 +26,30 @@ dependencies {
 }
 ```
 
-## Classes
+## Getting Started
 
-A simple screen in an Android application that uses Triad consists of four classes: a `Screen` which defines the `View` and `Presenter`, a `Presenter` which handles logic formats data for the view, a `Container` which acts as an interface between the `Presenter` and the `View`, and the `View` class which displays data to the user.
+We're gonna create a little counter app to get ourselves started. Whenever we touch a button a counter is incremented on screen:
+
+![Counter app](https://raw.githubusercontent.com/nhaarman/Triad/master/art/counter.png)
+
+Every screen in an application that uses Triad is represented by a `Screen`. A screen can consist of multiple components, each backed by a `Presenter`. In this case, we only have one presenter. The presenter communicates with a custom view (`CounterView`) through an interface (`CounterContainer`).
 
 ### Screen
 
+The `CounterScreen` class defines which layout to use, and instantiates the `CounterPresenter` class. The `CounterView` is automatically inflated and bound to the presenter.
+
 ```java
-public class MyScreen extends Screen<ApplicationComponent> {
+public class CounterScreen extends Screen<ApplicationComponent> {
 
   @Override
   protected int getLayoutResId() {
-    return R.layout.view_my;
+    return R.layout.view_counter;
   }
 
   @Override
   public Presenter<?, ?> createPresenter(@NonNull final Class<? extends Presenter<?,?>> presenterClass) {
-    if (presenterClass.equals(MyPresenter.class) {
-      return new MyPresenter();
+    if (presenterClass.equals(CounterPresenter.class) {
+      return new CounterPresenter();
     }
     
     throw new AssertionError("Unknown Presenter class: " + presenterClass);
@@ -52,59 +58,100 @@ public class MyScreen extends Screen<ApplicationComponent> {
 ```
 ### View
 
-```java
-public class MyView extends RelativeLayoutContainer<MyPresenter, ActivityComponent> implements MyContainer {
+The `CounterView` extends a `ViewGroup`, and reacts on user input of its children. The view notifies the presenter that something happened.
 
-  @InjectView(R.id.view_my_textview)
-  protected TextView mTextView;
+```java
+public class CounterView extends RelativeLayoutContainer<CounterPresenter, ActivityComponent> implements CounterContainer {
+
+  @Bind(R.id.countertv)
+  protected TextView mCounterTV;
 
   public MyView(Context context, AttributeSet attrs) {
-    super(context, attrs, MyPresenter.class);
+    super(context, attrs, CounterPresenter.class);
   }
 
   public MyView(Context context, AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr, MyPresenter.class);
+    super(context, attrs, defStyleAttr, CounterPresenter.class);
   }
 
   @Override
-  public void setText(String text) {
-    mTextView.setText(text);
+  public void setCounterText(final String counterText) {
+    mCounterTV.setText(counterText);
+  }
+  
+  @OnClick(R.id.incrementbutton)
+  public void onIncrementButtonClicked() {
+    getPresenter().onIncrementButtonClicked();
   }
 }
 ```
 
+The xml layout of the view is defined below. The root of the layout is a `CounterView`, and the `TextView` and `Button` are nested inside the `CounterView`.
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.MyView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.CounterView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
   <TextView
-    android:id="@+id/view_my_textview"
+    android:id="@+id/countertv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true" />
 
-</com.example.MyView>
+  <Button
+    android:id="@+id/incrementbutton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/countertv"
+    android:layout_centerHorizontal="true"
+    android:text="@string/increment" />
+
+</com.example.CounterView>
 ```
 
 ### Container
 
-```java
-interface MyContainer extends Container {
+The `CounterContainer` acts as a separating layer between the presenter and view. This makes it possible to create different implementations of `CounterView` for different devices, such as phones or tablets.
 
-  void setText(String text);
+```java
+interface CounterContainer extends Container {
+
+  void setCounterText(String counterText) {
 }
 ```
 
 ### Presenter
 
+Finally, the `CounterPresenter` handles any logic, and formats the data to display in the view. Presenters survive orientation changes, so our counter variable will not get lost on a configuration change.
+
 ```java
 class MyPresenter extends Presenter<MyContainer, ActivityComponent> {
 
+  private int mCounter;
+
+  CounterPresenter() {
+    mCounter = 0;
+  }
+
   @Override
-  public void onControlGained(MyContainer container, ActivityComponent activityComponent) {
-    container.setText("Hello world!");
+  protected void onControlGained(@NonNull final CounterContainer container, @NonNull final ActivityComponent activityComponent) {
+    container.setCounterText(formatCounterText());
+  }
+
+  void onIncrementButtonClicked() {
+    if (!container().isPresent()) {
+      return;
+    }
+
+    mCounter++;
+    container().get().setCounterText(formatCounterText());
+  }
+
+  @NonNull
+  private String formatCounterText() {
+    return String.valueOf(mCounter);
   }
 }
 ```
