@@ -28,7 +28,7 @@ public class TriadUtil {
   }
 
   @NonNull
-  public static <P extends Presenter<?, ?>> P findPresenter(@NonNull final Context context, @NonNull final Class<P> presenterClass) {
+  public static <P extends Presenter<?, ?>> P findPresenter(@NonNull final Context context, final int viewId) {
     Context baseContext = context;
     while (!(baseContext instanceof Activity) && baseContext instanceof ContextWrapper) {
       baseContext = ((ContextWrapper) baseContext).getBaseContext();
@@ -36,7 +36,7 @@ public class TriadUtil {
 
     if (baseContext instanceof ScreenProvider) {
       //noinspection unchecked
-      return (P) ((ScreenProvider) baseContext).getCurrentScreen().getPresenter(presenterClass);
+      return (P) ((ScreenProvider) baseContext).getCurrentScreen().getPresenter(viewId);
     } else {
        /* We return null, since the layout editor can not return the ScreenProvider. */
       //noinspection ConstantConditions

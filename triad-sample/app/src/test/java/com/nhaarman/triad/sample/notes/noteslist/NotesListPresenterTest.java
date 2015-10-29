@@ -7,16 +7,12 @@ import com.nhaarman.triad.sample.NoteRepository;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
+import org.mockito.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
-@SuppressWarnings("rawtypes")
 public class NotesListPresenterTest {
 
   private NotesListPresenter mNotesListPresenter;

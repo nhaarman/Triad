@@ -47,12 +47,8 @@ public class CounterScreen extends Screen<ApplicationComponent> {
   }
 
   @Override
-  public Presenter<?, ?> createPresenter(@NonNull final Class<? extends Presenter<?,?>> presenterClass) {
-    if (presenterClass.equals(CounterPresenter.class) {
-      return new CounterPresenter();
-    }
-    
-    throw new AssertionError("Unknown Presenter class: " + presenterClass);
+  public Presenter<?, ?> createPresenter(final int viewId) {
+    return new CounterPresenter();
   }
 }
 ```
@@ -67,11 +63,11 @@ public class CounterView extends RelativeLayoutContainer<CounterPresenter, Activ
   protected TextView mCounterTV;
 
   public MyView(Context context, AttributeSet attrs) {
-    super(context, attrs, CounterPresenter.class);
+    super(context, attrs);
   }
 
   public MyView(Context context, AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr, CounterPresenter.class);
+    super(context, attrs, defStyleAttr);
   }
 
   @Override

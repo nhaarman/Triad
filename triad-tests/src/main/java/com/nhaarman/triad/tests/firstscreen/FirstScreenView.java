@@ -27,11 +27,11 @@ public class FirstScreenView extends RelativeLayoutContainer<FirstScreenPresente
     implements FirstScreenContainer {
 
   public FirstScreenView(final Context context, final AttributeSet attrs) {
-    super(context, attrs, FirstScreenPresenter.class);
+    super(context, attrs);
   }
 
   public FirstScreenView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle, FirstScreenPresenter.class);
+    super(context, attrs, defStyle);
   }
 
   @OnClick(com.nhaarman.triad.tests.R.id.view_screen_first_button)

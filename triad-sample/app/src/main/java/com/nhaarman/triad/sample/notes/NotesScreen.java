@@ -32,20 +32,20 @@ public class NotesScreen extends Screen<ApplicationComponent> {
 
   @NonNull
   @Override
-  protected Presenter<?, ?> createPresenter(@NonNull final Class<? extends Presenter<?, ?>> presenterClass) {
-    if (presenterClass.equals(NotesPresenter.class)) {
+  protected Presenter<?, ?> createPresenter(final int viewId) {
+    if (viewId == R.id.view_notes) {
       return new NotesPresenter(
           applicationComponent().triad()
       );
     }
 
-    if (presenterClass.equals(NotesListPresenter.class)) {
+    if (viewId == R.id.view_notes_noteslistview) {
       return new NotesListPresenter(
           applicationComponent().noteRepository(),
-          (NotesListPresenter.OnNoteClickedListener) getPresenter(NotesPresenter.class)
+          (NotesListPresenter.OnNoteClickedListener) getPresenter(R.id.view_notes)
       );
     }
 
-    throw new AssertionError("Unknown presenter class: " + presenterClass);
+    throw new AssertionError("Unknown presenter class for view with id: " + viewId);
   }
 }

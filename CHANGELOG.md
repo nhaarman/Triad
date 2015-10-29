@@ -1,5 +1,10 @@
 # Changelog
 
+Version 0.14.0 *(2015-10-29)*
+-----------------------------------
+
+ * Use view ids as a reference for creating presenters instead of a class.
+
 Version 0.13.2 *(2015-10-27)*
 -----------------------------------
 

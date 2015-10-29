@@ -44,15 +44,15 @@ public abstract class RelativeLayoutContainer<
   @NonNull
   private final ActivityComponent mActivityComponent;
 
-  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final Class<P> presenterClass) {
-    this(context, attrs, 0, presenterClass);
+  public RelativeLayoutContainer(final Context context, final AttributeSet attrs) {
+    this(context, attrs, 0);
   }
 
-  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle, final Class<P> presenterClass) {
+  public RelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
 
     mActivityComponent = findActivityComponent(context);
-    mPresenter = findPresenter(context, presenterClass);
+    mPresenter = findPresenter(context, getId());
   }
 
   /**
