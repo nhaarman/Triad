@@ -44,7 +44,7 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
 
   @NonNull
   public Presenter<?, ?> getPresenter(final int viewId) {
-    if (mPresenters.valueAt(viewId) == null) {
+    if (mPresenters.get(viewId) == null) {
       mPresenters.put(viewId, createPresenter(viewId));
     }
 
