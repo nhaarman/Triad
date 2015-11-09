@@ -26,7 +26,7 @@ dependencies {
 }
 ```
 
-## Getting Started
+## How it works
 
 We're gonna create a little counter app to get ourselves started. Whenever we touch a button a counter is incremented on screen:
 
