@@ -32,7 +32,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
     implements ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
 
   @NonNull
-  private final TriadDelegate<ApplicationComponent, ActivityComponent> mDelegate;
+  private final TriadDelegate<ApplicationComponent> mDelegate;
 
   @Nullable
   private ActivityComponent mActivityComponent;
@@ -44,7 +44,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mDelegate.onCreate(getActivityComponent());
+    mDelegate.onCreate();
   }
 
   @Override

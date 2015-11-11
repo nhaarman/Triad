@@ -32,11 +32,11 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
   @NonNull
   private final SparseArray<Presenter<?, ?>> mPresenters = new SparseArray<>();
 
-  @Nullable
-  private ApplicationComponent mApplicationComponent;
+  @NonNull
+  private final SparseArray<Parcelable> mState = new SparseArray<>();
 
   @Nullable
-  private SparseArray<Parcelable> mState;
+  private ApplicationComponent mApplicationComponent;
 
   @LayoutRes
   protected abstract int getLayoutResId();
@@ -59,10 +59,17 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
   protected abstract Presenter<?, ?> createPresenter(int viewId);
 
   @Override
-  public boolean animateTransition(@Nullable final View oldView,
-                                   @NonNull final View newView,
-                                   @NonNull final Triad.Direction direction,
-                                   @NonNull final Triad.Callback callback) {
+  public boolean animateForward(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
+    return false;
+  }
+
+  @Override
+  public boolean animateBackward(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
+    return false;
+  }
+
+  @Override
+  public boolean animateReplace(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
     return false;
   }
 
@@ -79,12 +86,11 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
     return checkNotNull(mApplicationComponent, "Application component is null.");
   }
 
-  void storeState(@NonNull final SparseArray<Parcelable> state) {
-    mState = state;
+  void saveState(@NonNull final ViewGroup view) {
+    view.saveHierarchyState(mState);
   }
 
-  @Nullable
-  public SparseArray<Parcelable> getState() {
-    return mState;
+  void restoreState(@NonNull final ViewGroup view) {
+    view.restoreHierarchyState(mState);
   }
 }

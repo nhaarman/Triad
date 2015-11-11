@@ -22,8 +22,15 @@ import android.view.View;
 
 public interface TransitionAnimator {
 
-  boolean animateTransition(@Nullable View oldView,
-                            @NonNull View newView,
-                            @NonNull Triad.Direction direction,
-                            @NonNull Triad.Callback callback);
+  boolean animateForward(@Nullable View currentView,
+                         @NonNull View newView,
+                         @NonNull Triad.Callback callback);
+
+  boolean animateBackward(@Nullable View currentView,
+                          @NonNull View newView,
+                          @NonNull Triad.Callback callback);
+
+  boolean animateReplace(@Nullable View currentView,
+                         @NonNull View newView,
+                         @NonNull Triad.Callback callback);
 }
