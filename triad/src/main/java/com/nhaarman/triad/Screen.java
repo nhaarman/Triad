@@ -16,6 +16,7 @@
 
 package com.nhaarman.triad;
 
+import android.os.Parcelable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,6 +34,9 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
 
   @Nullable
   private ApplicationComponent mApplicationComponent;
+
+  @Nullable
+  private SparseArray<Parcelable> mState;
 
   @LayoutRes
   protected abstract int getLayoutResId();
@@ -73,5 +77,14 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
   @NonNull
   protected ApplicationComponent applicationComponent() {
     return checkNotNull(mApplicationComponent, "Application component is null.");
+  }
+
+  void storeState(@NonNull final SparseArray<Parcelable> state) {
+    mState = state;
+  }
+
+  @Nullable
+  public SparseArray<Parcelable> getState() {
+    return mState;
   }
 }
