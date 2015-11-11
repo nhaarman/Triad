@@ -28,11 +28,12 @@ import java.util.Iterator;
 /**
  * Describes the history of a {@link Triad} at a specific point in time.
  */
-public final class Backstack implements Iterable<Screen<?>> {
+public class Backstack implements Iterable<Screen<?>> {
 
+  @NonNull
   private final Deque<Screen<?>> mBackstack;
 
-  private Backstack(final Deque<Screen<?>> backstack) {
+  private Backstack(@NonNull final Deque<Screen<?>> backstack) {
     mBackstack = backstack;
   }
 
@@ -49,9 +50,9 @@ public final class Backstack implements Iterable<Screen<?>> {
     return mBackstack.size();
   }
 
-  @Nullable
-  public Screen<?> current() {
-    return mBackstack.peek();
+  @NonNull
+  public <T> Screen<T> current() {
+    return (Screen<T>) mBackstack.peek();
   }
 
   /**
@@ -73,8 +74,21 @@ public final class Backstack implements Iterable<Screen<?>> {
   /**
    * Create a backstack that contains a single screen.
    */
-  public static Backstack single(final Screen<?> screen) {
+  public static Backstack single(@NonNull final Screen<?> screen) {
     return emptyBuilder().push(screen).build();
+  }
+
+  /**
+   * Creates a backstack that contains given screens.
+   */
+  public static Backstack of(@NonNull final Screen<?>... screens) {
+    Builder builder = emptyBuilder();
+
+    for (Screen<?> screen : screens) {
+      builder.push(screen);
+    }
+
+    return builder.build();
   }
 
   public static final class Builder {

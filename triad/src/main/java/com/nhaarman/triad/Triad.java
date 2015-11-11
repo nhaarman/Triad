@@ -21,10 +21,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.SparseArray;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
@@ -34,8 +33,9 @@ import static com.nhaarman.triad.Preconditions.checkState;
 public class Triad {
 
   @NonNull
-  private final Map<Integer, ActivityResultListener> mActivityResultListeners;
+  private final SparseArray<ActivityResultListener> mActivityResultListeners;
 
+  @SuppressWarnings("rawtypes")
   @Nullable
   private Listener mListener;
 
@@ -54,20 +54,23 @@ public class Triad {
     this(backstack, null);
   }
 
-  private Triad(@NonNull final Backstack backstack, @Nullable final Listener listener) {
+  private Triad(@NonNull final Backstack backstack, @Nullable final Listener<?> listener) {
     mListener = listener;
     mBackstack = backstack;
 
-    mActivityResultListeners = new HashMap<>();
+    mActivityResultListeners = new SparseArray<>();
 
     mActivity = new WeakReference<>(null);
   }
 
+  /**
+   * Sets the current Activity, to be able to start other Activities from the Triad instance.
+   */
   void setActivity(@Nullable final Activity activity) {
     mActivity = new WeakReference<>(activity);
   }
 
-  public void setListener(@NonNull final Listener listener) {
+  public <T> void setListener(@NonNull final Listener<T> listener) {
     mListener = listener;
   }
 
@@ -76,48 +79,139 @@ public class Triad {
     return mBackstack;
   }
 
+  /**
+   * Initializes the backstack with given Screen. If the backstack is not empty, this call is ignored.
+   * This method must be called before any other backstack operation.
+   *
+   * @param screen The Screen to start with.
+   */
   public void startWith(@NonNull final Screen<?> screen) {
     if (mBackstack.size() == 0 && mTransition == null) {
       move(new GoToTransition(screen));
     }
   }
 
+  /**
+   * Pushes given Screen onto the backstack.
+   *
+   * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
+   *
+   * @param screen The screen to push onto the backstack.
+   */
   public void goTo(@NonNull final Screen<?> screen) {
     checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
 
     move(new GoToTransition(screen));
   }
 
+  /**
+   * Forces a notification of the current screen.
+   */
+  void showCurrent() {
+    move(new ShowTransition());
+  }
+
+  /**
+   * Pops the backstack until given Screen is found.
+   * If the Screen is not found, the Screen is pushed onto the current backstack.
+   * Does nothing if the Screen is already on top of the stack.
+   *
+   * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
+   *
+   * @param screen The Screen to pop to.
+   */
   public void popTo(@NonNull final Screen<?> screen) {
+    checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
+
     move(new PopToTransition(screen));
   }
 
+  /**
+   * Replaces the current Screen with given Screen.
+   *
+   * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
+   *
+   * @param screen The Screen to replace the current Screen.
+   */
   public void replaceWith(@NonNull final Screen<?> screen) {
+    checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
+
     move(new ReplaceWithTransition(screen));
   }
 
+  /**
+   * Pops the current screen off the backstack.
+   * Does nothing if the backstack would be empty afterwards.
+   *
+   * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
+   *
+   * @return true if the transition will execute.
+   */
   public boolean goBack() {
+    checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
+
     boolean canGoBack = mBackstack.size() > 1 || mTransition != null && !mTransition.isFinished();
-
     move(new GoBackTransition());
-
     return canGoBack;
   }
 
+  /**
+   * Replaces the entire backstack with given backstack, in a forward manner.
+   *
+   * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
+   *
+   * @param newBackstack The new backstack.
+   */
   public void forward(@NonNull final Backstack newBackstack) {
+    checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
+
     move(new ForwardTransition(newBackstack));
   }
 
+  /**
+   * Replaces the entire backstack with given backstack, in a backward manner.
+   *
+   * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
+   *
+   * @param newBackstack The new backstack.
+   */
+
   public void backward(@NonNull final Backstack newBackstack) {
+    checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
+
     move(new BackwardTransition(newBackstack));
   }
 
+  /**
+   * Replaces the entire backstack with given backstack, in a replace manner.
+   *
+   * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
+   *
+   * @param newBackstack The new backstack.
+   */
+  public void replace(@NonNull final Backstack newBackstack) {
+    checkState(mBackstack.size() > 0 || mTransition != null, "Use startWith(Screen) to show your first Screen.");
+
+    move(new ReplaceTransition(newBackstack));
+  }
+
+  /**
+   * Launches the Activity described by given Intent.
+   *
+   * @param intent The Activity to start.
+   */
   public void startActivity(@NonNull final Intent intent) {
     checkState(mActivity.get() != null, "Activity reference is null.");
 
     mActivity.get().startActivity(intent);
   }
 
+  /**
+   * Launches the Activity described by given Intent for result.
+   *
+   * @param intent   The Activity to start for result.
+   * @param listener The callback to notify for the result.
+   */
   public void startActivityForResult(@NonNull final Intent intent, @NonNull final ActivityResultListener listener) {
     checkState(mActivity.get() != null, "Activity reference is null.");
 
@@ -126,6 +220,13 @@ public class Triad {
     mRequestCodeCounter++;
   }
 
+  /**
+   * Propagates the activity result to the proper {@link ActivityResultListener}.
+   *
+   * @param requestCode The request code, as created by {@link #startActivityForResult(Intent, ActivityResultListener)}.
+   * @param resultCode  The result code of the returning Activity.
+   * @param data        The result data of the returning Activity.
+   */
   void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
     mActivityResultListeners.get(requestCode).onActivityResult(resultCode, data);
     mActivityResultListeners.remove(requestCode);
@@ -146,12 +247,8 @@ public class Triad {
   }
 
   @NonNull
-  public static Triad newInstance(@NonNull final Backstack backstack, @NonNull final Listener listener) {
+  public static Triad newInstance(@NonNull final Backstack backstack, @NonNull final Listener<?> listener) {
     return new Triad(backstack, listener);
-  }
-
-  public enum Direction {
-    FORWARD, BACKWARD, REPLACE
   }
 
   /**
@@ -168,16 +265,31 @@ public class Triad {
     void onComplete();
   }
 
-  public interface Listener {
+  public interface Listener<T> {
 
     /**
-     * Notifies the listener that the backstack is about to change. Note that the backstack of
-     * is not actually changed until the callback is triggered.  That is, {@code nextBackstack} is
-     * where the Triad is going next, and {@link Triad#getBackstack()} is where it's coming from.
+     * Notifies the listener that the backstack will forward to a new Screen.
      *
-     * @param callback Must be called to indicate completion.
+     * @param newScreen The new Screen to be shown.
+     * @param callback  Must be called to indicate completion.
      */
-    void go(Backstack nextBackstack, Direction direction, Callback callback);
+    void forward(@NonNull Screen<T> newScreen, @NonNull Callback callback);
+
+    /**
+     * Notifies the listener that the backstack will be moved back to given Screen.
+     *
+     * @param newScreen The new screen to be shown.
+     * @param callback  Must be called to indicate completion.
+     */
+    void backward(@NonNull Screen<T> newScreen, @NonNull Callback callback);
+
+    /**
+     * Notifies the listener that the backstack will be replaced, with given Screen on top.
+     *
+     * @param newScreen The new screen to be shown.
+     * @param callback  Must be called to indicate completion.
+     */
+    void replace(@NonNull Screen<T> newScreen, @NonNull Callback callback);
   }
 
   public interface ActivityResultListener {
@@ -203,6 +315,29 @@ public class Triad {
       }
     }
 
+    protected void forward(@NonNull final Backstack nextBackstack) {
+      checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
+
+      mNextBackstack = nextBackstack;
+      mListener.forward(nextBackstack.current(), this);
+    }
+
+    protected void backward(@NonNull final Backstack nextBackstack) {
+      checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
+
+      mNextBackstack = nextBackstack;
+      mListener.backward(nextBackstack.current(), this);
+    }
+
+    protected void replace(@NonNull final Backstack nextBackstack) {
+      checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
+
+      mNextBackstack = nextBackstack;
+      mListener.replace(nextBackstack.current(), this);
+    }
+
+    protected abstract void execute();
+
     @Override
     public void onComplete() {
       checkState(!mFinished, "onComplete already called for this transition");
@@ -217,15 +352,6 @@ public class Triad {
         mTransition.execute();
       }
     }
-
-    protected void go(final Backstack nextBackstack, final Direction direction) {
-      checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
-
-      mNextBackstack = nextBackstack;
-      mListener.go(nextBackstack, direction, this);
-    }
-
-    protected abstract void execute();
 
     public boolean isFinished() {
       return mFinished;
@@ -243,7 +369,7 @@ public class Triad {
         Backstack.Builder builder = mBackstack.buildUpon();
         builder.pop();
         Backstack newBackstack = builder.build();
-        go(newBackstack, Direction.BACKWARD);
+        backward(newBackstack);
       }
     }
   }
@@ -264,7 +390,7 @@ public class Triad {
       builder.push(mScreen);
       Backstack newBackstack = builder.build();
 
-      go(newBackstack, Direction.REPLACE);
+      replace(newBackstack);
     }
   }
 
@@ -279,7 +405,7 @@ public class Triad {
 
     @Override
     public void execute() {
-      go(mNewBackstack, Direction.FORWARD);
+      forward(mNewBackstack);
     }
   }
 
@@ -294,6 +420,11 @@ public class Triad {
 
     @Override
     public void execute() {
+      if (mBackstack.current().equals(mScreen)) {
+        onComplete();
+        return;
+      }
+
       Backstack.Builder builder = mBackstack.buildUpon();
       int count = 0;
       // Take care to leave the original screen instance on the stack, if we find it.  This enables
@@ -318,12 +449,20 @@ public class Triad {
       if (lastPopped != null) {
         builder.push(lastPopped);
         newBackstack = builder.build();
-        go(newBackstack, Direction.BACKWARD);
+        backward(newBackstack);
       } else {
         builder.push(mScreen);
         newBackstack = builder.build();
-        go(newBackstack, Direction.FORWARD);
+        forward(newBackstack);
       }
+    }
+  }
+
+  private class ShowTransition extends Transition {
+
+    @Override
+    public void execute() {
+      forward(mBackstack);
     }
   }
 
@@ -339,7 +478,7 @@ public class Triad {
     @Override
     public void execute() {
       Backstack newBackstack = mBackstack.buildUpon().push(mScreen).build();
-      go(newBackstack, Direction.FORWARD);
+      forward(newBackstack);
     }
   }
 
@@ -354,7 +493,22 @@ public class Triad {
 
     @Override
     public void execute() {
-      go(mNewBackstack, Direction.BACKWARD);
+      backward(mNewBackstack);
+    }
+  }
+
+  private class ReplaceTransition extends Transition {
+
+    @NonNull
+    private final Backstack mNewBackstack;
+
+    private ReplaceTransition(@NonNull final Backstack newBackstack) {
+      mNewBackstack = newBackstack;
+    }
+
+    @Override
+    public void execute() {
+      replace(mNewBackstack);
     }
   }
 }

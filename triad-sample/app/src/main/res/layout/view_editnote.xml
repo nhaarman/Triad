@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2015 Niek Haarman
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +17,8 @@
 <com.nhaarman.triad.sample.editnote.EditNoteView
   android:id="@+id/view_editnote"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="300dp"
-  android:layout_height="wrap_content"
-  android:layout_centerInParent="true"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
   android:background="#fff"
   android:padding="16dp">
 
@@ -30,23 +28,24 @@
     android:layout_height="wrap_content"
     android:hint="@string/title" />
 
-  <EditText
-    android:id="@+id/view_editnote_contentset"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/view_editnote_titleet"
-    android:layout_marginTop="4dp"
-    android:hint="@string/contents"
-    android:lines="3" />
-
   <Button
     android:id="@+id/view_editnote_savebutton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
     android:layout_alignParentRight="true"
-    android:layout_below="@id/view_editnote_contentset"
     android:layout_marginTop="8dp"
     android:text="@string/save" />
+
+  <EditText
+    android:id="@+id/view_editnote_contentset"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@id/view_editnote_savebutton"
+    android:layout_below="@id/view_editnote_titleet"
+    android:layout_marginTop="4dp"
+    android:hint="@string/contents"
+    android:lines="3" />
 
 
 </com.nhaarman.triad.sample.editnote.EditNoteView>

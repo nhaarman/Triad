@@ -62,10 +62,9 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
   }
 
   @Override
-  public boolean animateTransition(@Nullable final View oldView,
-                                   @NonNull final View newView,
-                                   @NonNull final Triad.Direction direction,
-                                   @NonNull final Triad.Callback callback) {
+  public boolean animateForward(@Nullable final View oldView,
+                                @NonNull final View newView,
+                                @NonNull final Triad.Callback callback) {
     if (oldView == null) {
       return false;
     }
