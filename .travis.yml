@@ -1,6 +1,10 @@
 language: android
 jdk: oraclejdk7
 
+env:
+  global:
+  - ADB_INSTALL_TIMEOUT=8
+
 android:
   components:
   - platform-tools
@@ -9,12 +13,21 @@ android:
   - build-tools-23.0.1
   - extra-android-support
   - extra-android-m2repository
+  - sys-img-x86_64-android-23
 
 before_install:
  - git fetch --tags
 
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force -n test -t android-23 --abi x86_64
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - ./gradlew build
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
 script:
- - ./gradlew build assemble test --stacktrace
+ - ./gradlew build assemble test connectedCheck --stacktrace
 
 after_success:
  - ./gradlew artifactoryPublish
