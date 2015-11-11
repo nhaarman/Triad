@@ -18,8 +18,10 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
@@ -168,10 +170,19 @@ public class TriadDelegate<ApplicationComponent, ActivityComponent> {
       checkState(mActivityComponent != null, "ActivityComponent is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
       checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate(ActivityComponent).");
 
+      if (direction == Triad.Direction.FORWARD && mCurrentView != null && mCurrentScreen != null) {
+        SparseArray<Parcelable> state = new SparseArray<>();
+        mCurrentView.saveHierarchyState(state);
+        mCurrentScreen.storeState(state);
+      }
       mCurrentScreen = screen;
 
       screen.setApplicationComponent(mApplicationComponent);
       ViewGroup container = screen.createView(mTriadView);
+      if (direction == Triad.Direction.BACKWARD && screen.getState() != null) {
+        container.restoreHierarchyState(screen.getState());
+      }
+
       mTriadView.transition(mCurrentView, container, direction, callback, screen);
 
       mCurrentView = container;
