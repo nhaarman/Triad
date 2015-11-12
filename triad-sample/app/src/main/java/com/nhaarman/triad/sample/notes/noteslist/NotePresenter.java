@@ -17,11 +17,11 @@
 package com.nhaarman.triad.sample.notes.noteslist;
 
 import android.support.annotation.NonNull;
-import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.BasePresenter;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 
-public class NotePresenter extends Presenter<NoteContainer, ActivityComponent> {
+public class NotePresenter extends BasePresenter<NoteContainer, ActivityComponent> {
 
   @NonNull
   private final Note mNote;

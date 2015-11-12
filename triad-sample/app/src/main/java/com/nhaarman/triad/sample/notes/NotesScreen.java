@@ -32,7 +32,7 @@ public class NotesScreen extends Screen<ApplicationComponent> {
 
   @NonNull
   @Override
-  protected Presenter<?, ?> createPresenter(final int viewId) {
+  protected Presenter<?,?> createPresenter(final int viewId) {
     if (viewId == R.id.view_notes) {
       return new NotesPresenter(
           applicationComponent().triad()

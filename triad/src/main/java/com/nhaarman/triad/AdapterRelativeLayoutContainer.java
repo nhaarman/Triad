@@ -13,15 +13,13 @@ import static com.nhaarman.triad.TriadUtil.findActivityComponent;
 
 /**
  * An abstract RelativeLayout {@link Container} instance that handles {@link Presenter} management
- * for use in an {@link AdapterView},
- * and uses Butter Knife to bind view fields in implementing classes.
+ * for use in an {@link AdapterView}, and uses Butter Knife to bind UI components in implementing classes.
  *
  * @param <P> The specialized {@link Presenter} type.
  */
-public abstract class AdapterRelativeLayoutContainer<
-    P extends Presenter<?, ActivityComponent>,
-    ActivityComponent
-    > extends RelativeLayout implements AdapterContainer<P> {
+public abstract class AdapterRelativeLayoutContainer
+    <P extends Presenter<?, ActivityComponent>, ActivityComponent>
+    extends RelativeLayout implements AdapterContainer<P> {
 
   @NonNull
   private final ActivityComponent mActivityComponent;
@@ -33,11 +31,11 @@ public abstract class AdapterRelativeLayoutContainer<
 
   private boolean mIsAttachedToWindow;
 
-  public AdapterRelativeLayoutContainer(final Context context, final AttributeSet attrs) {
+  public AdapterRelativeLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public AdapterRelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
+  public AdapterRelativeLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
 
     mActivityComponent = findActivityComponent(context);

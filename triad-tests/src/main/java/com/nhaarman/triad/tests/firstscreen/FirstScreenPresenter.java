@@ -17,10 +17,10 @@
 package com.nhaarman.triad.tests.firstscreen;
 
 import android.support.annotation.NonNull;
-import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.BasePresenter;
 import com.nhaarman.triad.tests.ActivityComponent;
 
-public class FirstScreenPresenter extends Presenter<FirstScreenContainer, ActivityComponent> {
+public class FirstScreenPresenter extends BasePresenter<FirstScreenContainer, ActivityComponent> {
 
   private int mCounter;
 

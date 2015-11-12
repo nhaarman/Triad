@@ -17,14 +17,17 @@
 package com.nhaarman.triad.sample.notes;
 
 import android.support.annotation.NonNull;
-import com.nhaarman.triad.Presenter;
+import android.support.annotation.Nullable;
+import android.view.View;
+import com.nhaarman.triad.BasePresenter;
+import com.nhaarman.triad.TransitionAnimator;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
-class NotesPresenter extends Presenter<NotesContainer, ActivityComponent> implements NotesListPresenter.OnNoteClickedListener {
+class NotesPresenter extends BasePresenter<NotesContainer, ActivityComponent> implements NotesListPresenter.OnNoteClickedListener {
 
   @NonNull
   private final Triad mTriad;

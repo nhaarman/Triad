@@ -1,142 +1,47 @@
-/*
- * Copyright 2015 Niek Haarman
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.nhaarman.triad;
 
-import android.content.res.Resources;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 
 /**
- * The Presenter class.
+ * The Presenter class in the MVP context.
  *
- * @param <ActivityComponent> The activity component.
- * @param <C>                 The specialized type of the {@link Container}.
+ * In the Model-View-Presenter pattern, the {@code Presenter} retrieves data from the
+ * {@code Model}, and formats it so the View ({@link Container}) can present it.
+ *
+ * The lifecycle of a Presenter consists of two methods:
+ * <li>
+ * <ul>{@link #acquire(Container, Object)}</ul>
+ * <ul>{@link #releaseContainer()}</ul>
+ * </li>
+ *
+ * Control over the {@link Container} instance starts at {@link #acquire(Container, Object)},
+ * and ends at {@link #releaseContainer()}.
+ * There are no guarantees on the order of calls to these two methods.
+ *
+ * Presenters survive configuration changes, making it easy to manage data and
+ * asynchronous calls.
+ *
+ * @param <C>                 The {@link Container} instance this {@code Presenter} controls.
+ * @param <ActivityComponent> The {@code ActivityComponent}.
  */
-public class Presenter<C extends Container, ActivityComponent> {
+public interface Presenter<C extends Container, ActivityComponent> {
 
   /**
-   * The {@link Container} this {@link Presenter} controls.
-   */
-  @NonNull
-  private Optional<C> mContainer = Optional.empty();
-
-  @NonNull
-  private Optional<Resources> mResources = Optional.empty();
-
-  @Nullable
-  private ActivityComponent mActivityComponent;
-
-  /**
-   * Sets the {@link C} this {@code Presenter} controls, and calls {@link #onControlGained(Container, Object)} )}
-   * to notify implementers of this class that the {@link C} is available.
+   * Binds the {@link Container} this {@code BasePresenter} controls.
+   * From this point on, the {@code Presenter} may manipulate given {@link Container} instance,
+   * until {@link #releaseContainer()} is called.
    *
-   * @param container The {@link C} to gain control over.
+   * @param container The {@link Container} to gain control over.
    */
   @MainThread
-  public void acquire(@NonNull final C container, @NonNull final ActivityComponent activityComponent) {
-    if (mContainer.isPresent() && container.equals(mContainer.get())) {
-      return;
-    }
-
-    if (mContainer.isPresent()) {
-      onControlLost();
-    }
-
-    mContainer = Optional.of(container);
-    mResources = getResources(container);
-    mActivityComponent = activityComponent;
-    onControlGained(container, activityComponent);
-  }
-
-  @VisibleForTesting
-  public void setContainer(@NonNull final C container) {
-    mContainer = Optional.of(container);
-    mResources = getResources(container);
-  }
-
-  /* Perform null checks to avoid unit tests from failing. */
-  private Optional<Resources> getResources(@NonNull final C container) {
-    //noinspection ConstantConditions
-    if (container.getContext() != null && container.getContext().getResources() != null) {
-      return Optional.of(container.getContext().getResources());
-    }
-
-    return Optional.empty();
-  }
+  void acquire(@NonNull C container, @NonNull ActivityComponent activityComponent);
 
   /**
-   * Releases the {@link C} this {@code Presenter} controls, and calls {@link #onControlLost()}
-   * to notify implementers of this class that the {@link C} is no longer available.
+   * Tells this Presenter to release the {@link Container} instance.
+   * From this point on, the {@code Presenter} is not allowed to manipulate
+   * the {@link Container} instance supplied to {@link #acquire(Container, Object)} anymore.
    */
   @MainThread
-  public void releaseContainer() {
-    if (!mContainer.isPresent()) {
-      return;
-    }
-
-    mContainer = Optional.empty();
-    mResources = Optional.empty();
-    mActivityComponent = null;
-    onControlLost();
-  }
-
-  /**
-   * Called when the {@link Container} for this {@code Presenter} is attached to the window
-   * and ready to display the state.
-   * From this point on, {@link #container()} will return the {@link C} instance, until {@link #onControlLost()} is called.
-   *
-   * @param container The {@link C} to gain control over.
-   */
-  @MainThread
-  protected void onControlGained(@NonNull final C container,
-                                 @NonNull final ActivityComponent activityComponent) {
-  }
-
-  /**
-   * Called when this {@code Presenter} no longer controls the {@link C}.
-   * From this point on, {@link #container()} will return {@link null}.
-   */
-  @MainThread
-  protected void onControlLost() {
-  }
-
-  /**
-   * Returns the {@link C} instance this {@code Presenter} controls.
-   */
-  @NonNull
-  public Optional<C> container() {
-    return mContainer;
-  }
-
-  /**
-   * Returns the {@link ActivityComponent}.
-   */
-  @NonNull
-  public Optional<ActivityComponent> activityComponent() {
-    return Optional.of(mActivityComponent);
-  }
-
-  /**
-   * Return a Resources instance for your application's package.
-   */
-  @NonNull
-  public Optional<Resources> getResources() {
-    return mResources;
-  }
+  void releaseContainer();
 }

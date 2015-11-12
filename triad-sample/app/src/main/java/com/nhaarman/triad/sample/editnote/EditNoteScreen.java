@@ -26,6 +26,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import com.nhaarman.triad.Presenter;
 import com.nhaarman.triad.Screen;
+import com.nhaarman.triad.TransitionAnimator;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.ApplicationComponent;
 import com.nhaarman.triad.sample.Note;
@@ -51,7 +52,7 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
 
   @NonNull
   @Override
-  protected Presenter<?, ?> createPresenter(final int viewId) {
+  protected Presenter<?,?> createPresenter(final int viewId) {
     return new EditNotePresenter(
         mNote,
         applicationComponent().noteValidator(),
@@ -82,5 +83,15 @@ public class EditNoteScreen extends Screen<ApplicationComponent> {
     });
 
     return true;
+  }
+
+  @Override
+  public boolean animateBackward(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
+    return false;
+  }
+
+  @Override
+  public boolean animateReplace(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
+    return false;
   }
 }

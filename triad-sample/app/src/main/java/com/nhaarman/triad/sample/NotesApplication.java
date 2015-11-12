@@ -21,19 +21,9 @@ import com.nhaarman.triad.TriadApplication;
 
 public class NotesApplication extends TriadApplication<ApplicationComponent> {
 
-  private ApplicationComponent mApplicationComponent;
-
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    mApplicationComponent = new ApplicationComponent(
-        getTriad()
-    );
-  }
-
   @NonNull
   @Override
-  public ApplicationComponent getApplicationComponent() {
-    return mApplicationComponent;
+  public ApplicationComponent createApplicationComponent() {
+    return new ApplicationComponent(getTriad());
   }
 }

@@ -18,7 +18,7 @@ package com.nhaarman.triad.sample.editnote;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.BasePresenter;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
@@ -27,7 +27,7 @@ import com.nhaarman.triad.sample.NoteRepository;
 import com.nhaarman.triad.sample.NoteValidator;
 import com.nhaarman.triad.sample.R;
 
-public class EditNotePresenter extends Presenter<EditNoteContainer, ActivityComponent> {
+public class EditNotePresenter extends BasePresenter<EditNoteContainer, ActivityComponent> {
 
   @Nullable
   private final Note mNote;
@@ -81,12 +81,12 @@ public class EditNotePresenter extends Presenter<EditNoteContainer, ActivityComp
     String contents = container.getContents();
 
     if (!mNoteValidator.validateTitle(title)) {
-      container.setTitleError(getResources().get().getString(R.string.error_title));
+      container.setTitleError(resources().get().getString(R.string.error_title));
       return;
     }
 
     if (!mNoteValidator.validateContents(contents)) {
-      container.setContentsError(getResources().get().getString(R.string.error_contents));
+      container.setContentsError(resources().get().getString(R.string.error_contents));
       return;
     }
 

@@ -39,7 +39,7 @@ import static com.nhaarman.triad.Preconditions.checkState;
  * <li>{@link #onActivityResult(int, int, Intent)}</li>
  * </ul>
  *
- * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code Presenter} creation.
+ * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code BasePresenter} creation.
  */
 public class TriadDelegate<ApplicationComponent> {
 
@@ -92,7 +92,7 @@ public class TriadDelegate<ApplicationComponent> {
 
     mTriad = ((TriadProvider) mActivity.getApplication()).getTriad();
     mTriad.setActivity(mActivity);
-    mTriad.setListener(new MyFlowListener());
+    mTriad.setListener(new MyTriadListener());
 
     if (mTriad.getBackstack().size() > 0) {
       mTriad.showCurrent();
@@ -139,7 +139,7 @@ public class TriadDelegate<ApplicationComponent> {
     return new TriadDelegate(activity);
   }
 
-  private class MyFlowListener implements Triad.Listener<ApplicationComponent> {
+  private class MyTriadListener implements Triad.Listener<ApplicationComponent> {
 
     @Override
     public void forward(@NonNull final Screen<ApplicationComponent> newScreen, @NonNull final Triad.Callback callback) {

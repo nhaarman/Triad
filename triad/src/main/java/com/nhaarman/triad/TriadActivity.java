@@ -25,7 +25,7 @@ import android.support.annotation.Nullable;
 /**
  * An {@link Activity} which is the root of an application that uses Triad.
  *
- * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code Presenter} creation.
+ * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code BasePresenter} creation.
  * @param <ActivityComponent>    The {@code ActivityComponent} to supply to {@code Presenters}.
  */
 public abstract class TriadActivity<ApplicationComponent, ActivityComponent> extends Activity
@@ -58,9 +58,7 @@ public abstract class TriadActivity<ApplicationComponent, ActivityComponent> ext
   }
 
   /**
-   * Creates the {@code ActivityComponent} which is used to retrieve dependencies from that are needed to create {@link Presenter}s.
-   *
-   * @return The created {@code ActivityComponent}.
+   * Creates the {@code ActivityComponent}.
    */
   @NonNull
   protected abstract ActivityComponent createActivityComponent();

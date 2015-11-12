@@ -18,6 +18,7 @@ package com.nhaarman.triad;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ListView;
 import butterknife.ButterKnife;
@@ -27,14 +28,13 @@ import static com.nhaarman.triad.TriadUtil.findPresenter;
 
 /**
  * An abstract ListView {@link Container} instance that handles {@link Presenter} management,
- * and uses Butter Knife to bind view fields in implementing classes.
+ * and uses Butter Knife to bind UI components in implementing classes.
  *
  * @param <P> The specialized {@link Presenter} type.
  */
-public abstract class ListViewContainer<
-    P extends Presenter<?, ActivityComponent>,
-    ActivityComponent
-    > extends ListView implements Container {
+public abstract class ListViewContainer
+    <P extends Presenter<?, ActivityComponent>, ActivityComponent>
+    extends ListView implements Container {
 
   /* Use a raw type in favor of an easier API. */
   @SuppressWarnings("rawtypes")
@@ -44,11 +44,11 @@ public abstract class ListViewContainer<
   @NonNull
   private final ActivityComponent mActivityComponent;
 
-  public ListViewContainer(final Context context, final AttributeSet attrs) {
+  public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public ListViewContainer(final Context context, final AttributeSet attrs, final int defStyle) {
+  public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
 
     mActivityComponent = findActivityComponent(context);

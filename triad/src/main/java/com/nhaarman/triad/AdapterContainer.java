@@ -17,7 +17,13 @@
 package com.nhaarman.triad;
 
 import android.support.annotation.NonNull;
+import android.widget.ListView;
 
+/**
+ * A {@link Container} implementation for use in an adapter View, such as {@link ListView} or {@code RecyclerView}.
+ *
+ * @param <P> The specialized {@link Presenter} type for this {@code Container}.
+ */
 public interface AdapterContainer<P extends Presenter<?, ?>> extends Container {
 
   void setPresenter(@NonNull P presenter);
