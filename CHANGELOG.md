@@ -1,5 +1,12 @@
 # Changelog
 
+Version 0.15.0 *(2015-11-12)*
+-----------------------------------
+
+ * Extracted `Presenter` to an interface, classes can extend `BasePresenter` now.
+ * Improved animation API.
+ * View state is saved when navigating to a new screen.
+
 Version 0.14.1 *(2015-10-30)*
 -----------------------------------
 
