@@ -46,47 +46,54 @@ public class TriadView extends RelativeLayout {
 
   void forward(@Nullable final ViewGroup currentView,
                @NonNull final ViewGroup newView,
-               @NonNull final Triad.Callback callback,
-               @NonNull final TransitionAnimator animator) {
+               @Nullable final TransitionAnimator animator,
+               @NonNull final Triad.Callback callback) {
     addView(newView);
-    newView.getViewTreeObserver().addOnPreDrawListener(
-        new TransitionPreDrawListener(currentView, newView, callback) {
-          @Override
-          boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
-            return animator.animateForward(currentView, newView, callback);
-          }
-        }
-    );
+    newView.getViewTreeObserver().addOnPreDrawListener(new ForwardTransitionPreDrawListener(currentView, newView, animator, callback));
   }
 
   void backward(@Nullable final ViewGroup currentView,
                 @NonNull final ViewGroup newView,
-                @NonNull final Triad.Callback callback,
-                @NonNull final TransitionAnimator animator) {
+                @Nullable final TransitionAnimator animator,
+                @NonNull final Triad.Callback callback) {
     addView(newView);
-    newView.getViewTreeObserver().addOnPreDrawListener(
-        new TransitionPreDrawListener(currentView, newView, callback) {
-          @Override
-          boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
-            return animator.animateBackward(currentView, newView, callback);
-          }
-        }
-    );
+    newView.getViewTreeObserver().addOnPreDrawListener(new BackwardTransitionPreDrawListener(currentView, newView, animator, callback));
   }
 
-  void replace(@Nullable final ViewGroup currentView,
-               @NonNull final ViewGroup newView,
-               @NonNull final Triad.Callback callback,
-               @NonNull final TransitionAnimator animator) {
-    addView(newView);
-    newView.getViewTreeObserver().addOnPreDrawListener(
-        new TransitionPreDrawListener(currentView, newView, callback) {
-          @Override
-          boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
-            return animator.animateReplace(currentView, newView, callback);
-          }
-        }
-    );
+  private class ForwardTransitionPreDrawListener extends TransitionPreDrawListener {
+
+    /**
+     * @param currentView The {@link View} to execute an exit animation for.
+     * @param newView     The {@link View} to execute an entering animation for.
+     */
+    ForwardTransitionPreDrawListener(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                     @NonNull final Triad.Callback callback) {
+      super(currentView, newView, animator, callback);
+    }
+
+    @Override
+    protected boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                      @NonNull final Triad.Callback callback) {
+      return animator != null && animator.forward(currentView, newView, callback);
+    }
+  }
+
+  private class BackwardTransitionPreDrawListener extends TransitionPreDrawListener {
+
+    /**
+     * @param currentView The {@link View} to execute an exit animation for.
+     * @param newView     The {@link View} to execute an entering animation for.
+     */
+    BackwardTransitionPreDrawListener(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                      @NonNull final Triad.Callback callback) {
+      super(currentView, newView, animator, callback);
+    }
+
+    @Override
+    protected boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                      @NonNull final Triad.Callback callback) {
+      return animator != null && animator.backward(currentView, newView, callback);
+    }
   }
 
   /**
@@ -100,6 +107,9 @@ public class TriadView extends RelativeLayout {
     @NonNull
     private final View mNewView;
 
+    @Nullable
+    private final TransitionAnimator mAnimator;
+
     @NonNull
     private final Triad.Callback mCallback;
 
@@ -109,9 +119,11 @@ public class TriadView extends RelativeLayout {
      */
     TransitionPreDrawListener(@Nullable final View currentView,
                               @NonNull final View newView,
+                              @Nullable final TransitionAnimator animator,
                               @NonNull final Triad.Callback callback) {
       mCurrentView = currentView;
       mNewView = newView;
+      mAnimator = animator;
       mCallback = callback;
     }
 
@@ -119,7 +131,7 @@ public class TriadView extends RelativeLayout {
     public boolean onPreDraw() {
       mNewView.getViewTreeObserver().removeOnPreDrawListener(this);
 
-      boolean handled = handleAnimation(mCurrentView, mNewView, mCallback);
+      boolean handled = handleAnimation(mCurrentView, mNewView, mAnimator, mCallback);
       if (!handled) {
         animateViewReplacing();
       }
@@ -127,12 +139,8 @@ public class TriadView extends RelativeLayout {
       return true;
     }
 
-    /**
-     * Offers the implementer a chance to handle the animation themselves.
-     *
-     * @return true if the animation is handled, false otherwise.
-     */
-    abstract boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback);
+    protected abstract boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                               @NonNull final Triad.Callback callback);
 
     /**
      * Executes an exit animation for the old {@link View}, and an entering animation for the new {@link View}.

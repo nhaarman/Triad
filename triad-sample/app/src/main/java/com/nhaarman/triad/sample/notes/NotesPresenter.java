@@ -17,10 +17,7 @@
 package com.nhaarman.triad.sample.notes;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.view.View;
 import com.nhaarman.triad.BasePresenter;
-import com.nhaarman.triad.TransitionAnimator;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
@@ -37,7 +34,7 @@ class NotesPresenter extends BasePresenter<NotesContainer, ActivityComponent> im
   }
 
   public void onCreateNoteClicked() {
-    mTriad.goTo(new EditNoteScreen());
+    mTriad.goTo(new EditNoteScreen(), new TranslateLeftAnimator());
   }
 
   @Override

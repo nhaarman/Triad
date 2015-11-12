@@ -142,7 +142,7 @@ public class TriadDelegate<ApplicationComponent> {
   private class MyTriadListener implements Triad.Listener<ApplicationComponent> {
 
     @Override
-    public void forward(@NonNull final Screen<ApplicationComponent> newScreen, @NonNull final Triad.Callback callback) {
+    public void forward(@NonNull final Screen<ApplicationComponent> newScreen, @Nullable final TransitionAnimator animator, @NonNull final Triad.Callback callback) {
       if (mCurrentScreen != null && mCurrentView != null) {
         SparseArray<Parcelable> state = new SparseArray<>();
         mCurrentView.saveHierarchyState(state);
@@ -153,7 +153,7 @@ public class TriadDelegate<ApplicationComponent> {
       newScreen.setApplicationComponent(mApplicationComponent);
 
       ViewGroup newView = newScreen.createView(mTriadView);
-      mTriadView.forward(mCurrentView, newView, callback, newScreen);
+      mTriadView.forward(mCurrentView, newView, animator, callback);
 
       mCurrentView = newView;
 
@@ -161,12 +161,12 @@ public class TriadDelegate<ApplicationComponent> {
     }
 
     @Override
-    public void backward(@NonNull final Screen<ApplicationComponent> newScreen, @NonNull final Triad.Callback callback) {
+    public void backward(@NonNull final Screen<ApplicationComponent> newScreen, @Nullable final TransitionAnimator animator, @NonNull final Triad.Callback callback) {
       mCurrentScreen = newScreen;
 
       ViewGroup newView = newScreen.createView(mTriadView);
       newScreen.restoreState(newView);
-      mTriadView.backward(mCurrentView, newView, callback, newScreen);
+      mTriadView.backward(mCurrentView, newView, animator, callback);
 
       mCurrentView = newView;
 
@@ -174,12 +174,12 @@ public class TriadDelegate<ApplicationComponent> {
     }
 
     @Override
-    public void replace(@NonNull final Screen<ApplicationComponent> newScreen, @NonNull final Triad.Callback callback) {
+    public void replace(@NonNull final Screen<ApplicationComponent> newScreen, @Nullable final TransitionAnimator animator, @NonNull final Triad.Callback callback) {
       mCurrentScreen = newScreen;
       newScreen.setApplicationComponent(mApplicationComponent);
 
       ViewGroup newView = newScreen.createView(mTriadView);
-      mTriadView.replace(mCurrentView, newView, callback, newScreen);
+      mTriadView.forward(mCurrentView, newView, animator, callback);
 
       mCurrentView = newView;
 

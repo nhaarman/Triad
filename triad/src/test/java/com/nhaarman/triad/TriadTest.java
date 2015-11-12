@@ -42,29 +42,29 @@ public class TriadTest {
     doAnswer(new Answer() {
       @Override
       public Object answer(final InvocationOnMock invocationOnMock) throws Throwable {
-        Triad.Callback callback = (Triad.Callback) invocationOnMock.getArguments()[1];
+        Triad.Callback callback = (Triad.Callback) invocationOnMock.getArguments()[2];
         callback.onComplete();
         return null;
       }
-    }).when(mListener).forward(any(Screen.class), any(Triad.Callback.class));
+    }).when(mListener).forward(any(Screen.class), any(TransitionAnimator.class), any(Triad.Callback.class));
 
     doAnswer(new Answer() {
       @Override
       public Object answer(final InvocationOnMock invocationOnMock) throws Throwable {
-        Triad.Callback callback = (Triad.Callback) invocationOnMock.getArguments()[1];
+        Triad.Callback callback = (Triad.Callback) invocationOnMock.getArguments()[2];
         callback.onComplete();
         return null;
       }
-    }).when(mListener).backward(any(Screen.class), any(Triad.Callback.class));
+    }).when(mListener).backward(any(Screen.class), any(TransitionAnimator.class), any(Triad.Callback.class));
 
     doAnswer(new Answer() {
       @Override
       public Object answer(final InvocationOnMock invocationOnMock) throws Throwable {
-        Triad.Callback callback = (Triad.Callback) invocationOnMock.getArguments()[1];
+        Triad.Callback callback = (Triad.Callback) invocationOnMock.getArguments()[2];
         callback.onComplete();
         return null;
       }
-    }).when(mListener).replace(any(Screen.class), any(Triad.Callback.class));
+    }).when(mListener).replace(any(Screen.class), any(TransitionAnimator.class), any(Triad.Callback.class));
   }
 
   @Test(expected = IllegalStateException.class)
@@ -86,7 +86,7 @@ public class TriadTest {
     triad.startWith(mScreen1);
 
     /* Then */
-    verify(mListener).forward(eq(mScreen1), any(Triad.Callback.class));
+    verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
     assertBackstackHasEntries(triad.getBackstack(), mScreen1);
   }
 
@@ -96,7 +96,7 @@ public class TriadTest {
     Triad triad = Triad.emptyInstance();
     triad.setListener(mListener);
     triad.startWith(mScreen1);
-    verify(mListener).forward(eq(mScreen1), any(Triad.Callback.class));
+    verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
 
     /* When */
     triad.startWith(mScreen1);
@@ -135,13 +135,13 @@ public class TriadTest {
     Triad triad = Triad.emptyInstance();
     triad.setListener(mListener);
     triad.startWith(mScreen1);
-    verify(mListener).forward(eq(mScreen1), any(Triad.Callback.class));
+    verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
 
     /* When */
     triad.goTo(mScreen2);
 
     /* Then */
-    verify(mListener).forward(eq(mScreen2), any(Triad.Callback.class));
+    verify(mListener).forward(eq(mScreen2), any(TransitionAnimator.class), any(Triad.Callback.class));
     assertBackstackHasEntries(triad.getBackstack(), mScreen1, mScreen2);
   }
 
@@ -166,7 +166,7 @@ public class TriadTest {
     triad.popTo(mScreen2);
 
     /* Then */
-    verify(mListener).forward(eq(mScreen2), any(Triad.Callback.class));
+    verify(mListener).forward(eq(mScreen2), any(TransitionAnimator.class), any(Triad.Callback.class));
     assertBackstackHasEntries(triad.getBackstack(), mScreen1, mScreen2);
   }
 
@@ -179,7 +179,7 @@ public class TriadTest {
     triad.popTo(mScreen1);
 
     /* Then */
-    verify(mListener).backward(eq(mScreen1), any(Triad.Callback.class));
+    verify(mListener).backward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
     assertBackstackHasEntries(triad.getBackstack(), mScreen1);
   }
 
@@ -215,7 +215,7 @@ public class TriadTest {
     triad.replaceWith(mScreen2);
 
     /* Then */
-    verify(mListener).replace(eq(mScreen2), any(Triad.Callback.class));
+    verify(mListener).replace(eq(mScreen2), any(TransitionAnimator.class), any(Triad.Callback.class));
     assertBackstackHasEntries(triad.getBackstack(), mScreen2);
   }
 
@@ -273,7 +273,7 @@ public class TriadTest {
     triad.forward(Backstack.of(mScreen2, mScreen3));
 
     /* Then */
-    verify(mListener).forward(eq(mScreen3), any(Triad.Callback.class));
+    verify(mListener).forward(eq(mScreen3), any(TransitionAnimator.class), any(Triad.Callback.class));
     assertBackstackHasEntries(triad.getBackstack(), mScreen2, mScreen3);
   }
 
@@ -296,7 +296,7 @@ public class TriadTest {
     triad.backward(Backstack.of(mScreen2, mScreen3));
 
     /* Then */
-    verify(mListener).backward(eq(mScreen3), any(Triad.Callback.class));
+    verify(mListener).backward(eq(mScreen3), any(TransitionAnimator.class), any(Triad.Callback.class));
     assertBackstackHasEntries(triad.getBackstack(), mScreen2, mScreen3);
   }
 
@@ -319,7 +319,7 @@ public class TriadTest {
     triad.replace(Backstack.of(mScreen2, mScreen3));
 
     /* Then */
-    verify(mListener).replace(eq(mScreen3), any(Triad.Callback.class));
+    verify(mListener).replace(eq(mScreen3), any(TransitionAnimator.class), any(Triad.Callback.class));
     assertBackstackHasEntries(triad.getBackstack(), mScreen2, mScreen3);
   }
 

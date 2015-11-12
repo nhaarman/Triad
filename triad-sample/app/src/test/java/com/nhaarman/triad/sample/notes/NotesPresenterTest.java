@@ -1,5 +1,6 @@
 package com.nhaarman.triad.sample.notes;
 
+import com.nhaarman.triad.TransitionAnimator;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
@@ -29,7 +30,7 @@ public class NotesPresenterTest {
     mNotesPresenter.onCreateNoteClicked();
 
     /* Then */
-    verify(mTriad).goTo(any(EditNoteScreen.class));
+    verify(mTriad).goTo(any(EditNoteScreen.class), any(TransitionAnimator.class));
   }
 
   @Test

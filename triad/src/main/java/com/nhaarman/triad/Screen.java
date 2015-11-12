@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
 
-public abstract class Screen<ApplicationComponent> implements TransitionAnimator {
+public abstract class Screen<ApplicationComponent> {
 
   @NonNull
   private final SparseArray<Presenter<?, ?>> mPresenters = new SparseArray<>();
@@ -57,21 +57,6 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
 
   @NonNull
   protected abstract Presenter<?, ?> createPresenter(int viewId);
-
-  @Override
-  public boolean animateForward(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
-    return false;
-  }
-
-  @Override
-  public boolean animateBackward(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
-    return false;
-  }
-
-  @Override
-  public boolean animateReplace(@Nullable final View currentView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
-    return false;
-  }
 
   boolean onBackPressed() {
     return false;
