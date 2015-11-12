@@ -49,7 +49,7 @@ public class EditNewNotePresenterTest {
     mTriad = mock(Triad.class);
 
     mEditNotePresenter = spy(new EditNotePresenter(null, mNoteValidator, mNoteCreatorMock, mNoteRepository,mTriad));
-    doReturn(Optional.of(mock(Resources.class))).when(mEditNotePresenter).getResources();
+    doReturn(Optional.of(mock(Resources.class))).when(mEditNotePresenter).resources();
 
     mEditNoteContainerMock = mock(EditNoteContainer.class);
     when(mEditNoteContainerMock.getContext()).thenReturn(mock(Context.class));

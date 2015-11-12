@@ -18,14 +18,14 @@ package com.nhaarman.triad.sample.notes.noteslist;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.BasePresenter;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.NoteRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotesListPresenter extends Presenter<NotesListContainer, ActivityComponent> {
+public class NotesListPresenter extends BasePresenter<NotesListContainer, ActivityComponent> {
 
   @NonNull
   private final NoteRepository mNoteRepository;

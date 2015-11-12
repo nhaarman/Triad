@@ -20,21 +20,21 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 
 import static com.nhaarman.triad.TriadUtil.findActivityComponent;
 import static com.nhaarman.triad.TriadUtil.findPresenter;
 
 /**
- * An abstract ListView {@link Container} instance that handles {@link Presenter} management,
+ * An abstract {@link Container} instance that handles {@link Presenter} management,
  * and uses Butter Knife to bind UI components in implementing classes.
  *
  * @param <P> The specialized {@link Presenter} type.
  */
-public abstract class ListViewContainer
+public abstract class LinearLayoutContainer
     <P extends Presenter<?, ActivityComponent>, ActivityComponent>
-    extends ListView implements Container {
+    extends LinearLayout implements Container {
 
   /* Use a raw type in favor of an easier API. */
   @SuppressWarnings("rawtypes")
@@ -44,11 +44,11 @@ public abstract class ListViewContainer
   @NonNull
   private final ActivityComponent mActivityComponent;
 
-  public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
+  public LinearLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
+  public LinearLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
 
     mActivityComponent = findActivityComponent(context);
@@ -56,11 +56,16 @@ public abstract class ListViewContainer
   }
 
   /**
-   * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
+   * Returns the {@link P} instance that is tied to this {@code LinearLayoutContainer}.
    */
   @NonNull
   public P getPresenter() {
     return (P) mPresenter;
+  }
+
+  @NonNull
+  public ActivityComponent getActivityComponent() {
+    return mActivityComponent;
   }
 
   @Override

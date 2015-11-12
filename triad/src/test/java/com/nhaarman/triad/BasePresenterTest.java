@@ -8,7 +8,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
-public class PresenterTest {
+public class BasePresenterTest {
 
   private TestPresenter mPresenter;
 

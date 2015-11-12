@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.support.annotation.NonNull;
 
+/**
+ * An utility class that retrieves the ActivityComponent and Presenter using a Context instance.
+ */
 public class TriadUtil {
 
   private TriadUtil() {

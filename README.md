@@ -123,7 +123,7 @@ interface CounterContainer extends Container {
 Finally, the `CounterPresenter` handles any logic, and formats the data to display in the view. Presenters survive orientation changes, so our counter variable will not get lost on a configuration change.
 
 ```java
-class MyPresenter extends Presenter<MyContainer, ActivityComponent> {
+class MyPresenter extends BasePresenter<MyContainer, ActivityComponent> {
 
   private int mCounter;
 

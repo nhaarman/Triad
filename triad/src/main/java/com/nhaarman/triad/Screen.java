@@ -16,6 +16,7 @@
 
 package com.nhaarman.triad;
 
+import android.os.Parcelable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,10 +27,13 @@ import android.view.ViewGroup;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
 
-public abstract class Screen<ApplicationComponent> implements TransitionAnimator {
+public abstract class Screen<ApplicationComponent> {
 
   @NonNull
   private final SparseArray<Presenter<?, ?>> mPresenters = new SparseArray<>();
+
+  @NonNull
+  private final SparseArray<Parcelable> mState = new SparseArray<>();
 
   @Nullable
   private ApplicationComponent mApplicationComponent;
@@ -54,14 +58,6 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
   @NonNull
   protected abstract Presenter<?, ?> createPresenter(int viewId);
 
-  @Override
-  public boolean animateTransition(@Nullable final View oldView,
-                                   @NonNull final View newView,
-                                   @NonNull final Triad.Direction direction,
-                                   @NonNull final Triad.Callback callback) {
-    return false;
-  }
-
   boolean onBackPressed() {
     return false;
   }
@@ -73,5 +69,13 @@ public abstract class Screen<ApplicationComponent> implements TransitionAnimator
   @NonNull
   protected ApplicationComponent applicationComponent() {
     return checkNotNull(mApplicationComponent, "Application component is null.");
+  }
+
+  void saveState(@NonNull final ViewGroup view) {
+    view.saveHierarchyState(mState);
+  }
+
+  void restoreState(@NonNull final ViewGroup view) {
+    view.restoreHierarchyState(mState);
   }
 }

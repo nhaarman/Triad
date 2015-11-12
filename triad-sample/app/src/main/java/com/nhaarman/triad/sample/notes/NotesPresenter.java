@@ -17,14 +17,14 @@
 package com.nhaarman.triad.sample.notes;
 
 import android.support.annotation.NonNull;
-import com.nhaarman.triad.Presenter;
+import com.nhaarman.triad.BasePresenter;
 import com.nhaarman.triad.Triad;
 import com.nhaarman.triad.sample.ActivityComponent;
 import com.nhaarman.triad.sample.Note;
 import com.nhaarman.triad.sample.editnote.EditNoteScreen;
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
-class NotesPresenter extends Presenter<NotesContainer, ActivityComponent> implements NotesListPresenter.OnNoteClickedListener {
+class NotesPresenter extends BasePresenter<NotesContainer, ActivityComponent> implements NotesListPresenter.OnNoteClickedListener {
 
   @NonNull
   private final Triad mTriad;
@@ -34,7 +34,7 @@ class NotesPresenter extends Presenter<NotesContainer, ActivityComponent> implem
   }
 
   public void onCreateNoteClicked() {
-    mTriad.goTo(new EditNoteScreen());
+    mTriad.goTo(new EditNoteScreen(), new TranslateLeftAnimator());
   }
 
   @Override

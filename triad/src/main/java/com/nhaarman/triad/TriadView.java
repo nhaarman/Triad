@@ -18,20 +18,18 @@ package com.nhaarman.triad;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
+import android.animation.ValueAnimator;
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.RelativeLayout;
 
-import static com.nhaarman.triad.Preconditions.checkArgument;
-
+@SuppressWarnings("AnonymousClassVariableHidesContainingMethodVariable")
 public class TriadView extends RelativeLayout {
 
   private final long mTransitionAnimationDurationMs;
@@ -43,124 +41,142 @@ public class TriadView extends RelativeLayout {
   public TriadView(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
 
-    mTransitionAnimationDurationMs = retrieveTransitionAnimationDurationMs();
+    mTransitionAnimationDurationMs = getResources().getInteger(android.R.integer.config_shortAnimTime);
   }
 
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public TriadView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
-
-    mTransitionAnimationDurationMs = retrieveTransitionAnimationDurationMs();
+  void forward(@Nullable final ViewGroup currentView,
+               @NonNull final ViewGroup newView,
+               @Nullable final TransitionAnimator animator,
+               @NonNull final Triad.Callback callback) {
+    addView(newView);
+    newView.getViewTreeObserver().addOnPreDrawListener(new ForwardTransitionPreDrawListener(currentView, newView, animator, callback));
   }
 
-  private long retrieveTransitionAnimationDurationMs() {
-    return getResources().getInteger(android.R.integer.config_shortAnimTime);
+  void backward(@Nullable final ViewGroup currentView,
+                @NonNull final ViewGroup newView,
+                @Nullable final TransitionAnimator animator,
+                @NonNull final Triad.Callback callback) {
+    addView(newView);
+    newView.getViewTreeObserver().addOnPreDrawListener(new BackwardTransitionPreDrawListener(currentView, newView, animator, callback));
   }
 
-  public void transition(@Nullable final View oldView,
-                         @Nullable final View newView,
-                         @NonNull final Triad.Direction direction,
-                         @NonNull final Triad.Callback callback,
-                         @NonNull final TransitionAnimator animator) {
-    checkArgument(oldView != null || newView != null, "Both oldView and newView are null.");
+  private class ForwardTransitionPreDrawListener extends TransitionPreDrawListener {
 
-    if (newView != null) {
-      addView(newView);
-      newView.getViewTreeObserver().addOnPreDrawListener(new TransitionPreDrawListener(oldView, newView, direction, callback, animator));
-    } else {
-      animateViewExit(oldView);
+    /**
+     * @param currentView The {@link View} to execute an exit animation for.
+     * @param newView     The {@link View} to execute an entering animation for.
+     */
+    ForwardTransitionPreDrawListener(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                     @NonNull final Triad.Callback callback) {
+      super(currentView, newView, animator, callback);
+    }
+
+    @Override
+    protected boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                      @NonNull final Triad.Callback callback) {
+      return animator != null && animator.forward(currentView, newView, callback);
     }
   }
 
-  /**
-   * Executes an exit animation for given {@link View},
-   * after which the {@link View} will be removed from its parent.
-   *
-   * @param view The {@link View} to animate and remove.
-   */
-  private void animateViewExit(@NonNull final View view) {
-    ObjectAnimator animator = ObjectAnimator.ofFloat(view, ALPHA, 0f);
-    animator.addListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationEnd(final Animator animation) {
-        ((ViewManager) view.getParent()).removeView(view);
-      }
-    });
-    animator.start();
+  private class BackwardTransitionPreDrawListener extends TransitionPreDrawListener {
+
+    /**
+     * @param currentView The {@link View} to execute an exit animation for.
+     * @param newView     The {@link View} to execute an entering animation for.
+     */
+    BackwardTransitionPreDrawListener(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                      @NonNull final Triad.Callback callback) {
+      super(currentView, newView, animator, callback);
+    }
+
+    @Override
+    protected boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                      @NonNull final Triad.Callback callback) {
+      return animator != null && animator.backward(currentView, newView, callback);
+    }
   }
 
   /**
    * Observes when the new {@link View} is about to be drawn, so a replacement animation can be executed.
    */
-  private class TransitionPreDrawListener implements OnPreDrawListener {
+  private abstract class TransitionPreDrawListener implements OnPreDrawListener {
 
     @Nullable
-    private final View mOldView;
+    private final View mCurrentView;
 
     @NonNull
     private final View mNewView;
 
-    @NonNull
-    private final Triad.Direction mDirection;
+    @Nullable
+    private final TransitionAnimator mAnimator;
 
     @NonNull
     private final Triad.Callback mCallback;
 
-    @NonNull
-    private final TransitionAnimator mAnimator;
-
     /**
-     * @param oldView The {@link View} to execute an exit animation for.
-     * @param newView The {@link View} to execute an entering animation for.
+     * @param currentView The {@link View} to execute an exit animation for.
+     * @param newView     The {@link View} to execute an entering animation for.
      */
-    TransitionPreDrawListener(@Nullable final View oldView,
+    TransitionPreDrawListener(@Nullable final View currentView,
                               @NonNull final View newView,
-                              @NonNull final Triad.Direction direction,
-                              @NonNull final Triad.Callback callback,
-                              @NonNull final TransitionAnimator animator) {
-      mOldView = oldView;
+                              @Nullable final TransitionAnimator animator,
+                              @NonNull final Triad.Callback callback) {
+      mCurrentView = currentView;
       mNewView = newView;
-      mDirection = direction;
-      mCallback = callback;
       mAnimator = animator;
+      mCallback = callback;
     }
 
     @Override
     public boolean onPreDraw() {
       mNewView.getViewTreeObserver().removeOnPreDrawListener(this);
-      boolean handled = mAnimator.animateTransition(mOldView, mNewView, mDirection, mCallback);
+
+      boolean handled = handleAnimation(mCurrentView, mNewView, mAnimator, mCallback);
       if (!handled) {
         animateViewReplacing();
       }
+
       return true;
     }
+
+    protected abstract boolean handleAnimation(@Nullable final View currentView, @NonNull final View newView, @Nullable final TransitionAnimator animator,
+                                               @NonNull final Triad.Callback callback);
 
     /**
      * Executes an exit animation for the old {@link View}, and an entering animation for the new {@link View}.
      * The old {@link View} will be removed from its parent after the animation.
      */
     private void animateViewReplacing() {
-      if (mOldView != null) {
-        mOldView.animate()
-            .alpha(0)
-            .setDuration(mTransitionAnimationDurationMs);
-      }
-
-      mNewView.setAlpha(0);
-
-      ObjectAnimator animator = ObjectAnimator.ofFloat(mNewView, ALPHA, 1f);
-      animator.setDuration(mTransitionAnimationDurationMs);
-      animator.addListener(new AnimatorListenerAdapter() {
+      ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
+      anim.setDuration(mTransitionAnimationDurationMs);
+      anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
         @Override
-        public void onAnimationEnd(final Animator animation) {
-          if (mOldView != null) {
-            ((ViewManager) mOldView.getParent()).removeView(mOldView);
-          }
-
-          mCallback.onComplete();
+        public void onAnimationUpdate(final ValueAnimator animation) {
+          animateAlphas((float) animation.getAnimatedValue());
         }
       });
-      animator.start();
+      anim.addListener(new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(final Animator animation) {
+          finishAnimation();
+        }
+      });
+      anim.start();
+    }
+
+    private void animateAlphas(final float value) {
+      if (mCurrentView != null) {
+        mCurrentView.setAlpha(1 - value);
+      }
+      mNewView.setAlpha(value);
+    }
+
+    private void finishAnimation() {
+      if (mCurrentView != null) {
+        ((ViewManager) mCurrentView.getParent()).removeView(mCurrentView);
+      }
+
+      mCallback.onComplete();
     }
   }
 }

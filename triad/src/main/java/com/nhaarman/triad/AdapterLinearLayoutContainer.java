@@ -5,21 +5,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.AdapterView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 import static com.nhaarman.triad.TriadUtil.findActivityComponent;
 
 /**
- * An abstract RelativeLayout {@link Container} instance that handles {@link Presenter} management
+ * An abstract LinearLayout {@link Container} instance that handles {@link Presenter} management
  * for use in an adapter View, and uses Butter Knife to bind UI components in implementing classes.
  *
  * @param <P> The specialized {@link Presenter} type.
  */
-public abstract class AdapterRelativeLayoutContainer
+public abstract class AdapterLinearLayoutContainer
     <P extends Presenter<?, ActivityComponent>, ActivityComponent>
-    extends RelativeLayout implements AdapterContainer<P> {
+    extends LinearLayout implements AdapterContainer<P> {
 
   @NonNull
   private final ActivityComponent mActivityComponent;
@@ -31,18 +31,18 @@ public abstract class AdapterRelativeLayoutContainer
 
   private boolean mIsAttachedToWindow;
 
-  public AdapterRelativeLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
+  public AdapterLinearLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public AdapterRelativeLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
+  public AdapterLinearLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
 
     mActivityComponent = findActivityComponent(context);
   }
 
   /**
-   * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
+   * Returns the {@link P} instance that is tied to this {@code LinearLayoutContainer}.
    */
   @NonNull
   public P getPresenter() {

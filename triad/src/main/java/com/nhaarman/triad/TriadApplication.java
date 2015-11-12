@@ -22,23 +22,45 @@ import android.support.annotation.Nullable;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 
+/**
+ * A base {@link Application} implementation that handles creation of the {@link Triad} and
+ * {@code ApplicationComponent} instance.
+ */
 public abstract class TriadApplication<ApplicationComponent> extends Application
     implements TriadProvider, ApplicationComponentProvider<ApplicationComponent> {
 
   @Nullable
   private Triad mTriad;
 
+  @Nullable
+  private ApplicationComponent mApplicationComponent;
+
   @Override
   public void onCreate() {
     super.onCreate();
     mTriad = Triad.emptyInstance();
+    mApplicationComponent = createApplicationComponent();
   }
+
+  /**
+   * Creates a new instance of the {@code ApplicationComponent}.
+   */
+  @NonNull
+  protected abstract ApplicationComponent createApplicationComponent();
 
   @Override
   @NonNull
-  public Triad getTriad() {
+  public final Triad getTriad() {
     checkState(mTriad != null, "Calling getTriad() before onCreate().");
 
     return mTriad;
+  }
+
+  @NonNull
+  @Override
+  public final ApplicationComponent getApplicationComponent() {
+    checkState(mApplicationComponent != null, "Calling getApplicationComponent() before onCreate().");
+
+    return mApplicationComponent;
   }
 }

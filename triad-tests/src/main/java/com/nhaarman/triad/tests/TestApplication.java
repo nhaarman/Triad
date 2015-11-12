@@ -23,7 +23,7 @@ public class TestApplication extends TriadApplication<ApplicationComponent> {
 
   @NonNull
   @Override
-  public ApplicationComponent getApplicationComponent() {
+  public ApplicationComponent createApplicationComponent() {
     return new ApplicationComponent();
   }
 }

@@ -17,22 +17,13 @@
 package com.nhaarman.triad.sample;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import com.nhaarman.triad.TriadApplication;
 
 public class NotesApplication extends TriadApplication<ApplicationComponent> {
 
-  @Nullable
-  private ApplicationComponent mApplicationComponent;
-
   @NonNull
   @Override
-  public ApplicationComponent getApplicationComponent() {
-    if (mApplicationComponent == null) {
-      mApplicationComponent = new ApplicationComponent(
-          getTriad()
-      );
-    }
-    return mApplicationComponent;
+  public ApplicationComponent createApplicationComponent() {
+    return new ApplicationComponent(getTriad());
   }
 }

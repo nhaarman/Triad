@@ -25,14 +25,14 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * An {@link AppCompatActivity} which is the root of an application that uses Triad.
  *
- * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code Presenter} creation.
+ * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code BasePresenter} creation.
  * @param <ActivityComponent>    The {@code ActivityComponent} to supply to {@code Presenters}.
  */
 public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityComponent> extends AppCompatActivity
     implements ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
 
   @NonNull
-  private final TriadDelegate<ApplicationComponent, ActivityComponent> mDelegate;
+  private final TriadDelegate<ApplicationComponent> mDelegate;
 
   @Nullable
   private ActivityComponent mActivityComponent;
@@ -44,7 +44,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mDelegate.onCreate(getActivityComponent());
+    mDelegate.onCreate();
   }
 
   @Override
@@ -58,7 +58,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
   }
 
   /**
-   * Creates the {@code ActivityComponent} which is used to retrieve dependencies from that are needed to create {@link Presenter}s.
+   * Creates the {@code ActivityComponent} which is used to retrieve dependencies from that are needed to create {@link BasePresenter}s.
    *
    * @return The created {@code ActivityComponent}.
    */

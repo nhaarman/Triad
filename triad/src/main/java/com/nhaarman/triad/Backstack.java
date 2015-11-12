@@ -28,30 +28,35 @@ import java.util.Iterator;
 /**
  * Describes the history of a {@link Triad} at a specific point in time.
  */
-public final class Backstack implements Iterable<Screen<?>> {
+public class Backstack implements Iterable<Screen<?>> {
 
-  private final Deque<Screen<?>> mBackstack;
+  @NonNull
+  private final Deque<Entry<?>> mBackstack;
 
-  private Backstack(final Deque<Screen<?>> backstack) {
+  private Backstack(@NonNull final Deque<Entry<?>> backstack) {
     mBackstack = backstack;
   }
 
   @Override
   public Iterator<Screen<?>> iterator() {
-    return new ReadIterator<>(mBackstack.iterator());
+    return new ReadIterator(mBackstack.iterator());
   }
 
   public Iterator<Screen<?>> reverseIterator() {
-    return new ReadIterator<>(mBackstack.descendingIterator());
+    return new ReadIterator(mBackstack.descendingIterator());
   }
 
-  public int size() {
+  Iterator<Entry<?>> reverseEntryIterator() {
+    return new EntryReadIterator(mBackstack.descendingIterator());
+  }
+
+  int size() {
     return mBackstack.size();
   }
 
-  @Nullable
-  public Screen<?> current() {
-    return mBackstack.peek();
+  @NonNull
+  <T> Entry<T> current() {
+    return (Entry<T>) mBackstack.peek();
   }
 
   /**
@@ -67,48 +72,66 @@ public final class Backstack implements Iterable<Screen<?>> {
   }
 
   public static Builder emptyBuilder() {
-    return new Builder(Collections.<Screen<?>>emptyList());
+    return new Builder(Collections.<Entry<?>>emptyList());
   }
 
   /**
    * Create a backstack that contains a single screen.
    */
-  public static Backstack single(final Screen<?> screen) {
+  public static Backstack single(@NonNull final Screen<?> screen) {
     return emptyBuilder().push(screen).build();
+  }
+
+  /**
+   * Creates a backstack that contains given screens.
+   */
+  public static Backstack of(@NonNull final Screen<?>... screens) {
+    Builder builder = emptyBuilder();
+
+    for (Screen<?> screen : screens) {
+      builder.push(screen);
+    }
+
+    return builder.build();
+  }
+
+  static class Entry<T> {
+
+    @NonNull
+    final Screen<T> screen;
+
+    @Nullable
+    final TransitionAnimator animator;
+
+    Entry(@NonNull final Screen<T> screen, @Nullable final TransitionAnimator animator) {
+      this.screen = screen;
+      this.animator = animator;
+    }
   }
 
   public static final class Builder {
 
     @NonNull
-    private final Deque<Screen<?>> mBackstack;
+    private final Deque<Entry<?>> mBackstack;
 
-    Builder(@NonNull final Collection<Screen<?>> backstack) {
+    Builder(@NonNull final Collection<Entry<?>> backstack) {
       mBackstack = new ArrayDeque<>(backstack);
     }
 
     @NonNull
     public Builder push(@NonNull final Screen<?> screen) {
-      mBackstack.push(screen);
-
-      return this;
+      return push(screen, null);
     }
 
     @NonNull
-    public Builder addAll(@NonNull final Collection<Screen<?>> screens) {
-      for (Screen<?> screen : screens) {
-        mBackstack.push(screen);
-      }
+    public Builder push(@NonNull final Screen<?> screen, @Nullable final TransitionAnimator animator) {
+      mBackstack.push(new Entry(screen, animator));
 
       return this;
     }
 
     @Nullable
-    public Screen<?> peek() {
-      return mBackstack.peek();
-    }
-
-    @Nullable
-    public Screen<?> pop() {
+    Entry<?> pop() {
       return mBackstack.pop();
     }
 
@@ -125,11 +148,11 @@ public final class Backstack implements Iterable<Screen<?>> {
     }
   }
 
-  private static class ReadIterator<T> implements Iterator<T> {
+  private static class ReadIterator implements Iterator<Screen<?>> {
 
-    private final Iterator<T> mIterator;
+    private final Iterator<Entry<?>> mIterator;
 
-    ReadIterator(final Iterator<T> iterator) {
+    ReadIterator(final Iterator<Entry<?>> iterator) {
       mIterator = iterator;
     }
 
@@ -139,7 +162,31 @@ public final class Backstack implements Iterable<Screen<?>> {
     }
 
     @Override
-    public T next() {
+    public Screen<?> next() {
+      return mIterator.next().screen;
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
+  }
+
+  private static class EntryReadIterator implements Iterator<Entry<?>> {
+
+    private final Iterator<Entry<?>> mIterator;
+
+    EntryReadIterator(final Iterator<Entry<?>> iterator) {
+      mIterator = iterator;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return mIterator.hasNext();
+    }
+
+    @Override
+    public Entry<?> next() {
       return mIterator.next();
     }
 
