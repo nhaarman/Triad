@@ -18,11 +18,17 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Instrumentation;
 import android.content.pm.ActivityInfo;
-import android.support.test.internal.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import android.content.res.Configuration;
+import android.os.Looper;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
-import android.test.ActivityInstrumentationTestCase2;
+import android.view.ViewGroup;
 import java.util.Collection;
+import org.junit.Rule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -30,18 +36,13 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class TriadActivityInstrumentationTestCase<T extends Activity> extends ActivityInstrumentationTestCase2<T> {
+public class TriadActivityInstrumentationTestCase<T extends Activity> {
 
-  private T mActivity;
+  @Rule
+  public final ActivityTestRule<T> mActivityRule;
 
   public TriadActivityInstrumentationTestCase(final Class<T> activityClass) {
-    super(activityClass);
-  }
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    getInstrumentation().callApplicationOnCreate((Application) getInstrumentation().getTargetContext().getApplicationContext());
+    mActivityRule = new MyActivityTestRule(activityClass);
   }
 
   protected void createNote(final String title, final String contents) throws InterruptedException {
@@ -52,26 +53,67 @@ public class TriadActivityInstrumentationTestCase<T extends Activity> extends Ac
     getInstrumentation().waitForIdleSync();
   }
 
-  protected void rotate() throws InterruptedException {
-    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+  public T getActivity() {
+    return mActivityRule.getActivity();
+  }
+
+  protected Triad getTriad() {
+    return ((TriadProvider) mActivityRule.getActivity().getApplicationContext()).getTriad();
+  }
+
+  protected ViewGroup getScreenHolder() {
+    return (ViewGroup) getActivity().findViewById(com.nhaarman.triad.R.id.view_triad);
+  }
+
+  protected Instrumentation getInstrumentation() {
+    return InstrumentationRegistry.getInstrumentation();
+  }
+
+  protected void rotate() {
+    int orientation = InstrumentationRegistry.getTargetContext().getResources().getConfiguration().orientation;
+
+    getActivity().setRequestedOrientation(
+        orientation == Configuration.ORIENTATION_PORTRAIT ?
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    );
     getInstrumentation().waitForIdleSync();
   }
 
-  @Override
-  public T getActivity() {
-    getInstrumentation().runOnMainSync(new Runnable() {
-      @Override
-      public void run() {
-        Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
-        if (activities.isEmpty()) {
-          mActivity = null;
-        } else {
-          mActivity = (T) activities.iterator().next();
-        }
-      }
-    });
-    getInstrumentation().waitForIdleSync();
+  private class MyActivityTestRule extends ActivityTestRule<T> {
 
-    return mActivity == null ? super.getActivity() : mActivity;
+    private T mActivity;
+
+    MyActivityTestRule(final Class<T> activityClass) {
+      super(activityClass);
+    }
+
+    @Override
+    protected void beforeActivityLaunched() {
+      getInstrumentation().callApplicationOnCreate((Application) InstrumentationRegistry.getTargetContext().getApplicationContext());
+    }
+
+    @Override
+    public T getActivity() {
+      Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+          Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
+          if (activities.isEmpty()) {
+            mActivity = null;
+          } else {
+            mActivity = (T) activities.iterator().next();
+          }
+        }
+      };
+      if (Looper.myLooper() == Looper.getMainLooper()) {
+        runnable.run();
+      } else {
+        getInstrumentation().runOnMainSync(runnable);
+        getInstrumentation().waitForIdleSync();
+      }
+
+      return mActivity == null ? super.getActivity() : mActivity;
+    }
   }
 }

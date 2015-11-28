@@ -18,68 +18,85 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Instrumentation;
 import android.content.pm.ActivityInfo;
-import android.support.test.internal.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import android.content.res.Configuration;
+import android.os.Looper;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
-import android.test.ActivityInstrumentationTestCase2;
 import android.view.ViewGroup;
-import com.nhaarman.triad.tests.R;
 import com.nhaarman.triad.tests.TestActivity;
 import java.util.Collection;
+import org.junit.Rule;
 
-import static com.nhaarman.triad.utils.ViewWaiter.viewVisible;
-import static com.nhaarman.triad.utils.ViewWaiter.waitUntil;
+public class TestActivityInstrumentationTestCase {
 
-public abstract class TestActivityInstrumentationTestCase extends ActivityInstrumentationTestCase2<TestActivity> {
+  @Rule
+  public final ActivityTestRule<TestActivity> mActivityRule = new MyActivityTestRule();
 
-  protected TestActivity mActivity;
-
-  protected ViewGroup mScreenHolder;
-
-  protected Triad mTriad;
-
-  protected TestActivityInstrumentationTestCase() {
-    super(TestActivity.class);
+  public TestActivity getActivity() {
+    return mActivityRule.getActivity();
   }
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  protected Triad getTriad() {
+    return mActivityRule.getActivity().getTriad();
+  }
 
-    getInstrumentation().callApplicationOnCreate((Application) getInstrumentation().getTargetContext().getApplicationContext());
+  protected ViewGroup getScreenHolder() {
+    return (ViewGroup) getActivity().findViewById(com.nhaarman.triad.R.id.view_triad);
+  }
 
-    mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad);
-
-    mTriad = getActivity().getTriad();
-
-    getInstrumentation().waitForIdleSync();
-    waitUntil(viewVisible(mScreenHolder, R.id.view_screen_first));
+  protected Instrumentation getInstrumentation() {
+    return InstrumentationRegistry.getInstrumentation();
   }
 
   protected void rotate() {
-    mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    getActivity();
+    int orientation = InstrumentationRegistry.getTargetContext().getResources().getConfiguration().orientation;
 
-    mScreenHolder = (ViewGroup) getActivity().findViewById(R.id.view_triad);
-
-    mTriad = getActivity().getTriad();
+    getActivity().setRequestedOrientation(
+        orientation == Configuration.ORIENTATION_PORTRAIT ?
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    );
+    getInstrumentation().waitForIdleSync();
   }
 
-  @Override
-  public TestActivity getActivity() {
-    getInstrumentation().runOnMainSync(new Runnable() {
-      @Override
-      public void run() {
-        Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
-        if (activities.isEmpty()) {
-          mActivity = null;
-        } else {
-          mActivity = (TestActivity) activities.iterator().next();
-        }
-      }
-    });
-    getInstrumentation().waitForIdleSync();
+  private class MyActivityTestRule extends ActivityTestRule<TestActivity> {
 
-    return mActivity == null ? super.getActivity() : mActivity;
+    private TestActivity mActivity;
+
+    MyActivityTestRule() {
+      super(TestActivity.class);
+    }
+
+    @Override
+    protected void beforeActivityLaunched() {
+      getInstrumentation().callApplicationOnCreate((Application) InstrumentationRegistry.getTargetContext().getApplicationContext());
+    }
+
+    @Override
+    public TestActivity getActivity() {
+      Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+          Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
+          if (activities.isEmpty()) {
+            mActivity = null;
+          } else {
+            mActivity = (TestActivity) activities.iterator().next();
+          }
+        }
+      };
+      if (Looper.myLooper() == Looper.getMainLooper()) {
+        runnable.run();
+      } else {
+        getInstrumentation().runOnMainSync(runnable);
+        getInstrumentation().waitForIdleSync();
+      }
+
+      return mActivity == null ? super.getActivity() : mActivity;
+    }
   }
 }

@@ -56,6 +56,8 @@ public class Triad {
   }
 
   private Triad(@NonNull final Backstack backstack, @Nullable final Listener<?> listener) {
+    new Exception().printStackTrace();
+
     mListener = listener;
     mBackstack = backstack;
 

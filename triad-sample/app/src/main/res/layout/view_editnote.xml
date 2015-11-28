@@ -19,7 +19,6 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#fff"
   android:padding="16dp">
 
   <EditText
@@ -34,6 +33,7 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
     android:layout_marginTop="8dp"
     android:text="@string/save" />
 
@@ -46,6 +46,5 @@
     android:layout_marginTop="4dp"
     android:hint="@string/contents"
     android:lines="3" />
-
 
 </com.nhaarman.triad.sample.editnote.EditNoteView>

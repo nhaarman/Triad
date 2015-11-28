@@ -16,12 +16,10 @@
 
 package com.nhaarman.triad.sample;
 
-import javax.inject.Inject;
 import android.support.annotation.Nullable;
 
 public class NoteValidator {
 
-  @Inject
   public NoteValidator() {
   }
 

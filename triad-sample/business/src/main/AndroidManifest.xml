@@ -14,8 +14,4 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.nhaarman.triad.sample.business">
-
-  <application/>
-
-</manifest>
+<manifest package="com.nhaarman.triad.sample.business" />

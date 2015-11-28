@@ -16,38 +16,48 @@
 
 package com.nhaarman.triad;
 
+import android.support.test.runner.AndroidJUnit4;
 import android.widget.TextView;
 import com.nhaarman.triad.tests.R;
+import com.nhaarman.triad.utils.ViewWaiter;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.assertj.android.api.Assertions.assertThat;
 
+@RunWith(AndroidJUnit4.class)
 public class RotationStateTest extends TestActivityInstrumentationTestCase {
 
-  public void test_initially_theCounterTextIsZero() {
+  @Test
+  public void test_initially_theCounterTextIsZero() throws InterruptedException {
     assertThat(getCounterTV()).hasText("0");
   }
 
-  public void test_afterRotation_theCounterTextIsStillZero() {
+  @Test
+  public void test_afterRotation_theCounterTextIsStillZero() throws InterruptedException {
     rotate();
     assertThat(getCounterTV()).hasText("0");
   }
 
-  public void test_afterIncrement_theCounterTextIsOne() {
+  @Test
+  public void test_afterIncrement_theCounterTextIsOne() throws InterruptedException {
     onView(withId(R.id.view_screen_first_button)).perform(click());
     getInstrumentation().waitForIdleSync();
     assertThat(getCounterTV()).hasText("1");
   }
 
-  public void test_afterIncrementAndRotation_theCounterTextIsOne() {
+  @Test
+  public void test_afterIncrementAndRotation_theCounterTextIsOne() throws InterruptedException {
     onView(withId(R.id.view_screen_first_button)).perform(click());
     rotate();
     assertThat(getCounterTV()).hasText("1");
   }
 
-  private TextView getCounterTV() {
-    return (TextView) mActivity.findViewById(R.id.view_screen_first_tv);
+  private TextView getCounterTV() throws InterruptedException {
+    ViewWaiter.waitUntil(ViewWaiter.viewVisible(getScreenHolder(), R.id.view_screen_first_tv));
+    return (TextView) getActivity().findViewById(R.id.view_screen_first_tv);
   }
 }

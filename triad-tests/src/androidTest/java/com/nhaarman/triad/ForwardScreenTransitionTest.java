@@ -16,7 +16,11 @@
 
 package com.nhaarman.triad;
 
+import android.support.test.runner.AndroidJUnit4;
 import com.nhaarman.triad.tests.secondscreen.SecondScreen;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static com.nhaarman.triad.utils.ViewWaiter.viewNotPresent;
 import static com.nhaarman.triad.utils.ViewWaiter.waitUntil;
@@ -25,23 +29,24 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
+@RunWith(AndroidJUnit4.class)
 public class ForwardScreenTransitionTest extends TestActivityInstrumentationTestCase {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  @Before
+  public void setUp() throws InterruptedException {
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
       public void run() {
-        mTriad.goTo(new SecondScreen());
+        getTriad().goTo(new SecondScreen());
       }
     });
 
-    waitUntil(viewNotPresent(mScreenHolder, com.nhaarman.triad.tests.R.id.view_screen_first));
+    waitUntil(viewNotPresent(getScreenHolder(), com.nhaarman.triad.tests.R.id.view_screen_first));
   }
 
-  public void test_afterTransition_viewsHaveBeenSwitched() throws InterruptedException {
-    assertThat(mScreenHolder.findViewById(com.nhaarman.triad.tests.R.id.view_screen_second), is(not(nullValue())));
-    assertThat(mScreenHolder.findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(nullValue()));
+  @Test
+  public void afterTransition_viewsHaveBeenSwitched() throws InterruptedException {
+    assertThat(getScreenHolder().findViewById(com.nhaarman.triad.tests.R.id.view_screen_second), is(not(nullValue())));
+    assertThat(getScreenHolder().findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(nullValue()));
   }
 }

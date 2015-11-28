@@ -16,9 +16,13 @@
 
 package com.nhaarman.triad.sample.editnote;
 
+import android.support.test.runner.AndroidJUnit4;
 import com.nhaarman.triad.TriadActivityInstrumentationTestCase;
 import com.nhaarman.triad.sample.MainActivity;
 import com.nhaarman.triad.sample.R;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -29,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+@RunWith(AndroidJUnit4.class)
 public class EditExistingNoteScreenTest extends TriadActivityInstrumentationTestCase<MainActivity> {
 
   private static final String TITLE = "Some title";
@@ -39,28 +44,31 @@ public class EditExistingNoteScreenTest extends TriadActivityInstrumentationTest
     super(MainActivity.class);
   }
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  @Before
+  public void setUp() throws Exception {
     getActivity();
     createNote(TITLE, CONTENTS);
     onView(withText(TITLE)).perform(click());
     getInstrumentation().waitForIdleSync();
   }
 
-  public void test_editNoteScreen_hasTitleEditText() {
+  @Test
+  public void editNoteScreen_hasTitleEditText() {
     onView(withHint(R.string.title)).check(matches(withText(TITLE)));
   }
 
-  public void test_editNoteScreen_hasContentsEditText() {
+  @Test
+  public void editNoteScreen_hasContentsEditText() {
     onView(withHint(R.string.contents)).check(matches(withText(CONTENTS)));
   }
 
-  public void test_editNoteScreen_hasSaveButton() {
+  @Test
+  public void editNoteScreen_hasSaveButton() {
     onView(withText(R.string.save)).check(matches(isDisplayed()));
   }
 
-  public void test_savingEmptyTitle_showsError() {
+  @Test
+  public void savingEmptyTitle_showsError() {
     /* Given */
     onView(withText(TITLE)).perform(clearText());
 
@@ -71,7 +79,8 @@ public class EditExistingNoteScreenTest extends TriadActivityInstrumentationTest
     onView(withHint(R.string.error_title)).check(matches(isDisplayed()));
   }
 
-  public void test_savingEmptyContents_showsError() {
+  @Test
+  public void savingEmptyContents_showsError() {
     /* Given */
     onView(withText(CONTENTS)).perform(clearText());
 
@@ -82,7 +91,8 @@ public class EditExistingNoteScreenTest extends TriadActivityInstrumentationTest
     onView(withHint(R.string.error_contents)).check(matches(isDisplayed()));
   }
 
-  public void test_savingValidContents_movesBackToNotesScreen() {
+  @Test
+  public void savingValidContents_movesBackToNotesScreen() {
     /* When */
     onView(withText(R.string.save)).perform(click());
 

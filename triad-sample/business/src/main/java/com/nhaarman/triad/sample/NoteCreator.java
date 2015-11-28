@@ -16,7 +16,6 @@
 
 package com.nhaarman.triad.sample;
 
-import javax.inject.Inject;
 import android.support.annotation.NonNull;
 
 public class NoteCreator {
@@ -24,7 +23,6 @@ public class NoteCreator {
   @NonNull
   private final NoteRepository mNoteRepository;
 
-  @Inject
   public NoteCreator(@NonNull final NoteRepository noteRepository) {
     mNoteRepository = noteRepository;
   }

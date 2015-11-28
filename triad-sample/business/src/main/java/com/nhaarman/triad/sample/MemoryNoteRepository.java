@@ -16,13 +16,12 @@
 
 package com.nhaarman.triad.sample;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 public class MemoryNoteRepository implements NoteRepository {
 
@@ -31,7 +30,6 @@ public class MemoryNoteRepository implements NoteRepository {
 
   private long mLastId;
 
-  @Inject
   public MemoryNoteRepository() {
     mNotes = new HashMap<>(16);
     mLastId = 0;
