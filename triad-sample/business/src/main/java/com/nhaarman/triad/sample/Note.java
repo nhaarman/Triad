@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,36 +20,38 @@ import android.support.annotation.NonNull;
 
 public class Note implements Comparable<Note> {
 
-  private String mTitle;
-  private String mContents;
-  private long mCreated;
+    private String mTitle;
 
-  public String getTitle() {
-    return mTitle;
-  }
+    private String mContents;
 
-  public void setTitle(final String title) {
-    mTitle = title;
-  }
+    private long mCreated;
 
-  public String getContents() {
-    return mContents;
-  }
+    public String getTitle() {
+        return mTitle;
+    }
 
-  public void setContents(final String contents) {
-    mContents = contents;
-  }
+    public void setTitle(final String title) {
+        mTitle = title;
+    }
 
-  public long getCreated() {
-    return mCreated;
-  }
+    public String getContents() {
+        return mContents;
+    }
 
-  public void setCreated(final long created) {
-    mCreated = created;
-  }
+    public void setContents(final String contents) {
+        mContents = contents;
+    }
 
-  @Override
-  public int compareTo(@NonNull final Note another) {
-    return Long.valueOf(mCreated).compareTo(another.getCreated());
-  }
+    public long getCreated() {
+        return mCreated;
+    }
+
+    public void setCreated(final long created) {
+        mCreated = created;
+    }
+
+    @Override
+    public int compareTo(@NonNull final Note another) {
+        return Long.valueOf(mCreated).compareTo(another.getCreated());
+    }
 }

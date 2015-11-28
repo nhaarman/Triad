@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,13 +29,13 @@ import static org.hamcrest.core.IsNull.nullValue;
 @RunWith(AndroidJUnit4.class)
 public class InitialStateTest extends TestActivityInstrumentationTestCase {
 
-  @Test
-  public void initially_screenHolderVisible() {
-    assertThat(getScreenHolder()).isVisible();
-  }
+    @Test
+    public void initially_screenHolderVisible() {
+        assertThat(getScreenHolder()).isVisible();
+    }
 
-  @Test
-  public void initially_screenHolderContainsFirstScreen() {
-    assertThat(getScreenHolder().findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(not(nullValue())));
-  }
+    @Test
+    public void initially_screenHolderContainsFirstScreen() {
+        assertThat(getScreenHolder().findViewById(com.nhaarman.triad.tests.R.id.view_screen_first), is(not(nullValue())));
+    }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,43 +27,43 @@ import java.util.List;
 
 public class NotesListPresenter extends BasePresenter<NotesListContainer, ActivityComponent> {
 
-  @NonNull
-  private final NoteRepository mNoteRepository;
+    @NonNull
+    private final NoteRepository mNoteRepository;
 
-  @NonNull
-  private final OnNoteClickedListener mListener;
+    @NonNull
+    private final OnNoteClickedListener mListener;
 
-  @Nullable
-  private List<NotePresenter> mNotePresenters;
+    @Nullable
+    private List<NotePresenter> mNotePresenters;
 
-  public NotesListPresenter(@NonNull final NoteRepository noteRepository,
-                            @NonNull final OnNoteClickedListener listener) {
-    mNoteRepository = noteRepository;
-    mListener = listener;
-  }
-
-  @Override
-  protected void onControlGained(@NonNull final NotesListContainer container, @NonNull final ActivityComponent activityComponent) {
-    List<Note> notes = mNoteRepository.findAll();
-
-    mNotePresenters = new ArrayList<>();
-    for (Note note : notes) {
-      mNotePresenters.add(new NotePresenter(note));
+    public NotesListPresenter(@NonNull final NoteRepository noteRepository,
+                              @NonNull final OnNoteClickedListener listener) {
+        mNoteRepository = noteRepository;
+        mListener = listener;
     }
 
-    container.setNotes(mNotePresenters);
-  }
+    @Override
+    protected void onControlGained(@NonNull final NotesListContainer container, @NonNull final ActivityComponent activityComponent) {
+        List<Note> notes = mNoteRepository.findAll();
 
-  public void onNoteClicked(final int position) {
-    if (mNotePresenters == null) {
-      return;
+        mNotePresenters = new ArrayList<>();
+        for (Note note : notes) {
+            mNotePresenters.add(new NotePresenter(note));
+        }
+
+        container.setNotes(mNotePresenters);
     }
 
-    mListener.onNoteClicked(mNotePresenters.get(position).getNote());
-  }
+    public void onNoteClicked(final int position) {
+        if (mNotePresenters == null) {
+            return;
+        }
 
-  public interface OnNoteClickedListener {
+        mListener.onNoteClicked(mNotePresenters.get(position).getNote());
+    }
 
-    void onNoteClicked(@NonNull Note note);
-  }
+    public interface OnNoteClickedListener {
+
+        void onNoteClicked(@NonNull Note note);
+    }
 }

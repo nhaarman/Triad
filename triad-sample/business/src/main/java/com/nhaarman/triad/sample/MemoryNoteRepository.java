@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,42 +25,42 @@ import java.util.Map;
 
 public class MemoryNoteRepository implements NoteRepository {
 
-  @NonNull
-  private final Map<Long, Note> mNotes;
+    @NonNull
+    private final Map<Long, Note> mNotes;
 
-  private long mLastId;
+    private long mLastId;
 
-  public MemoryNoteRepository() {
-    mNotes = new HashMap<>(16);
-    mLastId = 0;
-  }
-
-  @Override
-  public Long create(@NonNull final Note note) {
-    mLastId++;
-    note.setCreated(System.currentTimeMillis());
-    mNotes.put(mLastId, note);
-    return mLastId;
-  }
-
-  @Nullable
-  @Override
-  public Note find(@Nullable final Long id) {
-    if (id == null) {
-      return null;
+    public MemoryNoteRepository() {
+        mNotes = new HashMap<>(16);
+        mLastId = 0;
     }
 
-    return mNotes.get(id);
-  }
+    @Override
+    public Long create(@NonNull final Note note) {
+        mLastId++;
+        note.setCreated(System.currentTimeMillis());
+        mNotes.put(mLastId, note);
+        return mLastId;
+    }
 
-  @NonNull
-  @Override
-  public List<Note> findAll() {
-    return new ArrayList<>(mNotes.values());
-  }
+    @Nullable
+    @Override
+    public Note find(@Nullable final Long id) {
+        if (id == null) {
+            return null;
+        }
 
-  @Override
-  public boolean update(@NonNull final Note note) {
-    return mNotes.values().contains(note);
-  }
+        return mNotes.get(id);
+    }
+
+    @NonNull
+    @Override
+    public List<Note> findAll() {
+        return new ArrayList<>(mNotes.values());
+    }
+
+    @Override
+    public boolean update(@NonNull final Note note) {
+        return mNotes.values().contains(note);
+    }
 }

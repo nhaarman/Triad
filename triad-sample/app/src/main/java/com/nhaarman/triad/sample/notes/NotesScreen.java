@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,27 +25,27 @@ import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
 public class NotesScreen extends Screen<ApplicationComponent> {
 
-  @Override
-  protected int getLayoutResId() {
-    return R.layout.view_notes;
-  }
-
-  @NonNull
-  @Override
-  protected Presenter<?,?> createPresenter(final int viewId) {
-    if (viewId == R.id.view_notes) {
-      return new NotesPresenter(
-          applicationComponent().triad()
-      );
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.view_notes;
     }
 
-    if (viewId == R.id.view_notes_noteslistview) {
-      return new NotesListPresenter(
-          applicationComponent().noteRepository(),
-          (NotesListPresenter.OnNoteClickedListener) getPresenter(R.id.view_notes)
-      );
-    }
+    @NonNull
+    @Override
+    protected Presenter<?, ?> createPresenter(final int viewId) {
+        if (viewId == R.id.view_notes) {
+            return new NotesPresenter(
+                  applicationComponent().triad()
+            );
+        }
 
-    throw new AssertionError("Unknown presenter class for view with id: " + viewId);
-  }
+        if (viewId == R.id.view_notes_noteslistview) {
+            return new NotesListPresenter(
+                  applicationComponent().noteRepository(),
+                  (NotesListPresenter.OnNoteClickedListener) getPresenter(R.id.view_notes)
+            );
+        }
+
+        throw new AssertionError("Unknown presenter class for view with id: " + viewId);
+    }
 }

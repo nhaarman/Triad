@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,40 +27,40 @@ import static com.nhaarman.triad.Preconditions.checkState;
  * {@code ApplicationComponent} instance.
  */
 public abstract class TriadApplication<ApplicationComponent> extends Application
-    implements TriadProvider, ApplicationComponentProvider<ApplicationComponent> {
+      implements TriadProvider, ApplicationComponentProvider<ApplicationComponent> {
 
-  @Nullable
-  private Triad mTriad;
+    @Nullable
+    private Triad mTriad;
 
-  @Nullable
-  private ApplicationComponent mApplicationComponent;
+    @Nullable
+    private ApplicationComponent mApplicationComponent;
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    mTriad = Triad.emptyInstance();
-    mApplicationComponent = createApplicationComponent();
-  }
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mTriad = Triad.emptyInstance();
+        mApplicationComponent = createApplicationComponent();
+    }
 
-  /**
-   * Creates a new instance of the {@code ApplicationComponent}.
-   */
-  @NonNull
-  protected abstract ApplicationComponent createApplicationComponent();
+    /**
+     * Creates a new instance of the {@code ApplicationComponent}.
+     */
+    @NonNull
+    protected abstract ApplicationComponent createApplicationComponent();
 
-  @Override
-  @NonNull
-  public final Triad getTriad() {
-    checkState(mTriad != null, "Calling getTriad() before onCreate().");
+    @Override
+    @NonNull
+    public final Triad getTriad() {
+        checkState(mTriad != null, "Calling getTriad() before onCreate().");
 
-    return mTriad;
-  }
+        return mTriad;
+    }
 
-  @NonNull
-  @Override
-  public final ApplicationComponent getApplicationComponent() {
-    checkState(mApplicationComponent != null, "Calling getApplicationComponent() before onCreate().");
+    @NonNull
+    @Override
+    public final ApplicationComponent getApplicationComponent() {
+        checkState(mApplicationComponent != null, "Calling getApplicationComponent() before onCreate().");
 
-    return mApplicationComponent;
-  }
+        return mApplicationComponent;
+    }
 }

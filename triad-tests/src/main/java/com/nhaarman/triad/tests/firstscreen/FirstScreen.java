@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,14 +24,14 @@ import com.nhaarman.triad.tests.R;
 
 public class FirstScreen extends Screen<ApplicationComponent> {
 
-  @Override
-  protected int getLayoutResId() {
-    return R.layout.view_screen_first;
-  }
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.view_screen_first;
+    }
 
-  @NonNull
-  @Override
-  protected Presenter<?,?> createPresenter(final int viewId) {
-    return new FirstScreenPresenter();
-  }
+    @NonNull
+    @Override
+    protected Presenter<?, ?> createPresenter(final int viewId) {
+        return new FirstScreenPresenter();
+    }
 }

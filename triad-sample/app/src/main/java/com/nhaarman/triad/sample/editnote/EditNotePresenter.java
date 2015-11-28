@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,73 +29,73 @@ import com.nhaarman.triad.sample.R;
 
 public class EditNotePresenter extends BasePresenter<EditNoteContainer, ActivityComponent> {
 
-  @Nullable
-  private final Note mNote;
+    @Nullable
+    private final Note mNote;
 
-  @NonNull
-  private final NoteValidator mNoteValidator;
+    @NonNull
+    private final NoteValidator mNoteValidator;
 
-  @NonNull
-  private final NoteCreator mNoteCreatorMock;
+    @NonNull
+    private final NoteCreator mNoteCreatorMock;
 
-  @NonNull
-  private final NoteRepository mNoteRepository;
+    @NonNull
+    private final NoteRepository mNoteRepository;
 
-  @NonNull
-  private final Triad mTriad;
+    @NonNull
+    private final Triad mTriad;
 
-  public EditNotePresenter(@Nullable final Note note,
-                           @NonNull final NoteValidator noteValidator,
-                           @NonNull final NoteCreator noteCreatorMock,
-                           @NonNull final NoteRepository noteRepository,
-                           @NonNull final Triad triad) {
-    mNote = note;
-    mNoteValidator = noteValidator;
-    mNoteCreatorMock = noteCreatorMock;
-    mNoteRepository = noteRepository;
-    mTriad = triad;
-  }
-
-  @Override
-  protected void onControlGained(@NonNull final EditNoteContainer container, @NonNull final ActivityComponent activityComponent) {
-    String title = "";
-    String contents = "";
-
-    if (mNote != null) {
-      title = mNote.getTitle();
-      contents = mNote.getContents();
+    public EditNotePresenter(@Nullable final Note note,
+                             @NonNull final NoteValidator noteValidator,
+                             @NonNull final NoteCreator noteCreatorMock,
+                             @NonNull final NoteRepository noteRepository,
+                             @NonNull final Triad triad) {
+        mNote = note;
+        mNoteValidator = noteValidator;
+        mNoteCreatorMock = noteCreatorMock;
+        mNoteRepository = noteRepository;
+        mTriad = triad;
     }
 
-    container.setTitle(title);
-    container.setContents(contents);
-  }
+    @Override
+    protected void onControlGained(@NonNull final EditNoteContainer container, @NonNull final ActivityComponent activityComponent) {
+        String title = "";
+        String contents = "";
 
-  public void onSaveNoteClicked() {
-    if (!container().isPresent()) {
-      return;
+        if (mNote != null) {
+            title = mNote.getTitle();
+            contents = mNote.getContents();
+        }
+
+        container.setTitle(title);
+        container.setContents(contents);
     }
 
-    EditNoteContainer container = container().get();
+    public void onSaveNoteClicked() {
+        if (!container().isPresent()) {
+            return;
+        }
 
-    String title = container.getTitle();
-    String contents = container.getContents();
+        EditNoteContainer container = container().get();
 
-    if (!mNoteValidator.validateTitle(title)) {
-      container.setTitleError(resources().get().getString(R.string.error_title));
-      return;
+        String title = container.getTitle();
+        String contents = container.getContents();
+
+        if (!mNoteValidator.validateTitle(title)) {
+            container.setTitleError(resources().get().getString(R.string.error_title));
+            return;
+        }
+
+        if (!mNoteValidator.validateContents(contents)) {
+            container.setContentsError(resources().get().getString(R.string.error_contents));
+            return;
+        }
+
+        if (mNote == null) {
+            mNoteCreatorMock.createNote(title, contents);
+        } else {
+            mNoteRepository.update(mNote);
+        }
+
+        mTriad.goBack();
     }
-
-    if (!mNoteValidator.validateContents(contents)) {
-      container.setContentsError(resources().get().getString(R.string.error_contents));
-      return;
-    }
-
-    if (mNote == null) {
-      mNoteCreatorMock.createNote(title, contents);
-    } else {
-      mNoteRepository.update(mNote);
-    }
-
-    mTriad.goBack();
-  }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,21 +23,21 @@ import com.nhaarman.triad.sample.Note;
 
 public class NotePresenter extends BasePresenter<NoteContainer, ActivityComponent> {
 
-  @NonNull
-  private final Note mNote;
+    @NonNull
+    private final Note mNote;
 
-  public NotePresenter(@NonNull final Note note) {
-    mNote = note;
-  }
+    public NotePresenter(@NonNull final Note note) {
+        mNote = note;
+    }
 
-  @NonNull
-  public Note getNote() {
-    return mNote;
-  }
+    @NonNull
+    public Note getNote() {
+        return mNote;
+    }
 
-  @Override
-  protected void onControlGained(@NonNull final NoteContainer container, @NonNull final ActivityComponent activityComponent) {
-    container.setTitle(mNote.getTitle());
-    container.setContents(mNote.getContents());
-  }
+    @Override
+    protected void onControlGained(@NonNull final NoteContainer container, @NonNull final ActivityComponent activityComponent) {
+        container.setTitle(mNote.getTitle());
+        container.setContents(mNote.getContents());
+    }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,19 +26,19 @@ import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter;
 
 class NotesPresenter extends BasePresenter<NotesContainer, ActivityComponent> implements NotesListPresenter.OnNoteClickedListener {
 
-  @NonNull
-  private final Triad mTriad;
+    @NonNull
+    private final Triad mTriad;
 
-  NotesPresenter(@NonNull final Triad triad) {
-    mTriad = triad;
-  }
+    NotesPresenter(@NonNull final Triad triad) {
+        mTriad = triad;
+    }
 
-  public void onCreateNoteClicked() {
-    mTriad.goTo(new EditNoteScreen(), new TranslateLeftAnimator());
-  }
+    public void onCreateNoteClicked() {
+        mTriad.goTo(new EditNoteScreen(), new TranslateLeftAnimator());
+    }
 
-  @Override
-  public void onNoteClicked(@NonNull final Note note) {
-    mTriad.goTo(new EditNoteScreen(note));
-  }
+    @Override
+    public void onNoteClicked(@NonNull final Note note) {
+        mTriad.goTo(new EditNoteScreen(note));
+    }
 }

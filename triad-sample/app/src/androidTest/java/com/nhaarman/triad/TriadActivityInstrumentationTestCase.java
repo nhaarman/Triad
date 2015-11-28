@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,82 +38,82 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class TriadActivityInstrumentationTestCase<T extends Activity> {
 
-  @Rule
-  public final ActivityTestRule<T> mActivityRule;
+    @Rule
+    public final ActivityTestRule<T> mActivityRule;
 
-  public TriadActivityInstrumentationTestCase(final Class<T> activityClass) {
-    mActivityRule = new MyActivityTestRule(activityClass);
-  }
-
-  protected void createNote(final String title, final String contents) throws InterruptedException {
-    onView(withText(com.nhaarman.triad.sample.R.string.create_note)).perform(click());
-    onView(withHint(com.nhaarman.triad.sample.R.string.title)).perform(typeText(title));
-    onView(withHint(com.nhaarman.triad.sample.R.string.contents)).perform(typeText(contents));
-    onView(withText(com.nhaarman.triad.sample.R.string.save)).perform(click());
-    getInstrumentation().waitForIdleSync();
-  }
-
-  public T getActivity() {
-    return mActivityRule.getActivity();
-  }
-
-  protected Triad getTriad() {
-    return ((TriadProvider) mActivityRule.getActivity().getApplicationContext()).getTriad();
-  }
-
-  protected ViewGroup getScreenHolder() {
-    return (ViewGroup) getActivity().findViewById(com.nhaarman.triad.R.id.view_triad);
-  }
-
-  protected Instrumentation getInstrumentation() {
-    return InstrumentationRegistry.getInstrumentation();
-  }
-
-  protected void rotate() {
-    int orientation = InstrumentationRegistry.getTargetContext().getResources().getConfiguration().orientation;
-
-    getActivity().setRequestedOrientation(
-        orientation == Configuration.ORIENTATION_PORTRAIT ?
-            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    );
-    getInstrumentation().waitForIdleSync();
-  }
-
-  private class MyActivityTestRule extends ActivityTestRule<T> {
-
-    private T mActivity;
-
-    MyActivityTestRule(final Class<T> activityClass) {
-      super(activityClass);
+    public TriadActivityInstrumentationTestCase(final Class<T> activityClass) {
+        mActivityRule = new MyActivityTestRule(activityClass);
     }
 
-    @Override
-    protected void beforeActivityLaunched() {
-      getInstrumentation().callApplicationOnCreate((Application) InstrumentationRegistry.getTargetContext().getApplicationContext());
-    }
-
-    @Override
-    public T getActivity() {
-      Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-          Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
-          if (activities.isEmpty()) {
-            mActivity = null;
-          } else {
-            mActivity = (T) activities.iterator().next();
-          }
-        }
-      };
-      if (Looper.myLooper() == Looper.getMainLooper()) {
-        runnable.run();
-      } else {
-        getInstrumentation().runOnMainSync(runnable);
+    protected void createNote(final String title, final String contents) throws InterruptedException {
+        onView(withText(com.nhaarman.triad.sample.R.string.create_note)).perform(click());
+        onView(withHint(com.nhaarman.triad.sample.R.string.title)).perform(typeText(title));
+        onView(withHint(com.nhaarman.triad.sample.R.string.contents)).perform(typeText(contents));
+        onView(withText(com.nhaarman.triad.sample.R.string.save)).perform(click());
         getInstrumentation().waitForIdleSync();
-      }
-
-      return mActivity == null ? super.getActivity() : mActivity;
     }
-  }
+
+    public T getActivity() {
+        return mActivityRule.getActivity();
+    }
+
+    protected Triad getTriad() {
+        return ((TriadProvider) mActivityRule.getActivity().getApplicationContext()).getTriad();
+    }
+
+    protected ViewGroup getScreenHolder() {
+        return (ViewGroup) getActivity().findViewById(com.nhaarman.triad.R.id.view_triad);
+    }
+
+    protected Instrumentation getInstrumentation() {
+        return InstrumentationRegistry.getInstrumentation();
+    }
+
+    protected void rotate() {
+        int orientation = InstrumentationRegistry.getTargetContext().getResources().getConfiguration().orientation;
+
+        getActivity().setRequestedOrientation(
+              orientation == Configuration.ORIENTATION_PORTRAIT ?
+                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        );
+        getInstrumentation().waitForIdleSync();
+    }
+
+    private class MyActivityTestRule extends ActivityTestRule<T> {
+
+        private T mActivity;
+
+        MyActivityTestRule(final Class<T> activityClass) {
+            super(activityClass);
+        }
+
+        @Override
+        protected void beforeActivityLaunched() {
+            getInstrumentation().callApplicationOnCreate((Application) InstrumentationRegistry.getTargetContext().getApplicationContext());
+        }
+
+        @Override
+        public T getActivity() {
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
+                    if (activities.isEmpty()) {
+                        mActivity = null;
+                    } else {
+                        mActivity = (T) activities.iterator().next();
+                    }
+                }
+            };
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                runnable.run();
+            } else {
+                getInstrumentation().runOnMainSync(runnable);
+                getInstrumentation().waitForIdleSync();
+            }
+
+            return mActivity == null ? super.getActivity() : mActivity;
+        }
+    }
 }

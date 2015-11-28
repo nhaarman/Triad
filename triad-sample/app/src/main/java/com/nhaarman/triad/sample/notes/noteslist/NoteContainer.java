@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,12 +18,10 @@ package com.nhaarman.triad.sample.notes.noteslist;
 
 import android.support.annotation.NonNull;
 import com.nhaarman.triad.AdapterContainer;
-import com.nhaarman.triad.Container;
 
 public interface NoteContainer extends AdapterContainer<NotePresenter> {
 
-  void setTitle(@NonNull String title);
+    void setTitle(@NonNull String title);
 
-  void setContents(@NonNull String contents);
-
+    void setContents(@NonNull String contents);
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,20 +16,20 @@
 
 package com.nhaarman.triad.sample;
 
-import java.util.List;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import java.util.List;
 
 public interface NoteRepository {
 
-  @Nullable
-  Long create(@NonNull final Note note);
+    @Nullable
+    Long create(@NonNull final Note note);
 
-  @Nullable
-  Note find(@Nullable Long id);
+    @Nullable
+    Note find(@Nullable Long id);
 
-  @NonNull
-  List<Note> findAll();
+    @NonNull
+    List<Note> findAll();
 
-  boolean update(@NonNull final Note note);
+    boolean update(@NonNull final Note note);
 }
