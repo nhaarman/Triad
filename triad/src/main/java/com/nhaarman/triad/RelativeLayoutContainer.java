@@ -36,13 +36,13 @@ public abstract class RelativeLayoutContainer
       <P extends Presenter<?, ActivityComponent>, ActivityComponent>
       extends RelativeLayout implements Container {
 
-    /* Use a raw type in favor of an easier API. */
-    @SuppressWarnings("rawtypes")
-    @NonNull
-    private final Presenter mPresenter;
-
     @NonNull
     private final ActivityComponent mActivityComponent;
+
+    /* Use a raw type in favor of an easier API. */
+    @SuppressWarnings("rawtypes")
+    @Nullable
+    private Presenter mPresenter;
 
     public RelativeLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
         this(context, attrs, 0);
@@ -52,7 +52,6 @@ public abstract class RelativeLayoutContainer
         super(context, attrs, defStyle);
 
         mActivityComponent = findActivityComponent(context);
-        mPresenter = findPresenter(context, getId());
     }
 
     /**
@@ -60,6 +59,10 @@ public abstract class RelativeLayoutContainer
      */
     @NonNull
     public P getPresenter() {
+        if (mPresenter == null) {
+            mPresenter = findPresenter(getContext(), getId());
+        }
+
         return (P) mPresenter;
     }
 
@@ -83,13 +86,14 @@ public abstract class RelativeLayoutContainer
             return;
         }
 
-        mPresenter.acquire(this, mActivityComponent);
+        //noinspection rawtypes
+        ((Presenter) getPresenter()).acquire(this, mActivityComponent);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        mPresenter.releaseContainer();
+        getPresenter().releaseContainer();
     }
 }

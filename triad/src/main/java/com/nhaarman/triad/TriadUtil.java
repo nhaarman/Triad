@@ -40,7 +40,7 @@ public class TriadUtil {
             //noinspection unchecked
             return ((ActivityComponentProvider<ActivityComponent>) baseContext).getActivityComponent();
         } else {
-      /* We return null, since the layout editor can not return the Activity Component. */
+            /* We return null, since the layout editor can not return the Activity Component. */
             //noinspection ConstantConditions
             return null;
         }
@@ -57,7 +57,7 @@ public class TriadUtil {
             //noinspection unchecked
             return (P) ((ScreenProvider) baseContext).getCurrentScreen().getPresenter(viewId);
         } else {
-       /* We return null, since the layout editor can not return the ScreenProvider. */
+            /* We return null, since the layout editor can not return the ScreenProvider. */
             //noinspection ConstantConditions
             return null;
         }
