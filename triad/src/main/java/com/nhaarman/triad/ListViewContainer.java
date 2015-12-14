@@ -52,7 +52,6 @@ public abstract class ListViewContainer
         super(context, attrs, defStyle);
 
         mActivityComponent = findActivityComponent(context);
-        mPresenter = findPresenter(context, getId());
     }
 
     /**

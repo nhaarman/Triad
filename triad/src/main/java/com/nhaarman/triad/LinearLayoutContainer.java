@@ -52,7 +52,6 @@ public abstract class LinearLayoutContainer
         super(context, attrs, defStyle);
 
         mActivityComponent = findActivityComponent(context);
-        mPresenter = findPresenter(context, getId());
     }
 
     /**
