@@ -25,6 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
@@ -52,30 +53,31 @@ public class RelativeLayoutContainerTest {
         mActivityComponentMock = mock(ActivityComponent.class);
         when(((ActivityComponentProvider<ActivityComponent>) activity).getActivityComponent()).thenReturn(mActivityComponentMock);
 
-        mRelativeLayoutContainer = new TestRelativeLayoutContainer(activity, null, 0);
+        mRelativeLayoutContainer = spy(new TestRelativeLayoutContainer(activity, null, 0));
+        when(mRelativeLayoutContainer.getContext()).thenReturn(activity);
     }
 
     @Test
     public void getPresenter_returnsProperPresenter() {
-    /* Then */
+        /* Then */
         assertThat(mRelativeLayoutContainer.getPresenter(), is(mPresenterMock));
     }
 
     @Test
     public void onAttachedToWindow_givesControlToPresenter() {
-    /* When */
+        /* When */
         mRelativeLayoutContainer.onAttachedToWindow();
 
-    /* Then */
+        /* Then */
         verify(mPresenterMock).acquire(mRelativeLayoutContainer, mActivityComponentMock);
     }
 
     @Test
     public void onDetachedFromWindow_releasesPresenterControl() {
-    /* When */
+        /* When */
         mRelativeLayoutContainer.onDetachedFromWindow();
 
-    /* Then */
+        /* Then */
         verify(mPresenterMock).releaseContainer();
     }
 }
