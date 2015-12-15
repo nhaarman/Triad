@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,68 +32,68 @@ import java.util.List;
 
 public class NotesListView extends ListViewContainer<NotesListPresenter, ActivityComponent> implements NotesListContainer {
 
-  @NonNull
-  private final MyAdapter mAdapter;
+    @NonNull
+    private final MyAdapter mAdapter;
 
-  @Nullable
-  private List<NotePresenter> mNotes;
+    @Nullable
+    private List<NotePresenter> mNotes;
 
-  public NotesListView(final Context context, final AttributeSet attrs) {
-    this(context, attrs, 0);
-  }
-
-  public NotesListView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
-    mAdapter = new MyAdapter();
-  }
-
-  @Override
-  protected void onFinishInflate() {
-    super.onFinishInflate();
-    if (!isInEditMode()) {
-      setAdapter(mAdapter);
+    public NotesListView(final Context context, final AttributeSet attrs) {
+        this(context, attrs, 0);
     }
-  }
 
-  @Override
-  public void setNotes(@NonNull final List<NotePresenter> notes) {
-    mNotes = notes;
-    mAdapter.notifyDataSetChanged();
-  }
-
-  @OnItemClick
-  public void onItemClicked(final int position) {
-    getPresenter().onNoteClicked(position);
-  }
-
-  private class MyAdapter extends BaseAdapter {
-
-    @Override
-    public int getCount() {
-      return mNotes == null ? 0 : mNotes.size();
+    public NotesListView(final Context context, final AttributeSet attrs, final int defStyle) {
+        super(context, attrs, defStyle);
+        mAdapter = new MyAdapter();
     }
 
     @Override
-    public NotePresenter getItem(final int position) {
-      return mNotes == null ? null : mNotes.get(position);
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        if (!isInEditMode()) {
+            setAdapter(mAdapter);
+        }
     }
 
     @Override
-    public long getItemId(final int position) {
-      return position;
+    public void setNotes(@NonNull final List<NotePresenter> notes) {
+        mNotes = notes;
+        mAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public View getView(final int position, final View convertView, final ViewGroup parent) {
-      NoteContainer noteContainer = (NoteContainer) convertView;
-      if (noteContainer == null) {
-        noteContainer = (NoteContainer) LayoutInflater.from(getContext()).inflate(R.layout.view_note, parent, false);
-      }
-
-      noteContainer.setPresenter(getItem(position));
-
-      return (View) noteContainer;
+    @OnItemClick
+    public void onItemClicked(final int position) {
+        getPresenter().onNoteClicked(position);
     }
-  }
+
+    private class MyAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return mNotes == null ? 0 : mNotes.size();
+        }
+
+        @Override
+        public NotePresenter getItem(final int position) {
+            return mNotes == null ? null : mNotes.get(position);
+        }
+
+        @Override
+        public long getItemId(final int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, final View convertView, final ViewGroup parent) {
+            NoteContainer noteContainer = (NoteContainer) convertView;
+            if (noteContainer == null) {
+                noteContainer = (NoteContainer) LayoutInflater.from(getContext()).inflate(R.layout.view_note, parent, false);
+            }
+
+            noteContainer.setPresenter(getItem(position));
+
+            return (View) noteContainer;
+        }
+    }
 }
 

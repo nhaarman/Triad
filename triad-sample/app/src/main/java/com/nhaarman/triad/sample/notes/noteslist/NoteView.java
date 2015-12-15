@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,27 +27,27 @@ import com.nhaarman.triad.sample.R;
 
 public class NoteView extends AdapterRelativeLayoutContainer<NotePresenter, ActivityComponent> implements NoteContainer {
 
-  @Bind(R.id.view_note_titletv)
-  protected TextView mTitleTV;
+    @Bind(R.id.view_note_titletv)
+    protected TextView mTitleTV;
 
-  @Bind(R.id.view_note_contentstv)
-  protected TextView mContentsTV;
+    @Bind(R.id.view_note_contentstv)
+    protected TextView mContentsTV;
 
-  public NoteView(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
-  }
+    public NoteView(final Context context, final AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-  public NoteView(final Context context, final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
-  }
+    public NoteView(final Context context, final AttributeSet attrs, final int defStyle) {
+        super(context, attrs, defStyle);
+    }
 
-  @Override
-  public void setTitle(@NonNull final String title) {
-    mTitleTV.setText(title);
-  }
+    @Override
+    public void setTitle(@NonNull final String title) {
+        mTitleTV.setText(title);
+    }
 
-  @Override
-  public void setContents(@NonNull final String contents) {
-    mContentsTV.setText(contents);
-  }
+    @Override
+    public void setContents(@NonNull final String contents) {
+        mContentsTV.setText(contents);
+    }
 }

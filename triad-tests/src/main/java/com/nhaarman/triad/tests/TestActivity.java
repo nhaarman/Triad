@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,21 +24,21 @@ import com.nhaarman.triad.tests.firstscreen.FirstScreen;
 
 public class TestActivity extends TriadActivity<ApplicationComponent, ActivityComponent> {
 
-  @Override
-  protected void onCreate(final Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    getTriad().startWith(new FirstScreen());
-  }
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getTriad().startWith(new FirstScreen());
+    }
 
-  @NonNull
-  @Override
-  protected ActivityComponent createActivityComponent() {
-    return new ActivityComponent();
-  }
+    @NonNull
+    @Override
+    protected ActivityComponent createActivityComponent() {
+        return new ActivityComponent();
+    }
 
-  @NonNull
-  @Override
-  public Triad getTriad() {
-    return super.getTriad();
-  }
+    @NonNull
+    @Override
+    public Triad getTriad() {
+        return super.getTriad();
+    }
 }

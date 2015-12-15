@@ -13,11 +13,11 @@ android {
 dependencies {
   compile project(':triad')
 
-  /* Annotations library */
-  provided 'com.android.support:support-annotations:23.1.0'
+  provided androidAnnotations
 
   /* Tests */
-  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
-  androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
-  androidTestCompile ('com.squareup.assertj:assertj-android:1.0.0') {exclude group: 'com.android.support'}
+  androidTestCompile androidSupportTestRunner
+  androidTestCompile androidSupportTestRules
+  androidTestCompile espresso
+  androidTestCompile assertJAndroid
 }

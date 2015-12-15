@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,58 +33,62 @@ import static com.nhaarman.triad.TriadUtil.findPresenter;
  * @param <P> The specialized {@link Presenter} type.
  */
 public abstract class ListViewContainer
-    <P extends Presenter<?, ActivityComponent>, ActivityComponent>
-    extends ListView implements Container {
+      <P extends Presenter<?, ActivityComponent>, ActivityComponent>
+      extends ListView implements Container {
 
-  /* Use a raw type in favor of an easier API. */
-  @SuppressWarnings("rawtypes")
-  @NonNull
-  private final Presenter mPresenter;
+    /* Use a raw type in favor of an easier API. */
+    @SuppressWarnings("rawtypes")
+    @Nullable
+    private Presenter mPresenter;
 
-  @NonNull
-  private final ActivityComponent mActivityComponent;
+    @NonNull
+    private final ActivityComponent mActivityComponent;
 
-  public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
-    this(context, attrs, 0);
-  }
-
-  public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
-    super(context, attrs, defStyle);
-
-    mActivityComponent = findActivityComponent(context);
-    mPresenter = findPresenter(context, getId());
-  }
-
-  /**
-   * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
-   */
-  @NonNull
-  public P getPresenter() {
-    return (P) mPresenter;
-  }
-
-  @Override
-  protected void onFinishInflate() {
-    super.onFinishInflate();
-
-    ButterKnife.bind(this);
-  }
-
-  @Override
-  protected void onAttachedToWindow() {
-    super.onAttachedToWindow();
-
-    if (isInEditMode()) {
-      return;
+    public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    mPresenter.acquire(this, mActivityComponent);
-  }
+    public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
+        super(context, attrs, defStyle);
 
-  @Override
-  protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
+        mActivityComponent = findActivityComponent(context);
+    }
 
-    mPresenter.releaseContainer();
-  }
+    /**
+     * Returns the {@link P} instance that is tied to this {@code RelativeLayoutContainer}.
+     */
+    @NonNull
+    public P getPresenter() {
+        if (mPresenter == null) {
+            mPresenter = findPresenter(getContext(), getId());
+        }
+
+        return (P) mPresenter;
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+        ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        if (isInEditMode()) {
+            return;
+        }
+
+        //noinspection rawtypes
+        ((Presenter) getPresenter()).acquire(this, mActivityComponent);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        getPresenter().releaseContainer();
+    }
 }

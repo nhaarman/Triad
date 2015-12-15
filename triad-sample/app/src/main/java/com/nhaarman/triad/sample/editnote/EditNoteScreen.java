@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,31 +26,31 @@ import com.nhaarman.triad.sample.R;
 
 public class EditNoteScreen extends Screen<ApplicationComponent> {
 
-  @Nullable
-  private final Note mNote;
+    @Nullable
+    private final Note mNote;
 
-  public EditNoteScreen() {
-    this(null);
-  }
+    public EditNoteScreen() {
+        this(null);
+    }
 
-  public EditNoteScreen(@Nullable final Note note) {
-    mNote = note;
-  }
+    public EditNoteScreen(@Nullable final Note note) {
+        mNote = note;
+    }
 
-  @Override
-  protected int getLayoutResId() {
-    return R.layout.view_editnote;
-  }
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.view_editnote;
+    }
 
-  @NonNull
-  @Override
-  protected Presenter<?, ?> createPresenter(final int viewId) {
-    return new EditNotePresenter(
-        mNote,
-        applicationComponent().noteValidator(),
-        applicationComponent().noteCreator(),
-        applicationComponent().noteRepository(),
-        applicationComponent().triad()
-    );
-  }
+    @NonNull
+    @Override
+    protected Presenter<?, ?> createPresenter(final int viewId) {
+        return new EditNotePresenter(
+              mNote,
+              applicationComponent().noteValidator(),
+              applicationComponent().noteCreator(),
+              applicationComponent().noteRepository(),
+              applicationComponent().triad()
+        );
+    }
 }

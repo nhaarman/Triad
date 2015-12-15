@@ -1,0 +1,11 @@
+project.android.compileSdkVersion rootProject.compileSdkVersion;
+project.android.buildToolsVersion rootProject.toolsVersion
+
+project.android.defaultConfig.minSdkVersion rootProject.minSdkVersion
+project.android.defaultConfig.targetSdkVersion rootProject.targetSdkVersion
+
+project.android.lintOptions.lintConfig file("lint.xml")
+project.android.lintOptions.textReport true
+project.android.lintOptions.textOutput 'stdout'
+project.android.lintOptions.warningsAsErrors true
+project.android.lintOptions.abortOnError true

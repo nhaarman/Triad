@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
   ~ Copyright 2015 Niek Haarman
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +16,7 @@
   ~ limitations under the License.
   -->
 
-<com.nhaarman.triad.TriadView xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/view_triad"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent" />
+<lint>
+  <issue id="AllowBackup" severity="ignore" />
+  <issue id="GoogleAppIndexingWarning" severity="ignore" />
+</lint>

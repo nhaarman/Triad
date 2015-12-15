@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,65 +26,65 @@ import static com.nhaarman.triad.Preconditions.checkNotNull;
  */
 public class Optional<T> {
 
-  private static final Optional<?> EMPTY = new Optional<>();
+    private static final Optional<?> EMPTY = new Optional<>();
 
-  @Nullable
-  private final T mValue;
+    @Nullable
+    private final T mValue;
 
-  private Optional() {
-    mValue = null;
-  }
-
-  @SuppressWarnings("NullableProblems")
-  private Optional(@NonNull final T value) {
-    mValue = checkNotNull(value, "value is null.");
-  }
-
-  /**
-   * Invokes the {@link Consumer}'s {@link Consumer#accept(Object)} method if and only if the value is present.
-   */
-  public void ifPresent(@NonNull final Consumer<? super T> consumer) {
-    if (mValue != null) {
-      consumer.accept(mValue);
+    private Optional() {
+        mValue = null;
     }
-  }
 
-  /**
-   * Returns {@code true} if and only if the value can safely be retrieved using {@link #get()}.
-   */
-  public boolean isPresent() {
-    return mValue != null;
-  }
+    @SuppressWarnings("NullableProblems")
+    private Optional(@NonNull final T value) {
+        mValue = checkNotNull(value, "value is null.");
+    }
 
-  /**
-   * Returns this Optional's value.
-   * Make sure the value is present using {@link #isPresent()} before calling this method.
-   *
-   * @throws NullPointerException if the value is not present.
-   */
-  public T get() {
-    return checkNotNull(mValue, "value not present.");
-  }
+    /**
+     * Invokes the {@link Consumer}'s {@link Consumer#accept(Object)} method if and only if the value is present.
+     */
+    public void ifPresent(@NonNull final Consumer<? super T> consumer) {
+        if (mValue != null) {
+            consumer.accept(mValue);
+        }
+    }
 
-  /**
-   * Creates a new Optional of a nullable value.
-   */
-  public static <T> Optional<T> of(@Nullable final T value) {
-    return value == null ? (Optional<T>) EMPTY : new Optional<>(value);
-  }
+    /**
+     * Returns {@code true} if and only if the value can safely be retrieved using {@link #get()}.
+     */
+    public boolean isPresent() {
+        return mValue != null;
+    }
 
-  /**
-   * Returns an empty Optional.
-   */
-  public static <T> Optional<T> empty() {
-    return (Optional<T>) EMPTY;
-  }
+    /**
+     * Returns this Optional's value.
+     * Make sure the value is present using {@link #isPresent()} before calling this method.
+     *
+     * @throws NullPointerException if the value is not present.
+     */
+    public T get() {
+        return checkNotNull(mValue, "value not present.");
+    }
 
-  /**
-   * An interface which can be invoked with {@link #ifPresent(Consumer)}.
-   */
-  public interface Consumer<T> {
+    /**
+     * Creates a new Optional of a nullable value.
+     */
+    public static <T> Optional<T> of(@Nullable final T value) {
+        return value == null ? (Optional<T>) EMPTY : new Optional<>(value);
+    }
 
-    void accept(@NonNull T t);
-  }
+    /**
+     * Returns an empty Optional.
+     */
+    public static <T> Optional<T> empty() {
+        return (Optional<T>) EMPTY;
+    }
+
+    /**
+     * An interface which can be invoked with {@link #ifPresent(Consumer)}.
+     */
+    public interface Consumer<T> {
+
+        void accept(@NonNull T t);
+    }
 }
