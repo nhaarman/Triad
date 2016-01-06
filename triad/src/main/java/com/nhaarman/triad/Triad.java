@@ -55,8 +55,6 @@ public class Triad {
     }
 
     private Triad(@NonNull final Backstack backstack, @Nullable final Listener<?> listener) {
-        new Exception().printStackTrace();
-
         mListener = listener;
         mBackstack = backstack;
 
@@ -303,6 +301,10 @@ public class Triad {
 
     public interface Listener<T> {
 
+        void screenPushed(@NonNull Screen<T> pushedScreen);
+
+        void screenPopped(@NonNull Screen<T> poppedScreen);
+
         /**
          * Notifies the listener that the backstack will forward to a new Screen.
          *
@@ -351,21 +353,33 @@ public class Triad {
             }
         }
 
-        protected void forward(@NonNull final Backstack nextBackstack) {
+        protected void notifyScreenPopped(@NonNull final Screen<?> screen) {
+            checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
+
+            mListener.screenPopped(screen);
+        }
+
+        protected void notifyScreenPushed(@NonNull final Screen<?> screen) {
+            checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
+
+            mListener.screenPushed(screen);
+        }
+
+        protected void notifyForward(@NonNull final Backstack nextBackstack) {
             checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
 
             mNextBackstack = nextBackstack;
             mListener.forward(nextBackstack.current().screen, nextBackstack.current().animator, this);
         }
 
-        protected void backward(@NonNull final Backstack nextBackstack, @Nullable final TransitionAnimator animator) {
+        protected void notifyBackward(@NonNull final Backstack nextBackstack, @Nullable final TransitionAnimator animator) {
             checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
 
             mNextBackstack = nextBackstack;
             mListener.backward(nextBackstack.current().screen, animator, this);
         }
 
-        protected void replace(@NonNull final Backstack nextBackstack) {
+        protected void notifyReplace(@NonNull final Backstack nextBackstack) {
             checkState(mListener != null, "Listener is null. Be sure to call setListener(Listener).");
 
             mNextBackstack = nextBackstack;
@@ -405,7 +419,9 @@ public class Triad {
                 Backstack.Builder builder = mBackstack.buildUpon();
                 Backstack.Entry<?> entry = checkNotNull(builder.pop(), "Popped entry is null.");
                 Backstack newBackstack = builder.build();
-                backward(newBackstack, entry.animator);
+
+                notifyScreenPopped(entry.screen);
+                notifyBackward(newBackstack, entry.animator);
             }
         }
     }
@@ -426,11 +442,13 @@ public class Triad {
         @Override
         public void execute() {
             Backstack.Builder builder = mBackstack.buildUpon();
-            builder.pop();
+            Backstack.Entry<?> entry = checkNotNull(builder.pop(), "Popped entry is null");
             builder.push(mScreen, mAnimator);
             Backstack newBackstack = builder.build();
 
-            replace(newBackstack);
+            notifyScreenPopped(entry.screen);
+            notifyScreenPushed(mScreen);
+            notifyReplace(newBackstack);
         }
     }
 
@@ -445,7 +463,14 @@ public class Triad {
 
         @Override
         public void execute() {
-            forward(mNewBackstack);
+            for (Screen<?> screen : mBackstack) {
+                notifyScreenPopped(screen);
+            }
+            for (Iterator<Screen<?>> it = mNewBackstack.reverseIterator(); it.hasNext(); ) {
+                notifyScreenPushed(it.next());
+            }
+
+            notifyForward(mNewBackstack);
         }
     }
 
@@ -470,18 +495,21 @@ public class Triad {
             }
 
             Backstack.Builder builder = mBackstack.buildUpon();
+            Backstack.Builder poppedScreens = Backstack.emptyBuilder();
             int count = 0;
             // Take care to leave the original screen instance on the stack, if we find it.  This enables
             // some arguably bad behavior on the part of clients, but it's still probably the right thing
             // to do.
-            Backstack.Entry<?> lastPoppedEntry = null;
             for (Iterator<Backstack.Entry<?>> it = mBackstack.reverseEntryIterator(); it.hasNext(); ) {
                 Screen<?> screen = it.next().screen;
 
                 if (screen.equals(mScreen)) {
                     // Clear up to the target screen.
                     for (int i = 0; i < mBackstack.size() - count; i++) {
-                        lastPoppedEntry = builder.pop();
+                        Backstack.Entry<?> entry = builder.pop();
+                        if (entry != null) {
+                            poppedScreens.push(entry);
+                        }
                     }
                     break;
                 } else {
@@ -490,14 +518,22 @@ public class Triad {
             }
 
             Backstack newBackstack;
-            if (lastPoppedEntry != null) {
-                builder.push(lastPoppedEntry.screen, lastPoppedEntry.animator);
+            Backstack poppedBackstack = poppedScreens.build();
+            if (poppedBackstack.size() != 0) {
+                for (Iterator<Backstack.Entry<?>> it = poppedBackstack.reverseEntryIterator(); it.hasNext(); ) {
+                    Backstack.Entry<?> entry = it.next();
+                    notifyScreenPopped(entry.screen);
+                }
+
+                builder.push(poppedBackstack.current());
                 newBackstack = builder.build();
-                backward(newBackstack, mAnimator);
+                notifyBackward(newBackstack, mAnimator);
             } else {
+                notifyScreenPushed(mScreen);
+
                 builder.push(mScreen, mAnimator);
                 newBackstack = builder.build();
-                forward(newBackstack);
+                notifyForward(newBackstack);
             }
         }
     }
@@ -506,7 +542,7 @@ public class Triad {
 
         @Override
         public void execute() {
-            forward(mBackstack);
+            notifyForward(mBackstack);
         }
     }
 
@@ -521,8 +557,9 @@ public class Triad {
 
         @Override
         public void execute() {
-            Backstack newBackstack = mBackstack.buildUpon().push(mScreen).build();
-            forward(newBackstack);
+            Backstack newBackstack = Backstack.single(mScreen);
+            notifyScreenPushed(mScreen);
+            notifyForward(newBackstack);
         }
     }
 
@@ -542,7 +579,8 @@ public class Triad {
         @Override
         public void execute() {
             Backstack newBackstack = mBackstack.buildUpon().push(mScreen, mAnimator).build();
-            forward(newBackstack);
+            notifyScreenPushed(mScreen);
+            notifyForward(newBackstack);
         }
     }
 
@@ -557,7 +595,14 @@ public class Triad {
 
         @Override
         public void execute() {
-            backward(mNewBackstack, null);
+            for (Screen<?> screen : mBackstack) {
+                notifyScreenPopped(screen);
+            }
+            for (Iterator<Screen<?>> it = mNewBackstack.reverseIterator(); it.hasNext(); ) {
+                notifyScreenPushed(it.next());
+            }
+
+            notifyBackward(mNewBackstack, null);
         }
     }
 
@@ -572,7 +617,14 @@ public class Triad {
 
         @Override
         public void execute() {
-            replace(mNewBackstack);
+            for (Screen<?> screen : mBackstack) {
+                notifyScreenPopped(screen);
+            }
+            for (Iterator<Screen<?>> it = mNewBackstack.reverseIterator(); it.hasNext(); ) {
+                notifyScreenPushed(it.next());
+            }
+
+            notifyReplace(mNewBackstack);
         }
     }
 }

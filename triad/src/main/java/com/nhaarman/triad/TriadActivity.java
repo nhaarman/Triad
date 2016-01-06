@@ -81,6 +81,12 @@ public abstract class TriadActivity<ApplicationComponent, ActivityComponent> ext
         mDelegate.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onDestroy() {
+        mDelegate.onDestroy();
+        super.onDestroy();
+    }
+
     /**
      * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
      */

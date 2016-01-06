@@ -1,5 +1,10 @@
 # Changelog
 
+Version 0.16.0 *(2016-01-06)*
+-----------------------------------
+
+ * Screens are notified of creation and destroy.
+
 Version 0.15.1 *(2015-12-15)*
 -----------------------------------
 

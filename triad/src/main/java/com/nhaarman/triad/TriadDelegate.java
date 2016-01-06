@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+import java.util.Iterator;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
 import static com.nhaarman.triad.Preconditions.checkState;
@@ -111,6 +112,15 @@ public class TriadDelegate<ApplicationComponent> {
         mTriad.onActivityResult(requestCode, resultCode, data);
     }
 
+    public void onDestroy() {
+        checkState(mTriad != null, "Triad is null. Make sure to call TriadDelegate.onCreate()");
+
+        for (Iterator<Screen<?>> iterator = mTriad.getBackstack().reverseIterator(); iterator.hasNext(); ) {
+            Screen<?> screen = iterator.next();
+            screen.onDestroy();
+        }
+    }
+
     /**
      * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
      */
@@ -142,6 +152,17 @@ public class TriadDelegate<ApplicationComponent> {
     private class MyTriadListener implements Triad.Listener<ApplicationComponent> {
 
         @Override
+        public void screenPushed(@NonNull final Screen<ApplicationComponent> pushedScreen) {
+            pushedScreen.setApplicationComponent(mApplicationComponent);
+            pushedScreen.onCreate();
+        }
+
+        @Override
+        public void screenPopped(@NonNull final Screen<ApplicationComponent> poppedScreen) {
+            poppedScreen.onDestroy();
+        }
+
+        @Override
         public void forward(@NonNull final Screen<ApplicationComponent> newScreen, @Nullable final TransitionAnimator animator, @NonNull final Triad.Callback callback) {
             if (mCurrentScreen != null && mCurrentView != null) {
                 SparseArray<Parcelable> state = new SparseArray<>();
@@ -150,7 +171,6 @@ public class TriadDelegate<ApplicationComponent> {
             }
 
             mCurrentScreen = newScreen;
-            newScreen.setApplicationComponent(mApplicationComponent);
 
             ViewGroup newView = newScreen.createView(mTriadView);
             mTriadView.forward(mCurrentView, newView, animator, callback);
@@ -176,7 +196,6 @@ public class TriadDelegate<ApplicationComponent> {
         @Override
         public void replace(@NonNull final Screen<ApplicationComponent> newScreen, @Nullable final TransitionAnimator animator, @NonNull final Triad.Callback callback) {
             mCurrentScreen = newScreen;
-            newScreen.setApplicationComponent(mApplicationComponent);
 
             ViewGroup newView = newScreen.createView(mTriadView);
             mTriadView.forward(mCurrentView, newView, animator, callback);
