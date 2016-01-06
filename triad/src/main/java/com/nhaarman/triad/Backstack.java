@@ -124,8 +124,12 @@ public class Backstack implements Iterable<Screen<?>> {
 
         @NonNull
         public Builder push(@NonNull final Screen<?> screen, @Nullable final TransitionAnimator animator) {
-            mBackstack.push(new Entry(screen, animator));
+            return push(new Entry(screen, animator));
+        }
 
+        @NonNull
+        public Builder push(@NonNull final Entry<?> entry) {
+            mBackstack.push(entry);
             return this;
         }
 

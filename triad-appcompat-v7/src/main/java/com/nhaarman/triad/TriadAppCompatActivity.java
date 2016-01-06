@@ -83,6 +83,12 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
         mDelegate.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onDestroy() {
+        mDelegate.onDestroy();
+        super.onDestroy();
+    }
+
     /**
      * Returns the {@link Triad} instance to be used to navigate between {@link Screen}s.
      */
