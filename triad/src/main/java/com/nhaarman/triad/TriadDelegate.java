@@ -153,6 +153,7 @@ public class TriadDelegate<ApplicationComponent> {
 
         @Override
         public void screenPushed(@NonNull final Screen<ApplicationComponent> pushedScreen) {
+            pushedScreen.setApplicationComponent(mApplicationComponent);
             pushedScreen.onCreate();
         }
 
@@ -170,7 +171,6 @@ public class TriadDelegate<ApplicationComponent> {
             }
 
             mCurrentScreen = newScreen;
-            newScreen.setApplicationComponent(mApplicationComponent);
 
             ViewGroup newView = newScreen.createView(mTriadView);
             mTriadView.forward(mCurrentView, newView, animator, callback);
@@ -196,7 +196,6 @@ public class TriadDelegate<ApplicationComponent> {
         @Override
         public void replace(@NonNull final Screen<ApplicationComponent> newScreen, @Nullable final TransitionAnimator animator, @NonNull final Triad.Callback callback) {
             mCurrentScreen = newScreen;
-            newScreen.setApplicationComponent(mApplicationComponent);
 
             ViewGroup newView = newScreen.createView(mTriadView);
             mTriadView.forward(mCurrentView, newView, animator, callback);
