@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -32,7 +33,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -51,9 +54,12 @@ public class TriadTest {
     @Mock
     private Screen<Object> mScreen3;
 
+    private InOrder inOrder;
+
     @Before
     public void setUp() {
         initMocks(this);
+        inOrder = inOrder(mListener);
 
         doAnswer(new Answer() {
             @Override
@@ -85,297 +91,344 @@ public class TriadTest {
 
     @Test(expected = IllegalStateException.class)
     public void startWith_withoutListener_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
 
-    /* When */
+        /* When */
         triad.startWith(mock(Screen.class));
     }
 
     @Test
     public void startWith_firstTime_forwardsToScreen() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
 
-    /* When */
+        /* When */
         triad.startWith(mScreen1);
 
-    /* Then */
-        verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
+        /* Then */
+        inOrder.verify(mListener).screenPushed(mScreen1);
+        inOrder.verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen1);
     }
 
     @Test
     public void startWith_secondTime_doesNotMoveForward() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
         triad.startWith(mScreen1);
+        verify(mListener).screenPushed(mScreen1);
         verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
 
-    /* When */
+        /* When */
         triad.startWith(mScreen1);
 
-    /* Then */
+        /* Then */
         verifyNoMoreInteractions(mListener);
         assertBackstackHasEntries(triad.getBackstack(), mScreen1);
     }
 
     @Test
     public void startWith_withAValidBackstack_doesNotMoveForward() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
 
-    /* When */
+        /* When */
         triad.startWith(mScreen1);
 
-    /* Then */
+        /* Then */
         verifyNoMoreInteractions(mListener);
         assertBackstackHasEntries(triad.getBackstack(), mScreen1);
     }
 
     @Test(expected = IllegalStateException.class)
     public void goTo_withoutHavingABackstack_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
 
-    /* When */
+        /* When */
         triad.goTo(mScreen1);
     }
 
     @Test
     public void goTo_withAValidBackstack_forwardsToScreen() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
         triad.startWith(mScreen1);
-        verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
+        inOrder.verify(mListener).screenPushed(mScreen1);
+        inOrder.verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
 
-    /* When */
+        /* When */
         triad.goTo(mScreen2);
 
-    /* Then */
-        verify(mListener).forward(eq(mScreen2), any(TransitionAnimator.class), any(Triad.Callback.class));
+        /* Then */
+        inOrder.verify(mListener).screenPushed(mScreen2);
+        inOrder.verify(mListener).forward(eq(mScreen2), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen1, mScreen2);
     }
 
     @Test(expected = IllegalStateException.class)
     public void popTo_withAnEmptyBackstack_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
 
-    /* When */
+        /* When */
         triad.popTo(mScreen1);
     }
 
     @Test
     public void popTo_withScreenNotOnBackstack_forwardsToScreen() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
         triad.startWith(mScreen1);
+        inOrder.verify(mListener).screenPushed(mScreen1);
+        inOrder.verify(mListener).forward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
 
-    /* When */
+        /* When */
         triad.popTo(mScreen2);
 
-    /* Then */
-        verify(mListener).forward(eq(mScreen2), any(TransitionAnimator.class), any(Triad.Callback.class));
+        /* Then */
+        inOrder.verify(mListener).screenPushed(mScreen2);
+        inOrder.verify(mListener).forward(eq(mScreen2), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen1, mScreen2);
     }
 
     @Test
     public void popTo_withScreenOnBackstack_backwardsToScreen() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener);
 
-    /* When */
+        /* When */
         triad.popTo(mScreen1);
 
-    /* Then */
-        verify(mListener).backward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
+        /* Then */
+        inOrder.verify(mListener).screenPopped(mScreen2);
+        inOrder.verify(mListener).backward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
+        assertBackstackHasEntries(triad.getBackstack(), mScreen1);
+    }
+
+    @Test
+    public void popTo_withMultipleScreensOnBackstack_backwardsToScreen() {
+        /* Given */
+        Triad triad = Triad.newInstance(Backstack.of(mScreen1, mScreen2, mScreen3), mListener);
+
+        /* When */
+        triad.popTo(mScreen1);
+
+        /* Then */
+        inOrder.verify(mListener).screenPopped(mScreen3);
+        inOrder.verify(mListener).screenPopped(mScreen2);
+        inOrder.verify(mListener).backward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen1);
     }
 
     @Test
     public void popTo_withScreenOnTop_doesNothing() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
 
-    /* When */
+        /* When */
         triad.popTo(mScreen1);
 
-    /* Then */
+        /* Then */
         verifyNoMoreInteractions(mListener);
         assertBackstackHasEntries(triad.getBackstack(), mScreen1);
     }
 
     @Test(expected = IllegalStateException.class)
     public void replaceWith_withAnEmptyBackstack_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
 
-    /* When */
+        /* When */
         triad.replaceWith(mScreen1);
     }
 
     @Test
     public void replaceWith_withAValidBackstack_replacesScreen() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
 
-    /* When */
+        /* When */
         triad.replaceWith(mScreen2);
 
-    /* Then */
+        /* Then */
+        verify(mListener).screenPopped(mScreen1);
+        verify(mListener).screenPushed(mScreen2);
         verify(mListener).replace(eq(mScreen2), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen2);
     }
 
     @Test(expected = IllegalStateException.class)
     public void goBack_withAnEmptyBackstack_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
 
-    /* When */
+        /* When */
         triad.goBack();
     }
 
     @Test
-    public void goBack_withSingleBackstackEntry_doesNothing() {
-    /* Given */
+    public void goBack_withSingleBackstackEntry_doesNotPopScreen() {
+        /* Given */
         Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
 
-    /* When */
+        /* When */
         boolean result = triad.goBack();
 
-    /* Then */
+        /* Then */
+        verify(mListener, never()).screenPopped(mScreen1);
         assertThat(result, is(false));
         assertBackstackHasEntries(triad.getBackstack(), mScreen1);
     }
 
     @Test
     public void goBack_withMoreThanOneBackstackEntry_backwards() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener);
 
-    /* When */
+        /* When */
         boolean result = triad.goBack();
 
-    /* Then */
+        /* Then */
         assertThat(result, is(true));
+        inOrder.verify(mListener).screenPopped(mScreen2);
+        inOrder.verify(mListener).backward(eq(mScreen1), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen1);
     }
 
     @Test(expected = IllegalStateException.class)
     public void forward_withAnEmptyBackstack_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
 
-    /* When */
+        /* When */
         triad.forward(Backstack.of(mScreen1, mScreen2));
     }
 
     @Test
     public void forward_withAValidBackstack_forwardsToLastScreen() {
-    /* Given */
-        Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
+        /* Given */
+        Triad triad = Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener);
 
-    /* When */
+        /* When */
         triad.forward(Backstack.of(mScreen2, mScreen3));
 
-    /* Then */
-        verify(mListener).forward(eq(mScreen3), any(TransitionAnimator.class), any(Triad.Callback.class));
+        /* Then */
+        inOrder.verify(mListener).screenPopped(mScreen2);
+        inOrder.verify(mListener).screenPopped(mScreen1);
+
+        inOrder.verify(mListener).screenPushed(mScreen2);
+        inOrder.verify(mListener).screenPushed(mScreen3);
+
+        inOrder.verify(mListener).forward(eq(mScreen3), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen2, mScreen3);
     }
 
     @Test(expected = IllegalStateException.class)
     public void backward_withAnEmptyBackstack_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
 
-    /* When */
+        /* When */
         triad.backward(Backstack.of(mScreen1, mScreen2));
     }
 
     @Test
     public void backward_withAValidBackstack_backwardsToLastScreen() {
-    /* Given */
-        Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
+        /* Given */
+        Triad triad = Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener);
 
-    /* When */
+        /* When */
         triad.backward(Backstack.of(mScreen2, mScreen3));
 
-    /* Then */
-        verify(mListener).backward(eq(mScreen3), any(TransitionAnimator.class), any(Triad.Callback.class));
+        /* Then */
+
+        inOrder.verify(mListener).screenPopped(mScreen2);
+        inOrder.verify(mListener).screenPopped(mScreen1);
+
+        inOrder.verify(mListener).screenPushed(mScreen2);
+        inOrder.verify(mListener).screenPushed(mScreen3);
+
+        inOrder.verify(mListener).backward(eq(mScreen3), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen2, mScreen3);
     }
 
     @Test(expected = IllegalStateException.class)
     public void replace_withAnEmptyBackstack_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.emptyInstance();
         triad.setListener(mListener);
 
-    /* When */
+        /* When */
         triad.replace(Backstack.of(mScreen1, mScreen2));
     }
 
     @Test
     public void replace_withAValidBackstack_replacesToLastScreen() {
-    /* Given */
-        Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
+        /* Given */
+        Triad triad = Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener);
 
-    /* When */
+        /* When */
         triad.replace(Backstack.of(mScreen2, mScreen3));
 
-    /* Then */
+        /* Then */
+        inOrder.verify(mListener).screenPopped(mScreen2);
+        inOrder.verify(mListener).screenPopped(mScreen1);
+
+        inOrder.verify(mListener).screenPushed(mScreen2);
+        inOrder.verify(mListener).screenPushed(mScreen3);
+
         verify(mListener).replace(eq(mScreen3), any(TransitionAnimator.class), any(Triad.Callback.class));
         assertBackstackHasEntries(triad.getBackstack(), mScreen2, mScreen3);
     }
 
     @Test(expected = IllegalStateException.class)
     public void startActivity_withoutActivityReference_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
 
-    /* When */
+        /* When */
         triad.startActivity(mock(Intent.class));
     }
 
     @Test
     public void startActivity_withActivityReference_startsActivity() {
-    /* Given */
+        /* Given */
         Activity activity = mock(Activity.class);
         Intent intent = mock(Intent.class);
 
         Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
         triad.setActivity(activity);
 
-    /* When */
+        /* When */
         triad.startActivity(intent);
 
-    /* Then */
+        /* Then */
         verify(activity).startActivity(intent);
     }
 
     @Test(expected = IllegalStateException.class)
     public void startActivityForResult_withoutActivityReference_throwsIllegalStateException() {
-    /* Given */
+        /* Given */
         Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
 
-    /* When */
+        /* When */
         triad.startActivityForResult(mock(Intent.class), mock(Triad.ActivityResultListener.class));
     }
 
     @Test
     public void startActivityForResult_withActivityReference_startsActivityForResult() {
-    /* Given */
+        /* Given */
         Activity activity = mock(Activity.class);
         Intent intent = mock(Intent.class);
         Triad.ActivityResultListener resultListener = mock(Triad.ActivityResultListener.class);
@@ -383,10 +436,10 @@ public class TriadTest {
         Triad triad = Triad.newInstance(Backstack.single(mScreen1), mListener);
         triad.setActivity(activity);
 
-    /* When */
+        /* When */
         triad.startActivityForResult(intent, resultListener);
 
-    /* Then */
+        /* Then */
         verify(activity).startActivityForResult(eq(intent), anyInt());
     }
 

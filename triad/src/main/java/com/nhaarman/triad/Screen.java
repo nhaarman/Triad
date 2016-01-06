@@ -57,10 +57,6 @@ public abstract class Screen<ApplicationComponent> {
     @NonNull
     protected abstract Presenter<?, ?> createPresenter(int viewId);
 
-    boolean onBackPressed() {
-        return false;
-    }
-
     void setApplicationComponent(@Nullable final ApplicationComponent applicationComponent) {
         mApplicationComponent = applicationComponent;
     }
@@ -76,5 +72,15 @@ public abstract class Screen<ApplicationComponent> {
 
     void restoreState(@NonNull final ViewGroup view) {
         view.restoreHierarchyState(mState);
+    }
+
+    protected void onCreate() {
+    }
+
+    protected boolean onBackPressed() {
+        return false;
+    }
+
+    protected void onDestroy() {
     }
 }
