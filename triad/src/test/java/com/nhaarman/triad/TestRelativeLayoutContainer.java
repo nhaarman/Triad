@@ -19,7 +19,7 @@ package com.nhaarman.triad;
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class TestRelativeLayoutContainer extends RelativeLayoutContainer<TestPresenter, ActivityComponent> {
+public class TestRelativeLayoutContainer extends RelativeLayoutContainer<Presenter<? extends Container, ActivityComponent>, ActivityComponent> {
 
     public TestRelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);

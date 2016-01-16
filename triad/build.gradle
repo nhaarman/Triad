@@ -1,32 +1,18 @@
 apply plugin: 'com.android.library'
 
-android {
-  testOptions {
-    unitTests.returnDefaultValues = true
-  }
-
-  lintOptions {
-    lintConfig file("lint.xml")
-    textReport true
-    textOutput 'stdout'
-    warningsAsErrors true
-    abortOnError true
-  }
-}
-
 apply from: rootProject.projectDir.absolutePath + '/gradle/compile.gradle';
 apply from: rootProject.projectDir.absolutePath + '/gradle/publishing.gradle'
 apply from: rootProject.projectDir.absolutePath + '/gradle/bintray.gradle'
 apply from: rootProject.projectDir.absolutePath + '/gradle/artifactory.gradle'
 
 dependencies {
-  compile butterKnife
+  compile "com.jakewharton:butterknife:$butterKnifeVersion"
 
-  provided androidAnnotations
-  provided jetbrainsAnnotations
+  provided "com.android.support:support-annotations:$androidSupportVersion"
+  provided "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
 
   /* Tests */
-  testCompile junit
-  testCompile hamcrest
-  testCompile mockito
+  testCompile "junit:junit:$junitVersion"
+  testCompile "org.hamcrest:hamcrest-all:$hamcrestVersion"
+  testCompile "org.mockito:mockito-core:$mockitoVersion"
 }
