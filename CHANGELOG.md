@@ -1,6 +1,6 @@
 # Changelog
 
-Version 0.17.0 *(2016-01-06)*
+Version 0.17.0 *(2016-01-21)*
 -----------------------------------
 
  * Created dedicated Kotlin modules.
