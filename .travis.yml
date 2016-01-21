@@ -1,6 +1,11 @@
 language: android
 jdk: oraclejdk7
 
+env:
+  global:
+  - TERM=dumb
+  - GRADLE_OPTS="-Xmx2048m -XX:MaxPermSize=2048m"
+
 before_install:
  - git fetch --tags
 
@@ -8,7 +13,7 @@ install:
   - ./ops/sdk.sh
 
 script:
- - ./gradlew build assemble test --stacktrace
+ - ./gradlew build assemble test --stacktrace -PdisablePreDex
 
 after_success:
  - ./gradlew artifactoryPublish
