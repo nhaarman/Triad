@@ -21,8 +21,11 @@ repositories {
 }
 
 dependencies {
-  compile 'com.nhaarman:triad:x.x.x'
-  compile 'com.nhaarman:triad-appcompat-v7:x.x.x' // Optional; For use with appcompat-v7 libraries.
+  // Pick one of the following:
+  compile 'com.nhaarman:triad:x.x.x'                        // For Java
+  compile 'com.nhaarman:triad-appcompat-v7:x.x.x'           // For Java and using the AppCompat-v7 library
+  compile 'com.nhaarman:triad-kotlin:x.x.x'                 // For Kotlin
+  compile 'com.nhaarman:triad-kotlin-appcompat-v7:x.x.x'    // For Kotlin and using the AppCompat-v7 library
 }
 ```
 
@@ -159,7 +162,7 @@ Navigating through screens is based on earlier versions of Square's [Flow](https
 
 ## License
 
-    Copyright 2015 Niek Haarman
+    Copyright 2016 Niek Haarman
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
