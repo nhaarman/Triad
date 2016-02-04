@@ -17,7 +17,7 @@
 package com.nhaarman.triad
 
 import com.nhaarman.expect.expect
-import com.nhaarman.mockito.mock
+import com.nhaarman.mockito_kotlin.mock
 import org.junit.Before
 import org.junit.Test
 

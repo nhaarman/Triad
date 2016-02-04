@@ -16,7 +16,7 @@
 
 package com.nhaarman.triad.sample.notes.noteslist
 
-import com.nhaarman.mockito.*
+import com.nhaarman.mockito_kotlin.*
 import com.nhaarman.triad.sample.ActivityComponent
 import com.nhaarman.triad.sample.MemoryNoteRepository
 import com.nhaarman.triad.sample.Note

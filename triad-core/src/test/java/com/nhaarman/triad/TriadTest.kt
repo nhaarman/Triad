@@ -19,19 +19,20 @@ package com.nhaarman.triad
 import android.app.Activity
 import android.content.Intent
 import com.nhaarman.expect.expect
-import com.nhaarman.mockito.*
+import com.nhaarman.mockito_kotlin.*
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InOrder
 import org.mockito.Mock
+import org.mockito.Mockito.doAnswer
 import org.mockito.MockitoAnnotations.initMocks
 
 class TriadTest {
 
     @Mock
-    private lateinit var mListener: Triad.Listener<Any>
+    private lateinit var mListener: Triad.Listener
 
     @Mock
     private lateinit var mScreen1: Screen<Any>
@@ -58,6 +59,7 @@ class TriadTest {
             val callback = invocationOnMock.arguments[2] as Triad.Callback
             callback.onComplete()
         }).`when`(mListener).backward(any(), any(), any())
+
 
         doAnswer({ invocationOnMock ->
             val callback = invocationOnMock.arguments[2] as Triad.Callback

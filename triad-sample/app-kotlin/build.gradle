@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 buildscript {
   repositories {
@@ -7,7 +8,6 @@ buildscript {
   }
   dependencies {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
   }
 }
 
@@ -31,9 +31,9 @@ dependencies {
   compile project(':triad-sample:business')
 
   /* Tests */
-  testCompile project(':testutils')
   testCompile "junit:junit:$junitVersion"
   testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+  testCompile "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
 
   androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
   androidTestCompile "com.android.support.test:runner:$androidSupportTestVersion"

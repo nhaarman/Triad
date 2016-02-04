@@ -16,7 +16,7 @@
 
 package com.nhaarman.triad.sample.editnote
 
-import com.nhaarman.mockito.*
+import com.nhaarman.mockito_kotlin.*
 import com.nhaarman.triad.Triad
 import com.nhaarman.triad.sample.ActivityComponent
 import com.nhaarman.triad.sample.MemoryNoteRepository
@@ -92,7 +92,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<NoteValidator>(mNoteValidator).validateTitle(TITLE)
+        verify(mNoteValidator).validateTitle(TITLE)
     }
 
     @Test
@@ -107,7 +107,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<NoteValidator>(mNoteValidator).validateContents(CONTENTS)
+        verify(mNoteValidator).validateContents(CONTENTS)
     }
 
     @Test
@@ -122,7 +122,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<EditNoteContainer>(mEditNoteContainerMock).setTitleError(any())
+        verify(mEditNoteContainerMock).setTitleError(any())
     }
 
     @Test
@@ -137,7 +137,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<EditNoteContainer>(mEditNoteContainerMock).setContentsError(any())
+        verify(mEditNoteContainerMock).setContentsError(any())
     }
 
     @Test
@@ -152,7 +152,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<Triad>(mTriad, never()).goTo(any())
+        verify(mTriad, never()).goTo(any())
     }
 
     @Test
@@ -167,7 +167,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<NoteCreator>(mNoteCreatorMock).createNote(eq(TITLE), any())
+        verify(mNoteCreatorMock).createNote(eq(TITLE), any())
     }
 
     @Test
@@ -182,7 +182,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<NoteCreator>(mNoteCreatorMock).createNote(any(), eq(CONTENTS))
+        verify(mNoteCreatorMock).createNote(any(), eq(CONTENTS))
     }
 
     @Test
@@ -197,7 +197,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<MemoryNoteRepository>(mNoteRepository).create(any())
+        verify(mNoteRepository).create(any())
     }
 
     @Test
@@ -212,7 +212,7 @@ class EditNewNotePresenterTest {
         mEditNotePresenter.onSaveNoteClicked()
 
         /* Then */
-        verify<Triad>(mTriad).goBack()
+        verify(mTriad).goBack()
     }
 
     companion object {
