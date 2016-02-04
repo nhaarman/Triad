@@ -24,7 +24,7 @@ import java.lang.ref.WeakReference
 interface Triad {
 
     var backstack: Backstack
-    var listener: Listener<*>?
+    var listener: Listener?
 
     /**
      * Sets the current Activity, to be able to start other Activities from the Triad instance.
@@ -181,11 +181,11 @@ interface Triad {
         fun onComplete()
     }
 
-    interface Listener<T : Any> {
+    interface Listener {
 
-        fun screenPushed(pushedScreen: Screen<T>)
+        fun screenPushed(pushedScreen: Screen<*>)
 
-        fun screenPopped(poppedScreen: Screen<T>)
+        fun screenPopped(poppedScreen: Screen<*>)
 
         /**
          * Notifies the listener that the backstack will forward to a new Screen.
@@ -194,7 +194,7 @@ interface Triad {
          * *
          * @param callback  Must be called to indicate completion.
          */
-        fun forward(newScreen: Screen<T>, animator: TransitionAnimator?, callback: Callback)
+        fun forward(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Callback)
 
         /**
          * Notifies the listener that the backstack will be moved back to given Screen.
@@ -203,7 +203,7 @@ interface Triad {
          * *
          * @param callback  Must be called to indicate completion.
          */
-        fun backward(newScreen: Screen<T>, animator: TransitionAnimator?, callback: Callback)
+        fun backward(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Callback)
 
         /**
          * Notifies the listener that the backstack will be replaced, with given Screen on top.
@@ -212,7 +212,7 @@ interface Triad {
          * *
          * @param callback  Must be called to indicate completion.
          */
-        fun replace(newScreen: Screen<T>, animator: TransitionAnimator?, callback: Callback)
+        fun replace(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Callback)
     }
 
     interface ActivityResultListener {
@@ -227,7 +227,7 @@ interface Triad {
             return TriadImpl(Backstack.emptyBuilder().build())
         }
 
-        fun newInstance(backstack: Backstack, listener: Listener<*>): Triad {
+        fun newInstance(backstack: Backstack, listener: Listener): Triad {
             return TriadImpl(backstack, listener)
         }
     }
@@ -236,7 +236,7 @@ interface Triad {
 /**
  * Holds the current truth, the history of screens, and exposes operations to change it.
  */
-open class TriadImpl internal constructor(override var backstack: Backstack, override var listener: Triad.Listener<*>? = null) : Triad {
+open class TriadImpl internal constructor(override var backstack: Backstack, override var listener: Triad.Listener? = null) : Triad {
 
     private val activityResultListeners = SparseArray<Triad.ActivityResultListener>()
 

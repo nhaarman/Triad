@@ -99,25 +99,25 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
         }
     }
 
-    private inner class MyTriadListener : Triad.Listener<ApplicationComponent> {
+    private inner class MyTriadListener : Triad.Listener {
 
-        override fun screenPushed(pushedScreen: Screen<ApplicationComponent>) {
-            pushedScreen.setApplicationComponent(applicationComponent)
+        override fun screenPushed(pushedScreen: Screen<*>) {
+            (pushedScreen as Screen<ApplicationComponent>).setApplicationComponent(applicationComponent)
             pushedScreen.onCreate()
         }
 
-        override fun screenPopped(poppedScreen: Screen<ApplicationComponent>) {
+        override fun screenPopped(poppedScreen: Screen<*>) {
             poppedScreen.onDestroy()
         }
 
-        override fun forward(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, callback: Triad.Callback) {
+        override fun forward(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Triad.Callback) {
             _currentScreen?.apply {
                 currentView?.let {
                     saveState(it)
                 }
             }
 
-            _currentScreen = newScreen
+            _currentScreen = newScreen as Screen<ApplicationComponent>
             val oldView = currentView
             val newView = newScreen.createView(triadView)
             currentView = newView
@@ -126,8 +126,8 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
             onScreenChangedListener?.onScreenChanged(newScreen)
         }
 
-        override fun backward(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, callback: Triad.Callback) {
-            _currentScreen = newScreen
+        override fun backward(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Triad.Callback) {
+            _currentScreen = newScreen as Screen<ApplicationComponent>
 
             val oldView = currentView
             val newView = newScreen.createView(triadView)
@@ -141,15 +141,15 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
             onScreenChangedListener?.onScreenChanged(newScreen)
         }
 
-        override fun replace(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, callback: Triad.Callback) {
-            _currentScreen = newScreen
+        override fun replace(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Triad.Callback) {
+            _currentScreen = newScreen as Screen<ApplicationComponent>
 
             val oldView = currentView
             val newView = newScreen.createView(triadView)
             currentView = newView
             triadView.forward(oldView, newView, animator, callback)
 
-            onScreenChangedListener?.onScreenChanged(newScreen)
+            onScreenChangedListener?.onScreenChanged(newScreen as Screen<ApplicationComponent>)
         }
     }
 

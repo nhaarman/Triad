@@ -18,9 +18,9 @@ package com.nhaarman.triad
 
 import android.app.Activity
 import android.app.Application
-import com.nhaarman.mockito.any
-import com.nhaarman.mockito.mock
-import com.nhaarman.mockito.whenever
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -36,7 +36,7 @@ class TriadDelegateTest {
     private var mApplication: Application? = null
 
     @Mock
-    private lateinit var mListener: Triad.Listener<Any>
+    private lateinit var mListener: Triad.Listener
 
     @Mock
     private lateinit var mScreen1: Screen<Any>

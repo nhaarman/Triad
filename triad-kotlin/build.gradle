@@ -23,9 +23,9 @@ dependencies {
   provided "com.android.support:support-annotations:$androidSupportVersion"
 
   /* Tests */
-  testCompile project(':testutils')
   testCompile "junit:junit:$junitVersion"
   testCompile "com.nhaarman:expect.kt:$expectVersion"
+  testCompile "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
 
   testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }

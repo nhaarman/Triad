@@ -19,10 +19,10 @@ package com.nhaarman.triad
 import android.app.Activity
 import android.app.Application
 import com.nhaarman.expect.expect
-import com.nhaarman.mockito.mock
-import com.nhaarman.mockito.spy
-import com.nhaarman.mockito.verify
-import com.nhaarman.mockito.whenever
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.spy
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Matchers.anyInt

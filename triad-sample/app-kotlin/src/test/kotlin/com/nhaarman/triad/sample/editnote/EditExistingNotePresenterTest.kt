@@ -17,7 +17,7 @@
 package com.nhaarman.triad.sample.editnote
 
 import android.content.Context
-import com.nhaarman.mockito.*
+import com.nhaarman.mockito_kotlin.*
 import com.nhaarman.triad.Triad
 import com.nhaarman.triad.sample.*
 import org.junit.Before

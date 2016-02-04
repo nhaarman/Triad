@@ -19,13 +19,6 @@ package com.nhaarman.triad;
 import android.app.Activity;
 import android.app.Application;
 import android.view.ViewGroup;
-import com.nhaarman.triad.ApplicationComponentProvider;
-import com.nhaarman.triad.Backstack;
-import com.nhaarman.triad.Screen;
-import com.nhaarman.triad.Triad;
-import com.nhaarman.triad.TriadDelegate;
-import com.nhaarman.triad.TriadProvider;
-import com.nhaarman.triad.TriadView;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -46,7 +39,7 @@ public class TriadDelegateTest {
     private Application mApplication;
 
     @Mock
-    private Triad.Listener<Object> mListener;
+    private Triad.Listener mListener;
 
     @Mock
     private Screen<Object> mScreen1;
