@@ -18,7 +18,7 @@ package com.nhaarman.triad
 
 import android.app.Activity
 import android.content.Intent
-import android.view.ViewGroup
+import android.view.View
 import com.nhaarman.triad_core.R
 
 /**
@@ -55,7 +55,7 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
     val currentScreen: Screen<ApplicationComponent>
         get() = _currentScreen ?: throw IllegalStateException("Current screen is null.")
 
-    private var currentView: ViewGroup? = null
+    private var currentView: View? = null
 
     /**
      * An optional [OnScreenChangedListener] that is notified of screen changes.
@@ -149,7 +149,7 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
             currentView = newView
             triadView.forward(oldView, newView, animator, callback)
 
-            onScreenChangedListener?.onScreenChanged(newScreen as Screen<ApplicationComponent>)
+            onScreenChangedListener?.onScreenChanged(newScreen)
         }
     }
 

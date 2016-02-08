@@ -22,7 +22,6 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewManager
 import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.RelativeLayout
@@ -34,16 +33,16 @@ open class TriadView @JvmOverloads constructor(context: Context, attrs: Attribut
         resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
 
-    internal open fun forward(currentView: ViewGroup?,
-                         newView: ViewGroup,
-                         animator: TransitionAnimator?,
-                         callback: Triad.Callback) {
+    internal open fun forward(currentView: View?,
+                              newView: View,
+                              animator: TransitionAnimator?,
+                              callback: Triad.Callback) {
         addView(newView)
         newView.viewTreeObserver.addOnPreDrawListener(ForwardTransitionPreDrawListener(currentView, newView, animator, callback))
     }
 
-    internal fun backward(currentView: ViewGroup?,
-                          newView: ViewGroup,
+    internal fun backward(currentView: View?,
+                          newView: View,
                           animator: TransitionAnimator?,
                           callback: Triad.Callback) {
         addView(newView)
@@ -115,7 +114,7 @@ open class TriadView @JvmOverloads constructor(context: Context, attrs: Attribut
          */
         private fun animateViewReplacing() {
             val anim = ValueAnimator.ofFloat(0f, 1f)
-            anim.setDuration(mTransitionAnimationDurationMs)
+            anim.duration = mTransitionAnimationDurationMs
             anim.addUpdateListener { animation -> animateAlphas(animation.animatedValue as Float) }
             anim.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {

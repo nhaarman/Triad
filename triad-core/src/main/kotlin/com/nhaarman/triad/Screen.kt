@@ -19,6 +19,7 @@ package com.nhaarman.triad
 import android.os.Parcelable
 import android.util.SparseArray
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 
 abstract class Screen<ApplicationComponent : Any> {
@@ -31,8 +32,8 @@ abstract class Screen<ApplicationComponent : Any> {
 
     protected abstract val layoutResId: Int
 
-    open fun createView(parent: ViewGroup): ViewGroup {
-        return LayoutInflater.from(parent.context).inflate(layoutResId, parent, false) as ViewGroup
+    open fun createView(parent: ViewGroup): View {
+        return LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
     }
 
     open fun getPresenter(viewId: Int): Presenter<*, *> {
@@ -52,11 +53,11 @@ abstract class Screen<ApplicationComponent : Any> {
         this.applicationComponent = applicationComponent
     }
 
-    internal fun saveState(view: ViewGroup) {
+    internal fun saveState(view: View) {
         view.saveHierarchyState(state)
     }
 
-    internal fun restoreState(view: ViewGroup) {
+    internal fun restoreState(view: View) {
         view.restoreHierarchyState(state)
     }
 
