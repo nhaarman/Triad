@@ -1,5 +1,12 @@
 # Changelog
 
+Version 0.18.1 *(2016-03-28)*
+-----------------------------------
+
+ * Upgraded Kotlin version to 1.0.1.
+ * Allow a TransitionAnimator to be used in startWith().
+ * Use a View in favor of a ViewGroup for root views.
+
 Version 0.18.0 *(2016-02-04)*
 -----------------------------------
 

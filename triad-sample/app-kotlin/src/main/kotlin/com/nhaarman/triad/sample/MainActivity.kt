@@ -17,6 +17,9 @@
 package com.nhaarman.triad.sample
 
 import android.os.Bundle
+import android.view.View
+import com.nhaarman.triad.TransitionAnimator
+import com.nhaarman.triad.Triad
 import com.nhaarman.triad.TriadActivity
 import com.nhaarman.triad.sample.notes.NotesScreen
 

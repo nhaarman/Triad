@@ -115,8 +115,8 @@ class Backstack private constructor(private val backstack: Deque<Entry<*>>) : It
         /**
          * Create a backstack that contains a single screen.
          */
-        fun single(screen: Screen<*>): Backstack {
-            return emptyBuilder().push(screen).build()
+        fun single(screen: Screen<*>, animator: TransitionAnimator? = null): Backstack {
+            return emptyBuilder().push(screen, animator).build()
         }
 
         /**
