@@ -1,5 +1,12 @@
 # Changelog
 
+Version 0.18.2 *(2016-04-05)*
+-----------------------------------
+
+ * Added `onAttach(Activity)` and `onDetach(Activity)` lifecycle events.
+ * Only call `Screen.onDestroy()` when Activity is finishing.
+
+
 Version 0.18.1 *(2016-03-28)*
 -----------------------------------
 
