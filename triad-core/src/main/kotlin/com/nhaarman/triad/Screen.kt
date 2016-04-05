@@ -16,6 +16,7 @@
 
 package com.nhaarman.triad
 
+import android.app.Activity
 import android.os.Parcelable
 import android.util.SparseArray
 import android.view.LayoutInflater
@@ -33,10 +34,12 @@ abstract class Screen<ApplicationComponent : Any> {
     protected abstract val layoutResId: Int
 
     open fun createView(parent: ViewGroup): View {
+        println("createView")
         return LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
     }
 
     open fun getPresenter(viewId: Int): Presenter<*, *> {
+        println("getPresenter")
         var presenter = presenters.get(viewId)
 
         if (presenter == null) {
@@ -50,24 +53,37 @@ abstract class Screen<ApplicationComponent : Any> {
     protected abstract fun createPresenter(viewId: Int): Presenter<*, *>
 
     internal fun setApplicationComponent(applicationComponent: ApplicationComponent) {
+        println("setApplicationComponent")
         this.applicationComponent = applicationComponent
     }
 
     internal fun saveState(view: View) {
+        println("saveState")
         view.saveHierarchyState(state)
     }
 
     internal fun restoreState(view: View) {
+        println("restoreState")
         view.restoreHierarchyState(state)
     }
 
     open fun onCreate() {
+        println("onCreate")
+    }
+
+    open fun onAttach(activity: Activity) {
+        println("onAttach")
     }
 
     open fun onBackPressed(): Boolean {
         return false
     }
 
+    open fun onDetach(activity: Activity) {
+        println("onDetach")
+    }
+
     open fun onDestroy() {
+        println("onDestroy")
     }
 }

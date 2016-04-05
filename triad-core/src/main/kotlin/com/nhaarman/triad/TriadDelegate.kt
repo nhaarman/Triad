@@ -83,12 +83,20 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
         }
     }
 
+    fun onResume() {
+        _currentScreen?.onAttach(activity)
+    }
+
     fun onBackPressed(): Boolean {
         return _currentScreen != null && _currentScreen!!.onBackPressed() || triad.goBack()
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         triad.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun onPause() {
+        _currentScreen?.onDetach(activity)
     }
 
     fun onDestroy() {
