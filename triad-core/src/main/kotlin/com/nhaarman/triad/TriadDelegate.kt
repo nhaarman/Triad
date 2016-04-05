@@ -92,6 +92,8 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
     }
 
     fun onDestroy() {
+        if (!activity.isFinishing) return
+
         val iterator = triad.backstack.reverseIterator()
         while (iterator.hasNext()) {
             val screen = iterator.next()

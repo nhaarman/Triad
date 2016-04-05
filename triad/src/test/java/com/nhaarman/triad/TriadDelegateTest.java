@@ -26,6 +26,7 @@ import org.mockito.Mock;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
@@ -59,8 +60,10 @@ public class TriadDelegateTest {
     }
 
     @Test
-    public void onDestroy_notifiesBackstackScreenPopped() {
+    public void onDestroy_finishing_notifiesBackstackScreenPopped() {
         /* Given */
+        when(mActivity.isFinishing()).thenReturn(true);
+
         TriadDelegate<Object> delegate = TriadDelegate.Companion.createFor(mActivity);
         when(((TriadProvider) mApplication).getTriad()).thenReturn(Triad.Companion.newInstance(Backstack.Companion.of(mScreen1, mScreen2), mListener));
         delegate.onCreate();
@@ -71,5 +74,22 @@ public class TriadDelegateTest {
         /* Then */
         verify(mScreen2).onDestroy();
         verify(mScreen1).onDestroy();
+    }
+
+    @Test
+    public void onDestroy_notFinishing_doesNotNotifyScreens() {
+        /* Given */
+        when(mActivity.isFinishing()).thenReturn(false);
+
+        TriadDelegate<Object> delegate = TriadDelegate.Companion.createFor(mActivity);
+        when(((TriadProvider) mApplication).getTriad()).thenReturn(Triad.Companion.newInstance(Backstack.Companion.of(mScreen1, mScreen2), mListener));
+        delegate.onCreate();
+
+        /* When */
+        delegate.onDestroy();
+
+        /* Then */
+        verify(mScreen2, never()).onDestroy();
+        verify(mScreen1, never()).onDestroy();
     }
 }
