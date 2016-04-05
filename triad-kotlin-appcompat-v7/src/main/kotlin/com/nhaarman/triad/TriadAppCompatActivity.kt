@@ -39,6 +39,11 @@ abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityCompon
         delegate.onCreate()
     }
 
+    override fun onResume() {
+        super.onResume()
+        delegate.onResume()
+    }
+
     /**
      * Creates the `ActivityComponent` which is used to retrieve dependencies from that are needed to create [BasePresenter]s.
 
@@ -57,6 +62,11 @@ abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityCompon
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         delegate.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        delegate.onPause()
     }
 
     override fun onDestroy() {

@@ -54,6 +54,12 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mDelegate.onResume();
+    }
+
+    @Override
     @NonNull
     public synchronized ActivityComponent getActivityComponent() {
         if (mActivityComponent == null) {
@@ -87,6 +93,12 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         mDelegate.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mDelegate.onPause();
     }
 
     @Override
