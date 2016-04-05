@@ -23,7 +23,7 @@ import android.os.Bundle
 /**
  * An [Activity] which is the root of an application that uses Triad.
 
- * @param  The `ApplicationComponent` to use for `BasePresenter` creation.
+ * @param  The `ApplicationComponent` to use for `Presenter` creation.
  * *
  * @param     The `ActivityComponent` to supply to `Presenters`.
  */
@@ -43,6 +43,11 @@ abstract class TriadActivity<ApplicationComponent : Any, ActivityComponent> : Ac
         delegate.onCreate()
     }
 
+    override fun onResume() {
+        super.onResume()
+        delegate.onResume()
+    }
+
     /**
      * Creates the `ActivityComponent`.
      */
@@ -56,6 +61,11 @@ abstract class TriadActivity<ApplicationComponent : Any, ActivityComponent> : Ac
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         delegate.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        delegate.onPause()
     }
 
     override fun onDestroy() {

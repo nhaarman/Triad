@@ -20,6 +20,7 @@ import android.app.Activity
 import android.app.Application
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
@@ -56,8 +57,10 @@ class TriadDelegateTest {
     }
 
     @Test
-    fun onDestroy_notifiesBackstackScreenPopped() {
+    fun onDestroy_finishing_notifiesBackstackScreenPopped() {
         /* Given */
+        whenever(activity.isFinishing).thenReturn(true)
+
         val delegate = TriadDelegate.createFor<Any>(activity)
         whenever((mApplication as TriadProvider).triad).thenReturn(Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
         delegate.onCreate()
@@ -68,5 +71,22 @@ class TriadDelegateTest {
         /* Then */
         verify(mScreen2).onDestroy()
         verify(mScreen1).onDestroy()
+    }
+
+    @Test
+    fun onDestroy_notFinishing_doesNotNotifyScreens() {
+        /* Given */
+        whenever(activity.isFinishing).thenReturn(false)
+
+        val delegate = TriadDelegate.createFor<Any>(activity)
+        whenever((mApplication as TriadProvider).triad).thenReturn(Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
+        delegate.onCreate()
+
+        /* When */
+        delegate.onDestroy()
+
+        /* Then */
+        verify(mScreen2, never()).onDestroy()
+        verify(mScreen1, never()).onDestroy()
     }
 }

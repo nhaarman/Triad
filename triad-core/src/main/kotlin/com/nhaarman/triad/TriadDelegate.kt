@@ -83,6 +83,10 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
         }
     }
 
+    fun onResume() {
+        _currentScreen?.onAttach(activity)
+    }
+
     fun onBackPressed(): Boolean {
         return _currentScreen != null && _currentScreen!!.onBackPressed() || triad.goBack()
     }
@@ -91,7 +95,13 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
         triad.onActivityResult(requestCode, resultCode, data)
     }
 
+    fun onPause() {
+        _currentScreen?.onDetach(activity)
+    }
+
     fun onDestroy() {
+        if (!activity.isFinishing) return
+
         val iterator = triad.backstack.reverseIterator()
         while (iterator.hasNext()) {
             val screen = iterator.next()
