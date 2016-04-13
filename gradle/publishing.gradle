@@ -1,10 +1,9 @@
 // configuration of the Maven artifacts
 apply plugin: 'android-maven'
 
-// add javadoc/source jar tasks as artifacts
+// add source jar tasks as artifacts
 artifacts {
   archives sourceJar
-  archives javadocJar
 }
 
 version = rootProject.ext.versionName
