@@ -145,7 +145,16 @@ interface Triad {
 
      * @param newBackstack The new backstack.
      */
-    fun replace(newBackstack: Backstack)
+    fun replace(newBackstack: Backstack) = replace(newBackstack, null)
+
+    /**
+     * Replaces the entire backstack with given backstack, in a replace manner.
+
+     * One must first initialize this instance with [.startWith] before this method is called.
+
+     * @param newBackstack The new backstack.
+     */
+    fun replace(newBackstack: Backstack, animator: TransitionAnimator? = null)
 
     /**
      * Launches the Activity described by given Intent.
@@ -227,17 +236,18 @@ interface Triad {
 
         fun onActivityResult(resultCode: Int, data: Intent?)
     }
+}
 
+object TriadFactory {
 
-    companion object {
+    @JvmStatic
+    fun emptyInstance(): Triad {
+        return TriadImpl(Backstack.emptyBuilder().build())
+    }
 
-        fun emptyInstance(): Triad {
-            return TriadImpl(Backstack.emptyBuilder().build())
-        }
-
-        fun newInstance(backstack: Backstack, listener: Listener): Triad {
-            return TriadImpl(backstack, listener)
-        }
+    @JvmStatic
+    fun newInstance(backstack: Backstack, listener: Triad.Listener): Triad {
+        return TriadImpl(backstack, listener)
     }
 }
 
@@ -460,7 +470,7 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
 
      * @param newBackstack The new backstack.
      */
-    override fun replace(newBackstack: Backstack) {
+    override fun replace(newBackstack: Backstack, animator: TransitionAnimator?) {
         if (backstack.size() == 0 && transition == null) throw IllegalStateException("Use startWith(Screen) to show your first Screen.")
 
         move {
