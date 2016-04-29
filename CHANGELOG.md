@@ -1,5 +1,20 @@
 # Changelog
 
+Version 0.19.0 *(2016-04-29)*
+-----------------------------------
+
+ * Use JvmStatics where possible.
+
+Version 0.18.4 *(2016-04-13)*
+-----------------------------------
+
+ * Removed extraneous logging statements.
+
+Version 0.18.3 *(2016-04-05)*
+-----------------------------------
+
+ * Propagate lifecycle events in AppCompat activities as well.
+
 Version 0.18.2 *(2016-04-05)*
 -----------------------------------
 
