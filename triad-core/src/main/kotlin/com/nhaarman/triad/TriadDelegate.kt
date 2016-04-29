@@ -165,6 +165,7 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
 
     companion object {
 
+        @JvmStatic
         fun <T : Any> createFor(activity: Activity): TriadDelegate<T> {
             return TriadDelegate(activity)
         }

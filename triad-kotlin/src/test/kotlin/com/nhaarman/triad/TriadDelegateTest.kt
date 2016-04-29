@@ -62,7 +62,7 @@ class TriadDelegateTest {
         whenever(activity.isFinishing).thenReturn(true)
 
         val delegate = TriadDelegate.createFor<Any>(activity)
-        whenever((mApplication as TriadProvider).triad).thenReturn(Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
+        whenever((mApplication as TriadProvider).triad).thenReturn(TriadFactory.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
         delegate.onCreate()
 
         /* When */
@@ -79,7 +79,7 @@ class TriadDelegateTest {
         whenever(activity.isFinishing).thenReturn(false)
 
         val delegate = TriadDelegate.createFor<Any>(activity)
-        whenever((mApplication as TriadProvider).triad).thenReturn(Triad.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
+        whenever((mApplication as TriadProvider).triad).thenReturn(TriadFactory.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
         delegate.onCreate()
 
         /* When */

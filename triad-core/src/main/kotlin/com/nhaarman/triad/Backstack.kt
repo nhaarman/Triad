@@ -115,6 +115,8 @@ class Backstack private constructor(private val backstack: Deque<Entry<*>>) : It
         /**
          * Create a backstack that contains a single screen.
          */
+        @JvmOverloads
+        @JvmStatic
         fun single(screen: Screen<*>, animator: TransitionAnimator? = null): Backstack {
             return emptyBuilder().push(screen, animator).build()
         }
@@ -122,6 +124,7 @@ class Backstack private constructor(private val backstack: Deque<Entry<*>>) : It
         /**
          * Creates a backstack that contains given screens.
          */
+        @JvmStatic
         fun of(vararg screens: Screen<*>): Backstack {
             val builder = emptyBuilder()
 

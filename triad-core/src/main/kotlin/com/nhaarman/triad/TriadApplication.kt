@@ -35,7 +35,7 @@ abstract class TriadApplication<ApplicationComponent> : Application(), TriadProv
     override fun onCreate() {
         super.onCreate()
 
-        _triad = Triad.emptyInstance()
+        _triad = TriadFactory.emptyInstance()
         _applicationComponent = createApplicationComponent()
     }
 
