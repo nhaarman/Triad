@@ -65,7 +65,7 @@ public class TriadDelegateTest {
         when(mActivity.isFinishing()).thenReturn(true);
 
         TriadDelegate<Object> delegate = TriadDelegate.Companion.createFor(mActivity);
-        when(((TriadProvider) mApplication).getTriad()).thenReturn(Triad.Companion.newInstance(Backstack.Companion.of(mScreen1, mScreen2), mListener));
+        when(((TriadProvider) mApplication).getTriad()).thenReturn(TriadFactory.newInstance(Backstack.Companion.of(mScreen1, mScreen2), mListener));
         delegate.onCreate();
 
         /* When */
@@ -82,7 +82,7 @@ public class TriadDelegateTest {
         when(mActivity.isFinishing()).thenReturn(false);
 
         TriadDelegate<Object> delegate = TriadDelegate.Companion.createFor(mActivity);
-        when(((TriadProvider) mApplication).getTriad()).thenReturn(Triad.Companion.newInstance(Backstack.Companion.of(mScreen1, mScreen2), mListener));
+        when(((TriadProvider) mApplication).getTriad()).thenReturn(TriadFactory.newInstance(Backstack.Companion.of(mScreen1, mScreen2), mListener));
         delegate.onCreate();
 
         /* When */
