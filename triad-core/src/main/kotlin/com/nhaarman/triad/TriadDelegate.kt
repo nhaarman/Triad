@@ -91,7 +91,7 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
         return _currentScreen != null && _currentScreen!!.onBackPressed() || triad.goBack()
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         triad.onActivityResult(requestCode, resultCode, data)
     }
 
