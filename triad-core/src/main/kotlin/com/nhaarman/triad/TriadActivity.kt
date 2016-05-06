@@ -59,7 +59,7 @@ abstract class TriadActivity<ApplicationComponent : Any, ActivityComponent> : Ac
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         delegate.onActivityResult(requestCode, resultCode, data)
     }
 
