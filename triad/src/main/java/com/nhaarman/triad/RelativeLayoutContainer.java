@@ -60,7 +60,7 @@ public abstract class RelativeLayoutContainer
     @NonNull
     public P getPresenter() {
         if (mPresenter == null) {
-            mPresenter = findPresenter(getContext(), getId());
+            mPresenter = findPresenter(getContext(), this);
         }
 
         return (P) mPresenter;

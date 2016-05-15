@@ -22,7 +22,7 @@ import android.widget.LinearLayout
 
 abstract class LinearLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent> @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : LinearLayout(context, attrs, defStyle), Container {
 
-    val presenter: P by lazy { findPresenter<P>(context, id) }
+    val presenter: P by lazy { findPresenter<P>(context, this) }
 
     val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context) }
 
