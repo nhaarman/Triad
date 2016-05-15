@@ -31,7 +31,7 @@ abstract class RelativeLayoutContainer<P : Presenter<*, ActivityComponent>, Acti
     /**
      * Returns the [P] instance that is tied to this `RelativeLayoutContainer`.
      */
-    val presenter: P by lazy { findPresenter<P>(context, id) }
+    val presenter: P by lazy { findPresenter<P>(context, this) }
 
     val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context) }
 

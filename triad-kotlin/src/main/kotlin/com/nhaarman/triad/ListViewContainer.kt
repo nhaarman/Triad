@@ -28,7 +28,7 @@ import android.widget.ListView
 abstract class ListViewContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
 @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : ListView(context, attrs, defStyle), Container {
 
-    val presenter: P by lazy { findPresenter<P>(context, id) }
+    val presenter: P by lazy { findPresenter<P>(context, this) }
     val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context) }
 
     @Suppress("UNCHECKED_CAST")

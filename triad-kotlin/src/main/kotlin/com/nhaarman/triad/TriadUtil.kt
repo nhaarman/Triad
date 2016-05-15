@@ -19,6 +19,7 @@ package com.nhaarman.triad
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.view.View
 
 
 @Suppress("UNCHECKED_CAST")
@@ -31,20 +32,29 @@ fun <ActivityComponent> findActivityComponent(context: Context): ActivityCompone
     if (baseContext is ActivityComponentProvider<*>) {
         return (baseContext as ActivityComponentProvider<ActivityComponent>).activityComponent
     } else {
-        throw Error()
+        throw Error("Make sure ${baseContext.javaClass.canonicalName} implements ActivityComponentProvider.")
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-fun <P : Presenter<*, *>> findPresenter(context: Context, viewId: Int): P {
+@Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+fun <P : Presenter<*, *>> findPresenter(context: Context, view: View): P {
     var baseContext = context
     while (baseContext !is Activity && baseContext is ContextWrapper) {
         baseContext = baseContext.baseContext
     }
 
     if (baseContext is ScreenProvider<*>) {
-        return baseContext.currentScreen.getPresenter(viewId) as P
+        try {
+            return baseContext.currentScreen.getPresenter(view.id) as P
+        } catch(t: Throwable) {
+            val e = PresenterCreationFailedError("Could not create presenter for:\n    $view\nCaused by: $t", t.cause)
+            (e as java.lang.Throwable).stackTrace = t.stackTrace
+            throw e
+        }
     } else {
-        throw Error()
+        throw PresenterCreationFailedError("Make sure ${baseContext.javaClass.canonicalName} implements ScreenProvider.")
     }
 }
+
+private class PresenterCreationFailedError @JvmOverloads constructor(message: String, cause: Throwable? = null) :
+      Error(message, cause)

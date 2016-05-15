@@ -20,9 +20,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.support.annotation.NonNull;
-import com.nhaarman.triad.ActivityComponentProvider;
-import com.nhaarman.triad.Presenter;
-import com.nhaarman.triad.ScreenProvider;
+import android.view.View;
+import kotlin.jvm.JvmOverloads;
+import kotlin.jvm.Throws;
 
 /**
  * An utility class that retrieves the ActivityComponent and Presenter using a Context instance.
@@ -50,19 +50,37 @@ public class TriadUtil {
     }
 
     @NonNull
-    public static <P extends Presenter<?, ?>> P findPresenter(@NonNull final Context context, final int viewId) {
+    public static <P extends Presenter<?, ?>> P findPresenter(@NonNull final Context context, final View view) {
         Context baseContext = context;
         while (!(baseContext instanceof Activity) && baseContext instanceof ContextWrapper) {
             baseContext = ((ContextWrapper) baseContext).getBaseContext();
         }
 
         if (baseContext instanceof ScreenProvider) {
-            //noinspection unchecked
-            return (P) ((ScreenProvider) baseContext).getCurrentScreen().getPresenter(viewId);
+            try {
+            return (P) ((ScreenProvider<?>) baseContext).getCurrentScreen().getPresenter(view.getId());
+            } catch(Throwable t) {
+                PresenterCreationFailedError error =
+                      new PresenterCreationFailedError(String.format("Could not create presenter for:\n    %s\nCaused by: %s", view, t), t);
+                error.setStackTrace(t.getStackTrace());
+                throw error;
+            }
         } else {
             /* We return null, since the layout editor can not return the ScreenProvider. */
             //noinspection ConstantConditions
             return null;
+        }
+    }
+
+
+    private static class PresenterCreationFailedError extends Error {
+
+        PresenterCreationFailedError(final String message) {
+            super(message);
+        }
+
+        PresenterCreationFailedError(final String message, final Throwable throwable) {
+            super(message, throwable);
         }
     }
 }
