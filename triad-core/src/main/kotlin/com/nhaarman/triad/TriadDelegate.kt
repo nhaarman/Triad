@@ -36,11 +36,8 @@ import com.nhaarman.triad_core.R
 
  * @param  The `ApplicationComponent` to use for `Presenter` creation.
  */
-class TriadDelegate<ApplicationComponent : Any> private constructor(
-      /**
-       * The [Activity] instance this `TriadDelegate` is bound to.
-       */
-      private val activity: Activity) {
+class TriadDelegate<ApplicationComponent : Any> private constructor(private val activity: Activity) {
+    private var resumed = false
 
     private lateinit var applicationComponent: ApplicationComponent
 
@@ -85,6 +82,7 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
 
     fun onResume() {
         _currentScreen?.onAttach(activity)
+        resumed = true
     }
 
     fun onBackPressed(): Boolean {
@@ -96,6 +94,7 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
     }
 
     fun onPause() {
+        resumed = false
         _currentScreen?.onDetach(activity)
     }
 
@@ -114,9 +113,11 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(
         override fun screenPushed(pushedScreen: Screen<*>) {
             (pushedScreen as Screen<ApplicationComponent>).setApplicationComponent(applicationComponent)
             pushedScreen.onCreate()
+            if(resumed) pushedScreen.onAttach(activity)
         }
 
         override fun screenPopped(poppedScreen: Screen<*>) {
+            if(resumed) poppedScreen.onDetach(activity)
             poppedScreen.onDestroy()
         }
 
