@@ -157,6 +157,11 @@ interface Triad {
     fun replace(newBackstack: Backstack, animator: TransitionAnimator? = null)
 
     /**
+     * Returns whether the given Intent can be launched.
+     */
+    fun canStart(intent: Intent): Boolean
+
+    /**
      * Launches the Activity described by given Intent.
 
      * @param intent The Activity to start.
@@ -497,6 +502,10 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
             this.transition = transition
             transition.execute()
         }
+    }
+
+    override fun canStart(intent: Intent): Boolean {
+        return activity.get()?.packageManager?.queryIntentActivities(intent, 0)?.size != 0
     }
 
     /**
