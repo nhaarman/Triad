@@ -18,6 +18,7 @@ package com.nhaarman.triad
 
 import android.app.Activity
 import android.app.Application
+import android.view.ViewGroup
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
@@ -37,7 +38,7 @@ class TriadDelegateTest {
     private var mApplication: Application? = null
 
     @Mock
-    private lateinit var mListener: Triad.Listener
+    private lateinit var mListener: Triad.Listener<Any>
 
     @Mock
     private lateinit var mScreen1: Screen<Any>
@@ -52,7 +53,7 @@ class TriadDelegateTest {
         mApplication = Mockito.mock(Application::class.java, Mockito.withSettings().extraInterfaces(TriadProvider::class.java, ApplicationComponentProvider::class.java))
 
         whenever(activity.application).thenReturn(mApplication)
-        whenever(activity.findViewById(any())).thenReturn(mock<TriadView>())
+        whenever(activity.findViewById(any())).thenReturn(mock<ViewGroup>())
         whenever(mScreen2.createView(any())).thenReturn(mock())
     }
 
@@ -61,7 +62,7 @@ class TriadDelegateTest {
         /* Given */
         whenever(activity.isFinishing).thenReturn(true)
 
-        val delegate = TriadDelegate.createFor<Any>(activity)
+        val delegate = TriadDelegate<Any>(activity, mock())
         whenever((mApplication as TriadProvider).triad).thenReturn(TriadFactory.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
         delegate.onCreate()
 
@@ -78,7 +79,7 @@ class TriadDelegateTest {
         /* Given */
         whenever(activity.isFinishing).thenReturn(false)
 
-        val delegate = TriadDelegate.createFor<Any>(activity)
+        val delegate = TriadDelegate<Any>(activity, mock())
         whenever((mApplication as TriadProvider).triad).thenReturn(TriadFactory.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
         delegate.onCreate()
 

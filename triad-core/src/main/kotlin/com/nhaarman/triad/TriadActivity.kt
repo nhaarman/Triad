@@ -23,15 +23,15 @@ import android.os.Bundle
 /**
  * An [Activity] which is the root of an application that uses Triad.
 
- * @param  The `ApplicationComponent` to use for `Presenter` creation.
- * *
- * @param     The `ActivityComponent` to supply to `Presenters`.
+ * @param  ApplicationComponent `ApplicationComponent` to use for `Presenter` creation.
+ *
+ * @param  ActivityComponent `ActivityComponent` to supply to `Presenters`.
  */
 abstract class TriadActivity<ApplicationComponent : Any, ActivityComponent> : Activity(), ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
 
     private val delegate = TriadDelegate.createFor<ApplicationComponent>(this)
 
-    override val currentScreen: Screen<ApplicationComponent>
+    override val currentScreen: Screen<ApplicationComponent>?
         get() = delegate.currentScreen
 
     override val activityComponent: ActivityComponent by lazy {

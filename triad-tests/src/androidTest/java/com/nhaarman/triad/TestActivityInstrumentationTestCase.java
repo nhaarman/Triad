@@ -45,7 +45,7 @@ public class TestActivityInstrumentationTestCase {
     }
 
     protected ViewGroup getScreenHolder() {
-        return (ViewGroup) getActivity().findViewById(com.nhaarman.triad.R.id.view_triad);
+        return (ViewGroup) getActivity().findViewById(android.R.id.content);
     }
 
     protected Instrumentation getInstrumentation() {

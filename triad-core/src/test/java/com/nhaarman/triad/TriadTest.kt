@@ -32,7 +32,7 @@ import org.mockito.MockitoAnnotations.initMocks
 class TriadTest {
 
     @Mock
-    private lateinit var mListener: Triad.Listener
+    private lateinit var mListener: Triad.Listener<Any>
 
     @Mock
     private lateinit var mScreen1: Screen<Any>
@@ -51,19 +51,19 @@ class TriadTest {
         inOrder = inOrder(mListener)
 
         doAnswer({ invocationOnMock ->
-            val callback = invocationOnMock.arguments[2] as Triad.Callback
-            callback.onComplete()
+            val callback = invocationOnMock.arguments[2] as Function0<Unit>
+            callback()
         }).`when`(mListener).forward(any(), any(), any())
 
         doAnswer({ invocationOnMock ->
-            val callback = invocationOnMock.arguments[2] as Triad.Callback
-            callback.onComplete()
+            val callback = invocationOnMock.arguments[2] as Function0<Unit>
+            callback()
         }).`when`(mListener).backward(any(), any(), any())
 
 
         doAnswer({ invocationOnMock ->
-            val callback = invocationOnMock.arguments[2] as Triad.Callback
-            callback.onComplete()
+            val callback = invocationOnMock.arguments[2] as Function0<Unit>
+            callback()
         }).`when`(mListener).replace(any(), any(), any())
     }
 
@@ -80,7 +80,7 @@ class TriadTest {
     fun startWith_firstTime_forwardsToScreen() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
 
         /* When */
         triad.startWith(mScreen1)
@@ -95,7 +95,7 @@ class TriadTest {
     fun startWith_secondTime_doesNotMoveForward() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
         triad.startWith(mScreen1)
         verify(mListener).screenPushed(mScreen1)
         verify(mListener).forward(eq(mScreen1), any(), any())
@@ -125,7 +125,7 @@ class TriadTest {
     fun goTo_withoutHavingABackstack_throwsIllegalStateException() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
 
         /* When */
         triad.goTo(mScreen1)
@@ -135,7 +135,7 @@ class TriadTest {
     fun goTo_withAValidBackstack_forwardsToScreen() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
         triad.startWith(mScreen1)
         inOrder.verify(mListener).screenPushed(mScreen1)
         inOrder.verify(mListener).forward(eq(mScreen1), any(), any())
@@ -153,7 +153,7 @@ class TriadTest {
     fun popTo_withAnEmptyBackstack_throwsIllegalStateException() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
 
         /* When */
         triad.popTo(mScreen1)
@@ -163,7 +163,7 @@ class TriadTest {
     fun popTo_withScreenNotOnBackstack_forwardsToScreen() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
         triad.startWith(mScreen1)
         inOrder.verify(mListener).screenPushed(mScreen1)
         inOrder.verify(mListener).forward(eq(mScreen1), any(), any())
@@ -223,7 +223,7 @@ class TriadTest {
     fun replaceWith_withAnEmptyBackstack_throwsIllegalStateException() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
 
         /* When */
         triad.replaceWith(mScreen1)
@@ -286,7 +286,7 @@ class TriadTest {
     fun forward_withAnEmptyBackstack_throwsIllegalStateException() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
 
         /* When */
         triad.forward(Backstack.of(mScreen1, mScreen2))
@@ -315,7 +315,7 @@ class TriadTest {
     fun backward_withAnEmptyBackstack_throwsIllegalStateException() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
 
         /* When */
         triad.backward(Backstack.of(mScreen1, mScreen2))
@@ -345,7 +345,7 @@ class TriadTest {
     fun replace_withAnEmptyBackstack_throwsIllegalStateException() {
         /* Given */
         val triad = TriadFactory.emptyInstance()
-        triad.listener = mListener
+        triad.setListener(mListener)
 
         /* When */
         triad.replace(Backstack.of(mScreen1, mScreen2))

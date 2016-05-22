@@ -21,29 +21,33 @@ import android.animation.AnimatorListenerAdapter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import com.nhaarman.triad.TransitionAnimator;
-import com.nhaarman.triad.Triad;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 class TranslateLeftAnimator implements TransitionAnimator {
 
     @Override
-    public boolean forward(@Nullable final View oldView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
+    public boolean forward(@Nullable final View oldView, @NonNull final View newView, @NonNull final ViewGroup parent, @NonNull final Function0<Unit> onComplete) {
         if (oldView == null) {
             return false;
         }
 
+        parent.addView(newView);
+
         oldView.animate().x(-oldView.getWidth()).setInterpolator(new AccelerateInterpolator());
-        newView.setX(((View) newView.getParent()).getWidth());
+        newView.setX(parent.getWidth());
         newView.animate().x(0).setInterpolator(new DecelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(final Animator animation) {
                 newView.animate().setListener(null);
                 ((ViewManager) oldView.getParent()).removeView(oldView);
 
-                callback.onComplete();
+                onComplete.invoke();
             }
         });
 
@@ -51,20 +55,22 @@ class TranslateLeftAnimator implements TransitionAnimator {
     }
 
     @Override
-    public boolean backward(@Nullable final View oldView, @NonNull final View newView, @NonNull final Triad.Callback callback) {
+    public boolean backward(@Nullable final View oldView, @NonNull final View newView, @NonNull final ViewGroup parent, @NonNull final Function0<Unit> onComplete) {
         if (oldView == null) {
             return false;
         }
 
+        parent.addView(newView);
+
         newView.setX(-((View) newView.getParent()).getWidth());
         newView.animate().x(0).setInterpolator(new AccelerateInterpolator());
-        oldView.animate().x(((View) oldView.getParent()).getWidth()).setInterpolator(new DecelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
+        oldView.animate().x(parent.getWidth()).setInterpolator(new DecelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(final Animator animation) {
                 oldView.animate().setListener(null);
                 ((ViewManager) oldView.getParent()).removeView(oldView);
 
-                callback.onComplete();
+                onComplete.invoke();
             }
         });
 
