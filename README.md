@@ -11,7 +11,7 @@ Since the Presenters are plain Java objects, tests for these classes can run bla
 
 Triad is _not_ a framework, but a tool that can help structure your ui logic in a clean and concise way.
 
-_Please note that Triad is still under development, and API's **~~may~~ will change**. Although pretty stable, the need for simpler solutions and better API's may requires changes in your code. Feel free to try it out and leave your feedback!_
+_Please note that Triad is still under development, and API's **~~may~~ will change**. Although pretty stable, the need for simpler solutions and better API's may require changes in your code. Feel free to try it out and leave your feedback!_
 
 ## Setup
 
