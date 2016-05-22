@@ -9,7 +9,9 @@ Triad is a tiny Android library which enables use of the Model-View-Presenter pa
 It uses custom Views to replace the [dreaded Fragments](https://corner.squareup.com/2014/10/advocating-against-android-fragments.html), and introduces Presenter classes to separate business logic from view logic.
 Since the Presenters are plain Java objects, tests for these classes can run blazingly fast on a local JVM.
 
-_Please note that Triad is still under development, and API's **may change**. Feel free to try it out and leave your feedback!_
+Triad is _not_ a framework, but a tool that can help structure your ui logic in a clean and concise way.
+
+_Please note that Triad is still under development, and API's **~~may~~ will change**. Although pretty stable, the need for simpler solutions and better API's may requires changes in your code. Feel free to try it out and leave your feedback!_
 
 ## Setup
 
