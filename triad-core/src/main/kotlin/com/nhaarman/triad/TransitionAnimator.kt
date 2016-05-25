@@ -17,14 +17,17 @@
 package com.nhaarman.triad
 
 import android.view.View
+import android.view.ViewGroup
 
 interface TransitionAnimator {
 
     fun forward(oldView: View?,
                 newView: View,
-                callback: Triad.Callback): Boolean
+                parent: ViewGroup,
+                onComplete: () -> Unit): Boolean
 
     fun backward(oldView: View?,
                  newView: View,
-                 callback: Triad.Callback): Boolean
+                 parent: ViewGroup,
+                 onComplete: () -> Unit): Boolean
 }

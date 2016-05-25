@@ -24,7 +24,8 @@ import java.lang.ref.WeakReference
 interface Triad {
 
     var backstack: Backstack
-    var listener: Listener?
+
+    fun setListener(listener: Listener<*>?)
 
     /**
      * Sets the current Activity, to be able to start other Activities from the Triad instance.
@@ -37,7 +38,7 @@ interface Triad {
 
      * @param screen The Screen to start with.
      */
-    fun startWith(screen: Screen<*>)
+    fun startWith(screen: Screen<out Any>)
 
     /**
      * Initializes the backstack with given Screen. If the backstack is not empty, this call is ignored.
@@ -45,7 +46,7 @@ interface Triad {
 
      * @param screen The Screen to start with.
      */
-    fun startWith(screen: Screen<*>, animator: TransitionAnimator?)
+    fun startWith(screen: Screen<out Any>, animator: TransitionAnimator?)
 
     /**
      * Pushes given Screen onto the backstack.
@@ -54,7 +55,7 @@ interface Triad {
 
      * @param screen The screen to push onto the backstack.
      */
-    fun goTo(screen: Screen<*>) = goTo(screen, null)
+    fun goTo(screen: Screen<out Any>) = goTo(screen, null)
 
     /**
      * Pushes given Screen onto the backstack.
@@ -63,7 +64,7 @@ interface Triad {
 
      * @param screen The screen to push onto the backstack.
      */
-    fun goTo(screen: Screen<*>, animator: TransitionAnimator?)
+    fun goTo(screen: Screen<out Any>, animator: TransitionAnimator?)
 
     /**
      * Forces a notification of the current screen.
@@ -79,7 +80,7 @@ interface Triad {
 
      * @param screen The Screen to pop to.
      */
-    fun popTo(screen: Screen<*>) = popTo(screen, null)
+    fun popTo(screen: Screen<out Any>) = popTo(screen, null)
 
     /**
      * Pops the backstack until given Screen is found.
@@ -90,7 +91,7 @@ interface Triad {
 
      * @param screen The Screen to pop to.
      */
-    fun popTo(screen: Screen<*>, animator: TransitionAnimator? = null)
+    fun popTo(screen: Screen<out Any>, animator: TransitionAnimator? = null)
 
     /**
      * Replaces the current Screen with given Screen.
@@ -99,7 +100,7 @@ interface Triad {
 
      * @param screen The Screen to replace the current Screen.
      */
-    fun replaceWith(screen: Screen<*>) = replaceWith(screen, null)
+    fun replaceWith(screen: Screen<out Any>) = replaceWith(screen, null)
 
     /**
      * Replaces the current Screen with given Screen.
@@ -108,7 +109,7 @@ interface Triad {
 
      * @param screen The Screen to replace the current Screen.
      */
-    fun replaceWith(screen: Screen<*>, animator: TransitionAnimator? = null)
+    fun replaceWith(screen: Screen<out Any>, animator: TransitionAnimator? = null)
 
     /**
      * Pops the current screen off the backstack.
@@ -188,53 +189,38 @@ interface Triad {
      */
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
-    /**
-     * Supplied by Triad to the Listener, which is responsible for calling onComplete().
-     */
-    interface Callback {
+    interface Listener<T : Any> {
 
-        /**
-         * Must be called exactly once to indicate that the corresponding transition has completed.
-         *
-         *
-         * If not called, the backstack will not be updated and further calls to Triad will not execute.
-         * Calling more than once will result in an exception.
-         */
-        fun onComplete()
-    }
+        fun screenPushed(pushedScreen: Screen<T>)
 
-    interface Listener {
-
-        fun screenPushed(pushedScreen: Screen<*>)
-
-        fun screenPopped(poppedScreen: Screen<*>)
+        fun screenPopped(poppedScreen: Screen<T>)
 
         /**
          * Notifies the listener that the backstack will forward to a new Screen.
 
          * @param newScreen The new Screen to be shown.
          * *
-         * @param callback  Must be called to indicate completion.
+         * @param onComplete  Must be called to indicate completion.
          */
-        fun forward(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Callback)
+        fun forward(newScreen: Screen<T>, animator: TransitionAnimator?, onComplete: () -> Unit)
 
         /**
          * Notifies the listener that the backstack will be moved back to given Screen.
 
          * @param newScreen The new screen to be shown.
          * *
-         * @param callback  Must be called to indicate completion.
+         * @param onComplete  Must be called to indicate completion.
          */
-        fun backward(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Callback)
+        fun backward(newScreen: Screen<T>, animator: TransitionAnimator?, onComplete: () -> Unit)
 
         /**
          * Notifies the listener that the backstack will be replaced, with given Screen on top.
 
          * @param newScreen The new screen to be shown.
          * *
-         * @param callback  Must be called to indicate completion.
+         * @param onComplete  Must be called to indicate completion.
          */
-        fun replace(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Callback)
+        fun replace(newScreen: Screen<T>, animator: TransitionAnimator?, onComplete: () -> Unit)
     }
 
     interface ActivityResultListener {
@@ -251,7 +237,7 @@ object TriadFactory {
     }
 
     @JvmStatic
-    fun newInstance(backstack: Backstack, listener: Triad.Listener): Triad {
+    fun newInstance(backstack: Backstack, listener: Triad.Listener<Any>): Triad {
         return TriadImpl(backstack, listener)
     }
 }
@@ -259,7 +245,12 @@ object TriadFactory {
 /**
  * Holds the current truth, the history of screens, and exposes operations to change it.
  */
-open class TriadImpl internal constructor(override var backstack: Backstack, override var listener: Triad.Listener? = null) : Triad {
+open class TriadImpl internal constructor(override var backstack: Backstack, private var listener: Triad.Listener<Any>? = null) : Triad {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun setListener(listener: Triad.Listener<*>?) {
+        this.listener = listener as Triad.Listener<Any>?
+    }
 
     private val activityResultListeners = SparseArray<Triad.ActivityResultListener>()
 
@@ -282,11 +273,11 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
 
      * @param screen The Screen to start with.
      */
-    override fun startWith(screen: Screen<*>) {
+    override fun startWith(screen: Screen<out Any>) {
         startWith(screen, null)
     }
 
-    override fun startWith(screen: Screen<*>, animator: TransitionAnimator?) {
+    override fun startWith(screen: Screen<out Any>, animator: TransitionAnimator?) {
         if (backstack.size() == 0 && transition == null) {
             move {
                 val newBackstack = Backstack.single(screen, animator)
@@ -296,7 +287,7 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
         }
     }
 
-    override fun goTo(screen: Screen<*>, animator: TransitionAnimator?) {
+    override fun goTo(screen: Screen<out Any>, animator: TransitionAnimator?) {
         if (backstack.size() == 0 && transition == null) throw IllegalStateException("Use startWith(Screen) to show your first Screen.")
 
         move {
@@ -315,11 +306,11 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
         }
     }
 
-    override fun popTo(screen: Screen<*>, animator: TransitionAnimator?) {
+    override fun popTo(screen: Screen<out Any>, animator: TransitionAnimator?) {
         if (backstack.size() == 0 && transition == null) throw IllegalStateException("Use startWith(Screen) to show your first Screen.")
 
         move {
-            if (backstack.current<Any>().screen == screen) {
+            if (backstack.current<Any>()?.screen == screen) {
                 onComplete()
             } else {
                 val builder = backstack.buildUpon()
@@ -357,7 +348,7 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
                         notifyScreenPopped(entry.screen)
                     }
 
-                    builder.push(poppedBackstack.current<Any>())
+                    builder.push(poppedBackstack.current<Any>()!!)
                     newBackstack = builder.build()
                     notifyBackward(newBackstack, animator)
                 } else {
@@ -378,7 +369,7 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
 
      * @param screen The Screen to replace the current Screen.
      */
-    override fun replaceWith(screen: Screen<*>, animator: TransitionAnimator?) {
+    override fun replaceWith(screen: Screen<out Any>, animator: TransitionAnimator?) {
         if (backstack.size() == 0 && transition == null) throw IllegalStateException("Use startWith(Screen) to show your first Screen.")
 
         move {
@@ -531,7 +522,7 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
     }
 
     /**
-     * Propagates the activity result to the proper [ActivityResultListener].
+     * Propagates the activity result to the proper [Triad.ActivityResultListener].
 
      * @param requestCode The request code, as created by [.startActivityForResult].
      * *
@@ -544,43 +535,42 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
         activityResultListeners.remove(requestCode)
     }
 
-    inner class Transition(private val action: Transition.() -> Unit) : Triad.Callback {
+    @Suppress("UNCHECKED_CAST")
+    inner class Transition(private val action: Transition.() -> Unit) {
 
         var isFinished: Boolean = false
             private set
 
         private var next: Transition? = null
 
-        private var nextBackstack: Backstack? = null
-
         internal fun enqueue(transition: Transition): Transition {
             next = next?.enqueue(transition) ?: transition
             return this
         }
 
-        fun notifyScreenPopped(screen: Screen<*>) {
-            listener?.screenPopped(screen) ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
+        fun notifyScreenPopped(screen: Screen<out Any>) {
+            listener?.screenPopped(screen as Screen<Any>) ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
         }
 
-        fun notifyScreenPushed(screen: Screen<*>) {
-            listener?.screenPushed(screen) ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
+        fun notifyScreenPushed(screen: Screen<out Any>) {
+            listener?.screenPushed(screen as Screen<Any>) ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
         }
 
         fun notifyForward(nextBackstack: Backstack) {
-            this.nextBackstack = nextBackstack
-            listener?.forward(nextBackstack.current<Any>().screen, nextBackstack.current<Any>().animator, this)
+            backstack = nextBackstack
+            listener?.forward(nextBackstack.current<Any>()!!.screen, nextBackstack.current<Any>()!!.animator, { onComplete() })
                   ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
         }
 
         fun notifyBackward(nextBackstack: Backstack, animator: TransitionAnimator?) {
-            this.nextBackstack = nextBackstack
-            listener?.backward(nextBackstack.current<Any>().screen, animator, this)
+            backstack = nextBackstack
+            listener?.backward(nextBackstack.current<Any>()!!.screen, animator, { onComplete() })
                   ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
         }
 
         fun notifyReplace(nextBackstack: Backstack) {
-            this.nextBackstack = nextBackstack
-            listener?.replace(nextBackstack.current<Any>().screen, nextBackstack.current<Any>().animator, this)
+            backstack = nextBackstack
+            listener?.replace(nextBackstack.current<Any>()!!.screen, nextBackstack.current<Any>()!!.animator, { onComplete() })
                   ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
         }
 
@@ -588,12 +578,8 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
             action()
         }
 
-        override fun onComplete() {
+        internal fun onComplete() {
             if (isFinished) throw IllegalStateException("onComplete already called for this transition")
-
-            nextBackstack?.let {
-                backstack = it
-            }
 
             isFinished = true
 
@@ -603,5 +589,4 @@ open class TriadImpl internal constructor(override var backstack: Backstack, ove
             }
         }
     }
-
 }

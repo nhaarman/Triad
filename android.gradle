@@ -1,7 +1,7 @@
 project.android.compileSdkVersion 23
 project.android.buildToolsVersion "23.0.2"
 
-project.android.defaultConfig.minSdkVersion 14
+project.android.defaultConfig.minSdkVersion 16
 project.android.defaultConfig.targetSdkVersion 23
 
 project.android.testOptions.unitTests.returnDefaultValues = true

@@ -18,8 +18,7 @@ package com.nhaarman.triad
 
 import android.app.Activity
 import android.content.Intent
-import android.view.View
-import com.nhaarman.triad_core.R
+import android.view.ViewGroup
 
 /**
  * This class represents a delegate which can be used to use Triad in any
@@ -29,64 +28,68 @@ import com.nhaarman.triad_core.R
  * When using the `TriadDelegate`, you must proxy the following Activity
  * lifecycle methods to it:
  *
- *  * [.onCreate]
- *  * [.onBackPressed]
- *  * [.onActivityResult]
+ *  - [.onCreate]
+ *  - [.onResume]
+ *  - [.onPause]
+ *  - [.onDestroy]
+ *  - [.onBackPressed]
+ *  - [.onActivityResult]
  *
 
- * @param  The `ApplicationComponent` to use for `Presenter` creation.
+ * @param ApplicationComponent The `ApplicationComponent` to use for `Presenter` creation.
  */
-class TriadDelegate<ApplicationComponent : Any> private constructor(private val activity: Activity) {
+class TriadDelegate<ApplicationComponent : Any> internal constructor(
+      private val activity: Activity,
+      private val defaultTransitionAnimator: TransitionAnimator
+) {
+
     private var resumed = false
 
-    private lateinit var applicationComponent: ApplicationComponent
+    @Suppress("UNCHECKED_CAST")
+    private val applicationComponent: ApplicationComponent by lazy {
+        if (activity.application !is ApplicationComponentProvider<*>) {
+            throw IllegalStateException("Make sure your Application class implements ApplicationComponentProvider.")
+        }
 
-    /**
-     * The [Triad] instance that is used to navigate between [Screen]s.
-     */
-    private var _triad: Triad? = null
-    val triad: Triad
-        get() = _triad ?: throw IllegalStateException("Triad is null. Make sure to call TriadDelegate.onCreate().")
+        (activity.application as ApplicationComponentProvider<ApplicationComponent>).applicationComponent
+    }
 
-    private var _currentScreen: Screen<ApplicationComponent>? = null
-    val currentScreen: Screen<ApplicationComponent>
-        get() = _currentScreen ?: throw IllegalStateException("Current screen is null.")
+    private val rootView: ViewGroup by lazy {
+        activity.findViewById(android.R.id.content) as ViewGroup
+    }
 
-    private var currentView: View? = null
+    val triad: Triad by lazy {
+        if (activity.application !is TriadProvider) {
+            throw IllegalStateException("Make sure your Application class implements TriadProvider.")
+        }
+
+        (activity.application as TriadProvider).triad
+    }
+
+    val currentScreen: Screen<ApplicationComponent>?
+        get() = triad.backstack.current<ApplicationComponent>()?.screen
 
     /**
      * An optional [OnScreenChangedListener] that is notified of screen changes.
      */
     var onScreenChangedListener: OnScreenChangedListener<ApplicationComponent>? = null
 
-    private lateinit var triadView: TriadView
-
     fun onCreate() {
-        if (activity.application !is TriadProvider) throw IllegalStateException("Make sure your Application class implements TriadProvider.")
-        if (activity.application !is ApplicationComponentProvider<*>) throw IllegalStateException("Make sure your Application class implements ApplicationComponentProvider.")
+        triad.setActivity(activity)
+        triad.setListener(MyTriadListener())
 
-        applicationComponent = (activity.application as ApplicationComponentProvider<ApplicationComponent>).applicationComponent
-
-        activity.setContentView(R.layout.view_triad)
-        triadView = activity.findViewById(R.id.view_triad) as TriadView
-
-        _triad = (activity.application as TriadProvider).triad.apply {
-            setActivity(activity)
-            listener = MyTriadListener()
-
-            if (backstack.size() > 0) {
-                showCurrent()
-            }
+        if (triad.backstack.size() > 0) {
+            triad.showCurrent()
         }
     }
 
     fun onResume() {
-        _currentScreen?.onAttach(activity)
+        currentScreen?.onAttach(activity)
         resumed = true
     }
 
     fun onBackPressed(): Boolean {
-        return _currentScreen != null && _currentScreen!!.onBackPressed() || triad.goBack()
+        return currentScreen != null && currentScreen!!.onBackPressed() || triad.goBack()
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -95,7 +98,7 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(private val 
 
     fun onPause() {
         resumed = false
-        _currentScreen?.onDetach(activity)
+        currentScreen?.onDetach(activity)
     }
 
     fun onDestroy() {
@@ -108,57 +111,69 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(private val 
         }
     }
 
-    private inner class MyTriadListener : Triad.Listener {
+    private inner class MyTriadListener : Triad.Listener<ApplicationComponent> {
 
-        override fun screenPushed(pushedScreen: Screen<*>) {
-            (pushedScreen as Screen<ApplicationComponent>).setApplicationComponent(applicationComponent)
+        override fun screenPushed(pushedScreen: Screen<ApplicationComponent>) {
+            pushedScreen.setApplicationComponent(applicationComponent)
             pushedScreen.onCreate()
-            if(resumed) pushedScreen.onAttach(activity)
+            if (resumed) pushedScreen.onAttach(activity)
         }
 
-        override fun screenPopped(poppedScreen: Screen<*>) {
-            if(resumed) poppedScreen.onDetach(activity)
+        override fun screenPopped(poppedScreen: Screen<ApplicationComponent>) {
+            if (resumed) poppedScreen.onDetach(activity)
             poppedScreen.onDestroy()
         }
 
-        override fun forward(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Triad.Callback) {
-            _currentScreen?.apply {
-                currentView?.let {
-                    saveState(it)
-                }
+        override fun forward(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, onComplete: () -> Unit) {
+            rootView.getChildAt(0)?.let { view ->
+                currentScreen?.saveState(view)
             }
 
-            _currentScreen = newScreen as Screen<ApplicationComponent>
-            val oldView = currentView
-            val newView = newScreen.createView(triadView)
-            currentView = newView
+            val oldView = rootView.getChildAt(0)
+            val newView = newScreen.createView(rootView)
 
-            triadView.forward(oldView, newView, animator, callback)
+            val handled = animator?.forward(oldView, newView, rootView, {
+                if (oldView?.parent != null) (oldView.parent as ViewGroup).removeView(oldView)
+                onComplete()
+            })
+
+            if (handled != true) {
+                defaultTransitionAnimator.forward(oldView, newView, rootView, onComplete)
+            }
+
             onScreenChangedListener?.onScreenChanged(newScreen)
         }
 
-        override fun backward(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Triad.Callback) {
-            _currentScreen = newScreen as Screen<ApplicationComponent>
-
-            val oldView = currentView
-            val newView = newScreen.createView(triadView)
-            currentView = newView
-
-            currentView?.let {
-                newScreen.restoreState(it)
+        override fun backward(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, onComplete: () -> Unit) {
+            val oldView = rootView.getChildAt(0)
+            val newView = newScreen.createView(rootView).apply {
+                newScreen.restoreState(this)
             }
 
-            triadView.backward(oldView, newView, animator, callback)
+            val handled = animator?.backward(oldView, newView, rootView, {
+                if (oldView?.parent != null) (oldView.parent as ViewGroup).removeView(oldView)
+                onComplete()
+            })
+
+            if (handled != true) {
+                defaultTransitionAnimator.backward(oldView, newView, rootView, onComplete)
+            }
+
             onScreenChangedListener?.onScreenChanged(newScreen)
         }
 
-        override fun replace(newScreen: Screen<*>, animator: TransitionAnimator?, callback: Triad.Callback) {
-            _currentScreen = newScreen as Screen<ApplicationComponent>
+        override fun replace(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, onComplete: () -> Unit) {
+            val oldView = rootView.getChildAt(0)
+            val newView = newScreen.createView(rootView)
 
-            val oldView = currentView
-            val newView = newScreen.createView(triadView)
-            currentView = newView
-            triadView.forward(oldView, newView, animator, callback)
+            val handled = animator?.forward(oldView, newView, rootView, {
+                if (oldView?.parent != null) (oldView.parent as ViewGroup).removeView(oldView)
+                onComplete()
+            })
+
+            if (handled != true) {
+                defaultTransitionAnimator.forward(oldView, newView, rootView, onComplete)
+            }
 
             onScreenChangedListener?.onScreenChanged(newScreen)
         }
@@ -168,7 +183,7 @@ class TriadDelegate<ApplicationComponent : Any> private constructor(private val 
 
         @JvmStatic
         fun <T : Any> createFor(activity: Activity): TriadDelegate<T> {
-            return TriadDelegate(activity)
+            return TriadDelegate(activity, DefaultTransitionAnimator)
         }
     }
 }

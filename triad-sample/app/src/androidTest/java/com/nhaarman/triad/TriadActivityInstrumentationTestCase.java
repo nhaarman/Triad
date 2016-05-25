@@ -61,10 +61,6 @@ public class TriadActivityInstrumentationTestCase<T extends Activity> {
         return ((TriadProvider) mActivityRule.getActivity().getApplicationContext()).getTriad();
     }
 
-    protected ViewGroup getScreenHolder() {
-        return (ViewGroup) getActivity().findViewById(com.nhaarman.triad.R.id.view_triad);
-    }
-
     protected Instrumentation getInstrumentation() {
         return InstrumentationRegistry.getInstrumentation();
     }

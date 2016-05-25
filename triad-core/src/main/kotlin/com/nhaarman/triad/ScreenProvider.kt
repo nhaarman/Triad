@@ -18,5 +18,5 @@ package com.nhaarman.triad
 
 interface ScreenProvider<ApplicationComponent : Any> {
 
-    val currentScreen: Screen<ApplicationComponent>
+    val currentScreen: Screen<ApplicationComponent>?
 }

@@ -19,46 +19,50 @@ package com.nhaarman.triad.sample.notes
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewManager
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import com.nhaarman.triad.TransitionAnimator
-import com.nhaarman.triad.Triad
 
 internal class TranslateLeftAnimator : TransitionAnimator {
 
-    override fun forward(oldView: View?, newView: View, callback: Triad.Callback): Boolean {
+    override fun forward(oldView: View?, newView: View, parent: ViewGroup, onComplete: () -> Unit): Boolean {
         if (oldView == null) {
             return false
         }
 
+        parent.addView(newView)
+
         oldView.animate().x((-oldView.width).toFloat()).setInterpolator(AccelerateInterpolator())
-        newView.x = (newView.parent as View).width.toFloat()
+        newView.x = parent.width.toFloat()
         newView.animate().x(0f).setInterpolator(DecelerateInterpolator()).setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 newView.animate().setListener(null)
                 (oldView.parent as ViewManager).removeView(oldView)
 
-                callback.onComplete()
+                onComplete()
             }
         })
 
         return true
     }
 
-    override fun backward(oldView: View?, newView: View, callback: Triad.Callback): Boolean {
+    override fun backward(oldView: View?, newView: View, parent: ViewGroup, onComplete: () -> Unit): Boolean {
         if (oldView == null) {
             return false
         }
 
-        newView.x = (-(newView.parent as View).width).toFloat()
+        parent.addView(newView)
+
+        newView.x = -parent.width.toFloat()
         newView.animate().x(0f).setInterpolator(AccelerateInterpolator())
         oldView.animate().x((oldView.parent as View).width.toFloat()).setInterpolator(DecelerateInterpolator()).setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 oldView.animate().setListener(null)
                 (oldView.parent as ViewManager).removeView(oldView)
 
-                callback.onComplete()
+                onComplete()
             }
         })
 

@@ -21,17 +21,17 @@ import java.util.*
 /**
  * Describes the history of a [Triad] instance at a specific point in time.
  */
-class Backstack private constructor(private val backstack: Deque<Entry<*>>) : Iterable<Screen<*>> {
+class Backstack private constructor(private val backstack: Deque<Entry<out Any>>) : Iterable<Screen<out Any>> {
 
-    override fun iterator(): Iterator<Screen<*>> {
+    override fun iterator(): Iterator<Screen<out Any>> {
         return ReadIterator(backstack.iterator())
     }
 
-    fun reverseIterator(): Iterator<Screen<*>> {
+    fun reverseIterator(): Iterator<Screen<out Any>> {
         return ReadIterator(backstack.descendingIterator())
     }
 
-    internal fun reverseEntryIterator(): Iterator<Entry<*>> {
+    internal fun reverseEntryIterator(): Iterator<Entry<out Any>> {
         return EntryReadIterator(backstack.descendingIterator())
     }
 
@@ -39,8 +39,8 @@ class Backstack private constructor(private val backstack: Deque<Entry<*>>) : It
         return backstack.size
     }
 
-    internal fun <T : Any> current(): Entry<T> {
-        return backstack.peek() as Entry<T>
+    internal fun <T : Any> current(): Entry<T>? {
+        return backstack.peek() as Entry<T>?
     }
 
     /**
@@ -56,20 +56,20 @@ class Backstack private constructor(private val backstack: Deque<Entry<*>>) : It
 
     internal data class Entry<T : Any>(val screen: Screen<T>, val animator: TransitionAnimator?)
 
-    class Builder internal constructor(backstack: Collection<Entry<*>>) {
+    class Builder internal constructor(backstack: Collection<Entry<out Any>>) {
 
-        private val backstack: Deque<Entry<*>> = ArrayDeque(backstack)
+        private val backstack: Deque<Entry<out Any>> = ArrayDeque(backstack)
 
-        @JvmOverloads fun push(screen: Screen<*>, animator: TransitionAnimator? = null): Builder {
+        @JvmOverloads fun push(screen: Screen<out Any>, animator: TransitionAnimator? = null): Builder {
             return push(Entry(screen, animator))
         }
 
-        internal fun push(entry: Entry<*>): Builder {
+        internal fun push(entry: Entry<out Any>): Builder {
             backstack.push(entry)
             return this
         }
 
-        internal fun pop(): Entry<*>? {
+        internal fun pop(): Entry<out Any>? {
             return backstack.pop()
         }
 
@@ -84,32 +84,32 @@ class Backstack private constructor(private val backstack: Deque<Entry<*>>) : It
         }
     }
 
-    private class ReadIterator internal constructor(private val mIterator: Iterator<Entry<*>>) : Iterator<Screen<*>> {
+    private class ReadIterator internal constructor(private val iterator: Iterator<Entry<*>>) : Iterator<Screen<out Any>> {
 
         override fun hasNext(): Boolean {
-            return mIterator.hasNext()
+            return iterator.hasNext()
         }
 
-        override fun next(): Screen<*> {
-            return mIterator.next().screen
+        override fun next(): Screen<out Any> {
+            return iterator.next().screen
         }
     }
 
-    private class EntryReadIterator internal constructor(private val mIterator: Iterator<Entry<*>>) : Iterator<Entry<*>> {
+    private class EntryReadIterator internal constructor(private val iterator: Iterator<Entry<*>>) : Iterator<Entry<out Any>> {
 
         override fun hasNext(): Boolean {
-            return mIterator.hasNext()
+            return iterator.hasNext()
         }
 
-        override fun next(): Entry<*> {
-            return mIterator.next()
+        override fun next(): Entry<out Any> {
+            return iterator.next()
         }
     }
 
     companion object {
 
         fun emptyBuilder(): Builder {
-            return Builder(emptyList<Entry<*>>())
+            return Builder(emptyList<Entry<Any>>())
         }
 
         /**
@@ -117,7 +117,7 @@ class Backstack private constructor(private val backstack: Deque<Entry<*>>) : It
          */
         @JvmOverloads
         @JvmStatic
-        fun single(screen: Screen<*>, animator: TransitionAnimator? = null): Backstack {
+        fun single(screen: Screen<out Any>, animator: TransitionAnimator? = null): Backstack {
             return emptyBuilder().push(screen, animator).build()
         }
 
@@ -125,7 +125,7 @@ class Backstack private constructor(private val backstack: Deque<Entry<*>>) : It
          * Creates a backstack that contains given screens.
          */
         @JvmStatic
-        fun of(vararg screens: Screen<*>): Backstack {
+        fun of(vararg screens: Screen<out Any>): Backstack {
             val builder = emptyBuilder()
 
             for (screen in screens) {
