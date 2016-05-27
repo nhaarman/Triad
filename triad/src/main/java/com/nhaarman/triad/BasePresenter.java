@@ -107,8 +107,8 @@ public class BasePresenter<C extends Container, ActivityComponent> implements Pr
      */
     @Override
     @MainThread
-    public final void releaseContainer() {
-        if (!mContainer.isPresent()) {
+    public final void releaseContainer(@NonNull final C container) {
+        if (!mContainer.isPresent() || !mContainer.get().equals(container)) {
             return;
         }
 
