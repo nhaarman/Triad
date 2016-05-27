@@ -154,4 +154,21 @@ public class BasePresenterTest {
         assertThat(mPresenter.onControlLostCalled, is(true));
         assertThat(mPresenter.onControlGainedCalled, is(true));
     }
+
+    @Test
+    public void releasingADifferentContainer_doesNotCallOnControlLost() {
+       /* Given */
+        TestRelativeLayoutContainer container1 = mock(TestRelativeLayoutContainer.class);
+        TestRelativeLayoutContainer container2 = mock(TestRelativeLayoutContainer.class);
+
+        mPresenter.acquire(container1, mock(ActivityComponent.class));
+        mPresenter.onControlLostCalled = false;
+        mPresenter.onControlGainedCalled = false;
+
+    /* When */
+        mPresenter.releaseContainer(container2);
+
+    /* Then */
+        assertThat(mPresenter.onControlLostCalled, is(false));
+    }
 }

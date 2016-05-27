@@ -35,7 +35,7 @@ abstract class AdapterRelativeLayoutContainer<P : Presenter<*, ActivityComponent
     private var attachedToWindow: Boolean = false
 
     /**
-     * Returns the [P] instance that is tied to this `LinearLayoutContainer`.
+     * Returns the [P] instance that is tied to this `AdapterRelativeLayoutContainer`.
      */
     @Suppress("UNCHECKED_CAST")
     override var presenter: P? = null
