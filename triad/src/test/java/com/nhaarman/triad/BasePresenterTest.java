@@ -70,10 +70,11 @@ public class BasePresenterTest {
     @Test
     public void afterReleasingContainer_theContainerIsNotPresent() {
     /* Given */
-        mPresenter.acquire(mock(TestRelativeLayoutContainer.class), mock(ActivityComponent.class));
+        TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
+        mPresenter.acquire(container, mock(ActivityComponent.class));
 
     /* When */
-        mPresenter.releaseContainer();
+        mPresenter.releaseContainer(container);
 
     /* Then */
         assertThat(mPresenter.container().isPresent(), is(false));
@@ -82,10 +83,11 @@ public class BasePresenterTest {
     @Test
     public void afterReleasingContainer_theActivityComponentIsNotPresent() {
     /* Given */
-        mPresenter.acquire(mock(TestRelativeLayoutContainer.class), mock(ActivityComponent.class));
+        TestRelativeLayoutContainer container = mock(TestRelativeLayoutContainer.class);
+        mPresenter.acquire(container, mock(ActivityComponent.class));
 
     /* When */
-        mPresenter.releaseContainer();
+        mPresenter.releaseContainer(container);
 
     /* Then */
         assertThat(mPresenter.activityComponent().isPresent(), is(false));
@@ -112,7 +114,7 @@ public class BasePresenterTest {
         mPresenter.onControlGainedCalled = false;
 
     /* When */
-        mPresenter.releaseContainer();
+        mPresenter.releaseContainer(container);
 
     /* Then */
         assertThat(mPresenter.onControlLostCalled, is(true));
