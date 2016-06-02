@@ -21,8 +21,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.support.annotation.NonNull;
 import android.view.View;
-import kotlin.jvm.JvmOverloads;
-import kotlin.jvm.Throws;
 
 /**
  * An utility class that retrieves the ActivityComponent and Presenter using a Context instance.
@@ -33,7 +31,9 @@ public class TriadUtil {
     }
 
     @NonNull
-    public static <ActivityComponent> ActivityComponent findActivityComponent(@NonNull final Context context) {
+    public static <ActivityComponent> ActivityComponent findActivityComponent(@NonNull final Context context, @NonNull final View view) {
+        if(view.isInEditMode()) return null;
+
         Context baseContext = context;
         while (!(baseContext instanceof Activity) && baseContext instanceof ContextWrapper) {
             baseContext = ((ContextWrapper) baseContext).getBaseContext();
@@ -51,6 +51,8 @@ public class TriadUtil {
 
     @NonNull
     public static <P extends Presenter<?, ?>> P findPresenter(@NonNull final Context context, final View view) {
+        if(view.isInEditMode()) return null;
+
         Context baseContext = context;
         while (!(baseContext instanceof Activity) && baseContext instanceof ContextWrapper) {
             baseContext = ((ContextWrapper) baseContext).getBaseContext();

@@ -30,7 +30,7 @@ abstract class AdapterRelativeLayoutContainer<P : Presenter<*, ActivityComponent
 @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : RelativeLayout(context, attrs, defStyle),
       AdapterContainer<P> {
 
-    private val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context) }
+    private val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
 
     private var attachedToWindow: Boolean = false
 
