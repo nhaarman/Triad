@@ -152,4 +152,22 @@ class BasePresenterTest {
         expect(presenter.onControlLostCalled).toBe(true)
         expect(presenter.onControlGainedCalled).toBe(true)
     }
+
+
+    @Test
+    fun releasingADifferentContainer_doesNotCallOnControlLost() {
+        /* Given */
+        val container1 = mock<TestRelativeLayoutContainer>()
+        val container2 = mock<TestRelativeLayoutContainer>()
+
+        presenter.acquire(container1, mock())
+        presenter.onControlLostCalled = false
+        presenter.onControlGainedCalled = false
+
+        /* When */
+        presenter.releaseContainer(container2)
+
+        /* Then */
+        expect(presenter.onControlLostCalled).toBe(false)
+    }
 }

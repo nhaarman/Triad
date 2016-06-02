@@ -51,7 +51,7 @@ public abstract class RelativeLayoutContainer
     public RelativeLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
 
-        mActivityComponent = findActivityComponent(context);
+        mActivityComponent = findActivityComponent(context, this);
     }
 
     /**

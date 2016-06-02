@@ -24,7 +24,7 @@ abstract class LinearLayoutContainer<P : Presenter<*, ActivityComponent>, Activi
 
     val presenter: P by lazy { findPresenter<P>(context, this) }
 
-    val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context) }
+    val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
 
     @Suppress("UNCHECKED_CAST")
     override fun onAttachedToWindow() {
