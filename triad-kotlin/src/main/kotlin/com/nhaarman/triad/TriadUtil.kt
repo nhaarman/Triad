@@ -23,7 +23,9 @@ import android.view.View
 
 
 @Suppress("UNCHECKED_CAST")
-fun <ActivityComponent> findActivityComponent(context: Context): ActivityComponent {
+fun <ActivityComponent> findActivityComponent(context: Context, view: View): ActivityComponent {
+    if (view.isInEditMode) return null as ActivityComponent
+
     var baseContext = context
     while (baseContext !is Activity && baseContext is ContextWrapper) {
         baseContext = baseContext.baseContext
@@ -38,6 +40,8 @@ fun <ActivityComponent> findActivityComponent(context: Context): ActivityCompone
 
 @Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 fun <P : Presenter<*, *>> findPresenter(context: Context, view: View): P {
+    if (view.isInEditMode) return null as P
+
     var baseContext = context
     while (baseContext !is Activity && baseContext is ContextWrapper) {
         baseContext = baseContext.baseContext

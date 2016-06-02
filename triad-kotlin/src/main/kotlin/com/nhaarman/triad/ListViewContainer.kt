@@ -29,7 +29,7 @@ abstract class ListViewContainer<P : Presenter<*, ActivityComponent>, ActivityCo
 @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : ListView(context, attrs, defStyle), Container {
 
     val presenter: P by lazy { findPresenter<P>(context, this) }
-    val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context) }
+    val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
 
     @Suppress("UNCHECKED_CAST")
     override fun onAttachedToWindow() {

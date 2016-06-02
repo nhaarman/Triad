@@ -50,7 +50,7 @@ public abstract class ListViewContainer
     public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
 
-        mActivityComponent = findActivityComponent(context);
+        mActivityComponent = findActivityComponent(context, this);
     }
 
     /**
