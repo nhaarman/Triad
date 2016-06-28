@@ -66,8 +66,9 @@ class TriadDelegate<ApplicationComponent : Any> internal constructor(
         (activity.application as TriadProvider).triad
     }
 
-    val currentScreen: Screen<ApplicationComponent>?
-        get() = triad.backstack.current<ApplicationComponent>()?.screen
+    var _currentScreen: Screen<ApplicationComponent> ? = null
+    val currentScreen: Screen<ApplicationComponent>
+        get() = _currentScreen!!
 
     /**
      * An optional [OnScreenChangedListener] that is notified of screen changes.
@@ -98,7 +99,7 @@ class TriadDelegate<ApplicationComponent : Any> internal constructor(
 
     fun onPause() {
         resumed = false
-        currentScreen?.onDetach(activity)
+        _currentScreen?.onDetach(activity)
     }
 
     fun onDestroy() {
@@ -126,8 +127,10 @@ class TriadDelegate<ApplicationComponent : Any> internal constructor(
 
         override fun forward(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, onComplete: () -> Unit) {
             rootView.getChildAt(0)?.let { view ->
-                currentScreen?.saveState(view)
+                _currentScreen?.saveState(view)
             }
+
+            _currentScreen = newScreen
 
             val oldView = rootView.getChildAt(0)
             val newView = newScreen.createView(rootView)
@@ -145,6 +148,8 @@ class TriadDelegate<ApplicationComponent : Any> internal constructor(
         }
 
         override fun backward(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, onComplete: () -> Unit) {
+            _currentScreen = newScreen
+
             val oldView = rootView.getChildAt(0)
             val newView = newScreen.createView(rootView).apply {
                 newScreen.restoreState(this)
@@ -163,6 +168,8 @@ class TriadDelegate<ApplicationComponent : Any> internal constructor(
         }
 
         override fun replace(newScreen: Screen<ApplicationComponent>, animator: TransitionAnimator?, onComplete: () -> Unit) {
+            _currentScreen = newScreen
+
             val oldView = rootView.getChildAt(0)
             val newView = newScreen.createView(rootView)
 
