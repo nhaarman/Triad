@@ -80,18 +80,11 @@ interface Triad {
 
      * @param screen The Screen to pop to.
      */
-    fun popTo(screen: Screen<out Any>) = popTo(screen, null)
-
-    /**
-     * Pops the backstack until given Screen is found.
-     * If the Screen is not found, the Screen is pushed onto the current backstack.
-     * Does nothing if the Screen is already on top of the stack.
-
-     * One must first initialize this instance with [.startWith] before this method is called.
-
-     * @param screen The Screen to pop to.
-     */
     fun popTo(screen: Screen<out Any>, animator: TransitionAnimator? = null)
+
+    fun popTo(vararg screens: Screen<out Any>)
+
+    fun popTo(vararg screens: Backstack.Entry<out Any>)
 
     /**
      * Replaces the current Screen with given Screen.
@@ -307,56 +300,39 @@ open class TriadImpl internal constructor(override var backstack: Backstack, pri
     }
 
     override fun popTo(screen: Screen<out Any>, animator: TransitionAnimator?) {
+        return popTo(Backstack.Entry(screen, animator))
+    }
+
+    override fun popTo(vararg screens: Screen<out Any>) {
+        popTo(screens.map { Backstack.Entry(it, null) })
+    }
+
+    override fun popTo(vararg screens: Backstack.Entry<out Any>) {
+        popTo(screens.toList())
+    }
+
+    private fun popTo(entries: List<Backstack.Entry<out Any>>) {
         if (backstack.size() == 0 && transition == null) throw IllegalStateException("Use startWith(Screen) to show your first Screen.")
 
         move {
-            if (backstack.current<Any>()?.screen == screen) {
+            val backstackScreen = backstack.current<Any>()?.screen
+            val firstScreen = entries.first().screen
+            if (backstackScreen == firstScreen || backstackScreen?.javaClass == firstScreen.javaClass) {
                 onComplete()
             } else {
-                val builder = backstack.buildUpon()
-                val poppedScreens = Backstack.emptyBuilder()
-                var count = 0
-                // Take care to leave the original screen instance on the stack, if we find it.  This enables
-                // some arguably bad behavior on the part of clients, but it's still probably the right thing
-                // to do.
-                run {
-                    val it = backstack.reverseEntryIterator()
-                    while (it.hasNext()) {
-                        val s = it.next().screen
+                val builder = backstack.buildUpon().apply { pop() }
+                val screenIndex = builder.build().indexOfFirst { screen -> entries.find { it.screen == screen || it.screen.javaClass == screen.javaClass } != null }
 
-                        if (s == screen) {
-                            // Clear up to the target screen.
-                            for (i in 0..backstack.size() - count - 1) {
-                                val entry = builder.pop()
-                                if (entry != null) {
-                                    poppedScreens.push(entry)
-                                }
-                            }
-                            break
-                        } else {
-                            count++
-                        }
-                    }
-                }
-
-                val newBackstack: Backstack
-                val poppedBackstack = poppedScreens.build()
-                if (poppedBackstack.size() != 0) {
-                    val it = poppedBackstack.reverseEntryIterator()
-                    while (it.hasNext()) {
-                        val entry = it.next()
-                        notifyScreenPopped(entry.screen)
-                    }
-
-                    builder.push(poppedBackstack.current<Any>()!!)
-                    newBackstack = builder.build()
-                    notifyBackward(newBackstack, animator)
+                if (screenIndex == -1) {
+                    notifyForward(builder.push(entries.first()).build())
                 } else {
-                    notifyScreenPushed(screen)
+                    for (i in 0..screenIndex - 1) {
+                        builder.pop()
+                    }
 
-                    builder.push(screen, animator)
-                    newBackstack = builder.build()
-                    notifyForward(newBackstack)
+                    builder.build().let {
+                        notifyBackward(it, it.entryIterator().next().animator)
+                    }
                 }
             }
         }
@@ -374,7 +350,7 @@ open class TriadImpl internal constructor(override var backstack: Backstack, pri
 
         move {
             val builder = backstack.buildUpon()
-            val entry = builder.pop() ?: throw IllegalStateException("Popped entry is null")
+            val entry = builder.pop()
             builder.push(screen, animator)
             val newBackstack = builder.build()
 
@@ -402,7 +378,7 @@ open class TriadImpl internal constructor(override var backstack: Backstack, pri
                 onComplete()
             } else {
                 val builder = backstack.buildUpon()
-                val entry = builder.pop() ?: throw IllegalStateException("Popped entry is null")
+                val entry = builder.pop()
                 val newBackstack = builder.build()
 
                 notifyScreenPopped(entry.screen)

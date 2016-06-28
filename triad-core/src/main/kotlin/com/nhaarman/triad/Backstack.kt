@@ -35,6 +35,10 @@ class Backstack private constructor(private val backstack: Deque<Entry<out Any>>
         return EntryReadIterator(backstack.descendingIterator())
     }
 
+    internal fun entryIterator(): Iterator<Entry<out Any>> {
+        return EntryReadIterator(backstack.iterator())
+    }
+
     fun size(): Int {
         return backstack.size
     }
@@ -54,7 +58,7 @@ class Backstack private constructor(private val backstack: Deque<Entry<out Any>>
         return backstack.toString()
     }
 
-    internal data class Entry<T : Any>(val screen: Screen<T>, val animator: TransitionAnimator?)
+    data class Entry<T : Any>(val screen: Screen<T>, val animator: TransitionAnimator?)
 
     class Builder internal constructor(backstack: Collection<Entry<out Any>>) {
 
@@ -69,7 +73,7 @@ class Backstack private constructor(private val backstack: Deque<Entry<out Any>>
             return this
         }
 
-        internal fun pop(): Entry<out Any>? {
+        internal fun pop(): Entry<out Any> {
             return backstack.pop()
         }
 
