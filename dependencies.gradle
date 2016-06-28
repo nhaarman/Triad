@@ -1,6 +1,6 @@
 ext {
   butterKnifeVersion = "7.0.1"
-  androidSupportVersion = "23.4.0"
+  androidSupportVersion = "24.0.0"
   jetbrainsAnnotationsVersion = "15.0"
 
   /* Tests */
