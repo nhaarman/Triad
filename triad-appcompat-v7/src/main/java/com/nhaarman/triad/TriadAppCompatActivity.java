@@ -50,7 +50,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDelegate.onCreate();
+        mDelegate.onCreate(getIntent());
     }
 
     @Override

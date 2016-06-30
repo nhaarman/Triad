@@ -64,7 +64,7 @@ class TriadDelegateTest {
 
         val delegate = TriadDelegate<Any>(activity, mock())
         whenever((mApplication as TriadProvider).triad).thenReturn(TriadFactory.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
-        delegate.onCreate()
+        delegate.onCreate(null)
 
         /* When */
         delegate.onDestroy()
@@ -81,7 +81,7 @@ class TriadDelegateTest {
 
         val delegate = TriadDelegate<Any>(activity, mock())
         whenever((mApplication as TriadProvider).triad).thenReturn(TriadFactory.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
-        delegate.onCreate()
+        delegate.onCreate(null)
 
         /* When */
         delegate.onDestroy()

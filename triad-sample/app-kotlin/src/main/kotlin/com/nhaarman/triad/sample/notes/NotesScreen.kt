@@ -22,6 +22,8 @@ import com.nhaarman.triad.sample.ApplicationComponent
 import com.nhaarman.triad.sample.R
 import com.nhaarman.triad.sample.notes.noteslist.NotesListPresenter
 
+fun create(): Screen<*> = NotesScreen()
+
 internal class NotesScreen : Screen<ApplicationComponent>() {
 
     override val layoutResId = R.layout.view_notes

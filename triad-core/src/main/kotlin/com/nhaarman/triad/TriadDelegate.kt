@@ -75,12 +75,20 @@ class TriadDelegate<ApplicationComponent : Any> internal constructor(
      */
     var onScreenChangedListener: OnScreenChangedListener<ApplicationComponent>? = null
 
-    fun onCreate() {
+    fun onCreate(intent: Intent?) {
         triad.setActivity(activity)
         triad.setListener(MyTriadListener())
 
         if (triad.backstack.size() > 0) {
             triad.showCurrent()
+        } else if (intent != null) {
+            val screen = intent.createScreen()?.invoke()
+            if (screen != null) {
+                triad.startWith(screen)
+            } else {
+                val backstack = intent.createBackstack()?.invoke()
+                if (backstack != null) triad.startWith(backstack)
+            }
         }
     }
 

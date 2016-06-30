@@ -40,7 +40,7 @@ abstract class TriadActivity<ApplicationComponent : Any, ActivityComponent> : Ac
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        delegate.onCreate()
+        delegate.onCreate(intent)
     }
 
     override fun onResume() {
