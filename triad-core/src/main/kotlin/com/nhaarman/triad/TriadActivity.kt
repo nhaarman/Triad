@@ -31,7 +31,7 @@ abstract class TriadActivity<ApplicationComponent : Any, ActivityComponent> : Ac
 
     private val delegate = TriadDelegate.createFor<ApplicationComponent>(this)
 
-    override val currentScreen: Screen<ApplicationComponent>?
+    override val currentScreen: Screen<ApplicationComponent>
         get() = delegate.currentScreen
 
     override val activityComponent: ActivityComponent by lazy {

@@ -51,7 +51,7 @@ abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityCompon
      */
     protected abstract fun createActivityComponent(): ActivityComponent
 
-    override val currentScreen: Screen<ApplicationComponent>?
+    override val currentScreen: Screen<ApplicationComponent>
         get() = delegate.currentScreen
 
     override fun onBackPressed() {

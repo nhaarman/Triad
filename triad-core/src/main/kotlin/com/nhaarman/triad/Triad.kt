@@ -535,13 +535,14 @@ open class TriadImpl internal constructor(override var backstack: Backstack, pri
         activityResultListeners.remove(requestCode)
     }
 
-    @Suppress("UNCHECKED_CAST")
     inner class Transition(private val action: Transition.() -> Unit) {
 
         var isFinished: Boolean = false
             private set
 
         private var next: Transition? = null
+
+        private var nextBackstack: Backstack? = null
 
         internal fun enqueue(transition: Transition): Transition {
             next = next?.enqueue(transition) ?: transition
@@ -557,19 +558,19 @@ open class TriadImpl internal constructor(override var backstack: Backstack, pri
         }
 
         fun notifyForward(nextBackstack: Backstack) {
-            backstack = nextBackstack
+            this.nextBackstack = nextBackstack
             listener?.forward(nextBackstack.current<Any>()!!.screen, nextBackstack.current<Any>()!!.animator, { onComplete() })
                   ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
         }
 
         fun notifyBackward(nextBackstack: Backstack, animator: TransitionAnimator?) {
-            backstack = nextBackstack
+            this.nextBackstack = nextBackstack
             listener?.backward(nextBackstack.current<Any>()!!.screen, animator, { onComplete() })
                   ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
         }
 
         fun notifyReplace(nextBackstack: Backstack) {
-            backstack = nextBackstack
+            this.nextBackstack = nextBackstack
             listener?.replace(nextBackstack.current<Any>()!!.screen, nextBackstack.current<Any>()!!.animator, { onComplete() })
                   ?: throw IllegalStateException("Listener is null. Be sure to call setListener(Listener).")
         }
@@ -580,6 +581,10 @@ open class TriadImpl internal constructor(override var backstack: Backstack, pri
 
         internal fun onComplete() {
             if (isFinished) throw IllegalStateException("onComplete already called for this transition")
+
+            nextBackstack?.let {
+                backstack = it
+            }
 
             isFinished = true
 
