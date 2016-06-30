@@ -73,7 +73,7 @@ class TriadTest {
         val triad = TriadFactory.emptyInstance()
 
         /* When */
-        triad.startWith(mock())
+        triad.startWith(mock<Screen<*>>())
     }
 
     @Test
@@ -119,6 +119,23 @@ class TriadTest {
         /* Then */
         verifyNoMoreInteractions(mListener)
         assertBackstackHasEntries(triad.backstack, mScreen1)
+    }
+
+
+    @Test
+    fun startWithBackstack_movesForward() {
+        /* Given */
+        val triad = TriadFactory.emptyInstance()
+        triad.setListener(mListener)
+
+        /* When */
+        triad.startWith(Backstack.of(mScreen1, mScreen2))
+
+        /* Then */
+        inOrder.verify(mListener).screenPushed(mScreen1)
+        inOrder.verify(mListener).screenPushed(mScreen2)
+        inOrder.verify(mListener).forward(eq(mScreen2), any(), any())
+        assertBackstackHasEntries(triad.backstack, mScreen1, mScreen2)
     }
 
     @Test(expected = IllegalStateException::class)
