@@ -49,7 +49,7 @@ fun <P : Presenter<*, *>> findPresenter(context: Context, view: View): P {
 
     if (baseContext is ScreenProvider<*>) {
         try {
-            return baseContext.currentScreen?.getPresenter(view.id) as P
+            return baseContext.currentScreen.getPresenter(view.id) as P
         } catch(t: Throwable) {
             val e = PresenterCreationFailedError("Could not create presenter for:\n    $view\nCaused by: $t", t.cause)
             (e as java.lang.Throwable).stackTrace = t.stackTrace
