@@ -49,6 +49,12 @@ interface Triad {
     fun startWith(screen: Screen<out Any>, animator: TransitionAnimator?)
 
     /**
+     * Initializes with given backstack. If the current backstack is not empty, this call is ignored.
+     * This method must be called before any other backstack operation.
+     */
+    fun startWith(backstack: Backstack)
+
+    /**
      * Pushes given Screen onto the backstack.
 
      * One must first initialize this instance with [.startWith] before this method is called.
@@ -283,6 +289,15 @@ open class TriadImpl internal constructor(override var backstack: Backstack, pri
                 val newBackstack = Backstack.single(screen, animator)
                 notifyScreenPushed(screen)
                 notifyForward(newBackstack)
+            }
+        }
+    }
+
+    override fun startWith(backstack: Backstack) {
+        if (this.backstack.size() == 0 && transition == null) {
+            move {
+                backstack.reverseIterator().forEach { notifyScreenPushed(it) }
+                notifyForward(backstack)
             }
         }
     }
