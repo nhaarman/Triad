@@ -85,12 +85,12 @@ class TriadDelegate<ApplicationComponent : Any> internal constructor(
     }
 
     fun onResume() {
-        currentScreen?.onAttach(activity)
+        _currentScreen?.onAttach(activity)
         resumed = true
     }
 
     fun onBackPressed(): Boolean {
-        return currentScreen != null && currentScreen!!.onBackPressed() || triad.goBack()
+        return _currentScreen?.onBackPressed() == true || triad.goBack()
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
