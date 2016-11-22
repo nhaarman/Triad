@@ -70,6 +70,4 @@ abstract class AdapterLinearLayoutContainer<P : Presenter<*, ActivityComponent>,
 
         attachedToWindow = false
     }
-
-    override final fun context() = context
 }

@@ -1,20 +1,13 @@
 apply plugin: 'com.android.library'
 
-apply from: rootProject.projectDir.absolutePath + '/gradle/compile.gradle';
-apply from: rootProject.projectDir.absolutePath + '/gradle/publishing.gradle'
-apply from: rootProject.projectDir.absolutePath + '/gradle/bintray.gradle'
-apply from: rootProject.projectDir.absolutePath + '/gradle/artifactory.gradle'
-
 dependencies {
   compile project(':triad-core')
 
-  compile "com.jakewharton:butterknife:$butterKnifeVersion"
-
-  provided "com.android.support:support-annotations:$androidSupportVersion"
-  provided "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+  provided androidSupportAnnotations
+  provided jetbrainsAnnotations
 
   /* Tests */
-  testCompile "junit:junit:$junitVersion"
-  testCompile "org.hamcrest:hamcrest-all:$hamcrestVersion"
-  testCompile "org.mockito:mockito-core:$mockitoVersion"
+  testCompile junit
+  testCompile hamcrest
+  testCompile mockito
 }

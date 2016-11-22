@@ -18,8 +18,6 @@ package com.nhaarman.triad;
 
 import android.support.annotation.NonNull;
 import android.widget.ListView;
-import com.nhaarman.triad.Container;
-import com.nhaarman.triad.Presenter;
 
 /**
  * A {@link Container} implementation for use in an adapter View, such as {@link ListView} or {@code RecyclerView}.

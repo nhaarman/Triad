@@ -11,3 +11,6 @@ project.android.lintOptions.textReport true
 project.android.lintOptions.textOutput 'stdout'
 project.android.lintOptions.warningsAsErrors true
 project.android.lintOptions.abortOnError true
+
+project.android.sourceSets.main.java.srcDirs += 'src/main/kotlin'
+project.android.sourceSets.test.java.srcDirs += 'src/test/kotlin'

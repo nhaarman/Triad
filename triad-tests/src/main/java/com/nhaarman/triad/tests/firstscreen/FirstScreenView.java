@@ -18,10 +18,11 @@ package com.nhaarman.triad.tests.firstscreen;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.TextView;
-import butterknife.OnClick;
 import com.nhaarman.triad.RelativeLayoutContainer;
 import com.nhaarman.triad.tests.ActivityComponent;
+import com.nhaarman.triad.tests.R;
 
 public class FirstScreenView extends RelativeLayoutContainer<FirstScreenPresenter, ActivityComponent>
       implements FirstScreenContainer {
@@ -34,9 +35,16 @@ public class FirstScreenView extends RelativeLayoutContainer<FirstScreenPresente
         super(context, attrs, defStyle);
     }
 
-    @OnClick(com.nhaarman.triad.tests.R.id.view_screen_first_button)
-    public void onButtonClicked() {
-        getPresenter().onButtonClicked();
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+        findViewById(R.id.view_screen_first_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                getPresenter().onButtonClicked();
+            }
+        });
     }
 
     @Override

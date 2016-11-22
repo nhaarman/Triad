@@ -2,35 +2,23 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-  }
-}
-
-android {
-  sourceSets {
-    main.java.srcDirs += 'src/main/kotlin'
-    test.java.srcDirs += 'src/test/kotlin'
-  }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath kotlinGradlePlugin
+    }
 }
 
 dependencies {
-  compile project(':triad-core')
+    compile project(':triad-core')
 
-  provided "com.android.support:support-annotations:$androidSupportVersion"
+    provided androidSupportAnnotations
 
-  /* Tests */
-  testCompile "junit:junit:$junitVersion"
-  testCompile "com.nhaarman:expect.kt:$expectVersion"
-  testCompile "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
+    /* Tests */
+    testCompile junit
+    testCompile expectKt
+    testCompile mockitoKotlin
 
-  testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    testCompile kotlinReflect
 }
-
-apply from: rootProject.projectDir.absolutePath + '/gradle/compile.gradle';
-apply from: rootProject.projectDir.absolutePath + '/gradle/publishing.gradle'
-apply from: rootProject.projectDir.absolutePath + '/gradle/bintray.gradle'
-apply from: rootProject.projectDir.absolutePath + '/gradle/artifactory.gradle'

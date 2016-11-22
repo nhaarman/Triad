@@ -1,15 +1,14 @@
 buildscript {
-  ext.kotlin_version = '1.0.5-2'
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    classpath 'com.android.tools.build:gradle:2.1.0'
-    classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
-    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.2.4'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
-  }
+    apply from: './dependencies.gradle'
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath androidBuildToolsPlugin
+        classpath gradleVersionsPlugin
+        classpath gradleBintrayPlugin
+    }
 }
 
 apply plugin: 'com.github.ben-manes.versions'
@@ -18,17 +17,16 @@ project.apply from: './gradle/tagging.gradle'
 project.apply from: './dependencies.gradle'
 
 allprojects {
-  repositories {
-    jcenter()
-    mavenCentral()
-  }
-
-  afterEvaluate { project ->
-    if (project.hasProperty('android')) {
-      project.apply from: rootProject.projectDir.absolutePath + '/android.gradle';
+    repositories {
+        mavenCentral()
+        jcenter()
     }
-  }
+
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            project.apply from: rootProject.projectDir.absolutePath + '/android.gradle';
+        }
+    }
 }
 
 println ext.versionName
-

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Niek Haarman
+ * Copyright 2015 Niek Haarman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,20 @@
 
 package com.nhaarman.triad;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class TestRelativeLayoutContainer extends RelativeLayoutContainer<Presenter<? extends Container, ActivityComponent>, ActivityComponent> {
+public interface TransitionAnimator {
 
-    public TestRelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
-        super(context, attrs, defStyle);
-    }
+    boolean forward(@Nullable View oldView,
+                    @NonNull View newView,
+                    @NonNull ViewGroup parent,
+                    @NonNull Triad.Callback callback);
 
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-    }
+    boolean backward(@Nullable View oldView,
+                     @NonNull View newView,
+                     @NonNull ViewGroup parent,
+                     @NonNull Triad.Callback callback);
 }

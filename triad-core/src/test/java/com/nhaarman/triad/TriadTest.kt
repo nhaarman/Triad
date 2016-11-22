@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Intent
 import com.nhaarman.expect.expect
 import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.triad.Triad.Callback
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -50,21 +51,21 @@ class TriadTest {
         initMocks(this)
         inOrder = inOrder(mListener)
 
-        doAnswer({ invocationOnMock ->
-            val callback = invocationOnMock.arguments[2] as Function0<Unit>
-            callback()
-        }).`when`(mListener).forward(any(), any(), any())
+        doAnswer { invocationOnMock ->
+            val callback = invocationOnMock.arguments[2] as Callback
+            callback.onComplete()
+        }.`when`(mListener).forward(any(), anyOrNull(), any())
 
-        doAnswer({ invocationOnMock ->
-            val callback = invocationOnMock.arguments[2] as Function0<Unit>
-            callback()
-        }).`when`(mListener).backward(any(), any(), any())
+        doAnswer { invocationOnMock ->
+            val callback = invocationOnMock.arguments[2] as Callback
+            callback.onComplete()
+        }.`when`(mListener).backward(any(), anyOrNull(), any())
 
 
-        doAnswer({ invocationOnMock ->
-            val callback = invocationOnMock.arguments[2] as Function0<Unit>
-            callback()
-        }).`when`(mListener).replace(any(), any(), any())
+        doAnswer { invocationOnMock ->
+            val callback = invocationOnMock.arguments[2] as Callback
+            callback.onComplete()
+        }.`when`(mListener).replace(any(), anyOrNull(), any())
     }
 
     @Test(expected = IllegalStateException::class)
@@ -87,7 +88,7 @@ class TriadTest {
 
         /* Then */
         inOrder.verify(mListener).screenPushed(mScreen1)
-        inOrder.verify(mListener).forward(eq(mScreen1), any(), any())
+        inOrder.verify(mListener).forward(eq(mScreen1), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen1)
     }
 
@@ -98,7 +99,7 @@ class TriadTest {
         triad.setListener(mListener)
         triad.startWith(mScreen1)
         verify(mListener).screenPushed(mScreen1)
-        verify(mListener).forward(eq(mScreen1), any(), any())
+        verify(mListener).forward(eq(mScreen1), anyOrNull(), any())
 
         /* When */
         triad.startWith(mScreen1)
@@ -121,7 +122,6 @@ class TriadTest {
         assertBackstackHasEntries(triad.backstack, mScreen1)
     }
 
-
     @Test
     fun startWithBackstack_movesForward() {
         /* Given */
@@ -134,7 +134,7 @@ class TriadTest {
         /* Then */
         inOrder.verify(mListener).screenPushed(mScreen1)
         inOrder.verify(mListener).screenPushed(mScreen2)
-        inOrder.verify(mListener).forward(eq(mScreen2), any(), any())
+        inOrder.verify(mListener).forward(eq(mScreen2), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen1, mScreen2)
     }
 
@@ -155,14 +155,14 @@ class TriadTest {
         triad.setListener(mListener)
         triad.startWith(mScreen1)
         inOrder.verify(mListener).screenPushed(mScreen1)
-        inOrder.verify(mListener).forward(eq(mScreen1), any(), any())
+        inOrder.verify(mListener).forward(eq(mScreen1), anyOrNull(), any())
 
         /* When */
         triad.goTo(mScreen2)
 
         /* Then */
         inOrder.verify(mListener).screenPushed(mScreen2)
-        inOrder.verify(mListener).forward(eq(mScreen2), any(), any())
+        inOrder.verify(mListener).forward(eq(mScreen2), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen1, mScreen2)
     }
 
@@ -183,14 +183,14 @@ class TriadTest {
         triad.setListener(mListener)
         triad.startWith(mScreen1)
         inOrder.verify(mListener).screenPushed(mScreen1)
-        inOrder.verify(mListener).forward(eq(mScreen1), any(), any())
+        inOrder.verify(mListener).forward(eq(mScreen1), anyOrNull(), any())
 
         /* When */
         triad.popTo(mScreen2)
 
         /* Then */
         inOrder.verify(mListener).screenPushed(mScreen2)
-        inOrder.verify(mListener).forward(eq(mScreen2), any(), any())
+        inOrder.verify(mListener).forward(eq(mScreen2), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen1, mScreen2)
     }
 
@@ -204,7 +204,7 @@ class TriadTest {
 
         /* Then */
         inOrder.verify(mListener).screenPopped(mScreen2)
-        inOrder.verify(mListener).backward(eq(mScreen1), any(), any())
+        inOrder.verify(mListener).backward(eq(mScreen1), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen1)
     }
 
@@ -219,7 +219,7 @@ class TriadTest {
         /* Then */
         inOrder.verify(mListener).screenPopped(mScreen3)
         inOrder.verify(mListener).screenPopped(mScreen2)
-        inOrder.verify(mListener).backward(eq(mScreen1), any(), any())
+        inOrder.verify(mListener).backward(eq(mScreen1), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen1)
     }
 
@@ -257,7 +257,7 @@ class TriadTest {
         /* Then */
         verify(mListener).screenPopped(mScreen1)
         verify(mListener).screenPushed(mScreen2)
-        verify(mListener).replace(eq(mScreen2), any(), any())
+        verify(mListener).replace(eq(mScreen2), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen2)
     }
 
@@ -295,7 +295,7 @@ class TriadTest {
         /* Then */
         assertThat(result, `is`(true))
         inOrder.verify(mListener).screenPopped(mScreen2)
-        inOrder.verify(mListener).backward(eq(mScreen1), any(), any())
+        inOrder.verify(mListener).backward(eq(mScreen1), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen1)
     }
 
@@ -324,7 +324,7 @@ class TriadTest {
         inOrder.verify(mListener).screenPushed(mScreen2)
         inOrder.verify(mListener).screenPushed(mScreen3)
 
-        inOrder.verify(mListener).forward(eq(mScreen3), any(), any())
+        inOrder.verify(mListener).forward(eq(mScreen3), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen2, mScreen3)
     }
 
@@ -354,7 +354,7 @@ class TriadTest {
         inOrder.verify(mListener).screenPushed(mScreen2)
         inOrder.verify(mListener).screenPushed(mScreen3)
 
-        inOrder.verify(mListener).backward(eq(mScreen3), any(), any())
+        inOrder.verify(mListener).backward(eq(mScreen3), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen2, mScreen3)
     }
 
@@ -383,7 +383,7 @@ class TriadTest {
         inOrder.verify(mListener).screenPushed(mScreen2)
         inOrder.verify(mListener).screenPushed(mScreen3)
 
-        verify(mListener).replace(eq(mScreen3), any(), any())
+        verify(mListener).replace(eq(mScreen3), anyOrNull(), any())
         assertBackstackHasEntries(triad.backstack, mScreen2, mScreen3)
     }
 

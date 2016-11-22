@@ -24,7 +24,7 @@ import android.widget.RelativeLayout
  * An abstract RelativeLayout [Container] instance that handles [Presenter] management
  * for use in an adapter View.
 
- * @param  The specialized [Presenter] type.
+ * @param P The specialized [Presenter] type.
  */
 abstract class AdapterRelativeLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
 @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : RelativeLayout(context, attrs, defStyle),
@@ -70,6 +70,4 @@ abstract class AdapterRelativeLayoutContainer<P : Presenter<*, ActivityComponent
 
         attachedToWindow = false
     }
-
-    override final fun context() = context
 }
