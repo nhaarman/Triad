@@ -19,8 +19,8 @@ package com.nhaarman.triad;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 import static com.nhaarman.triad.TriadUtil.findActivityComponent;
@@ -31,9 +31,9 @@ import static com.nhaarman.triad.TriadUtil.findActivityComponent;
  *
  * @param <P> The specialized {@link Presenter} type.
  */
-public abstract class AdapterLinearLayoutContainer
+public abstract class AdapterLinearLayoutCompatContainer
       <P extends Presenter<?, ActivityComponent>, ActivityComponent>
-      extends LinearLayout implements AdapterContainer<P> {
+      extends LinearLayoutCompat implements AdapterContainer<P> {
 
     @NonNull
     private final ActivityComponent activityComponent;
@@ -45,11 +45,11 @@ public abstract class AdapterLinearLayoutContainer
 
     private boolean isAttachedToWindow;
 
-    public AdapterLinearLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
+    public AdapterLinearLayoutCompatContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public AdapterLinearLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
+    public AdapterLinearLayoutCompatContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
 
         activityComponent = findActivityComponent(context, this);
