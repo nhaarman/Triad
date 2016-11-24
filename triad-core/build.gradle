@@ -12,8 +12,6 @@ buildscript {
 }
 
 dependencies {
-    compile kotlinStdLib
-
     provided androidSupportAnnotations
     provided jetbrainsAnnotations
 

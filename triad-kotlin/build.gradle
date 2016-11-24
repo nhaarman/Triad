@@ -16,6 +16,7 @@ buildscript {
 
 dependencies {
     compile project(':triad-core')
+    compile kotlinStdLib
 
     provided androidSupportAnnotations
 
