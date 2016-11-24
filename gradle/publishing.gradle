@@ -1,0 +1,97 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    destinationDir = new File("$buildDir/javadoc")
+    failOnError = false
+
+    apply from: '../android.gradle'
+    classpath += project.configurations.provided
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from "$buildDir/javadoc"
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+project.version = versionName
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                groupId project.group
+
+                name "Triad"
+                description "Custom view based screen navigation in Android"
+                url "https://github.com/nhaarman/Triad"
+
+                scm {
+                    url 'scm:git@github.com:nhaarman/Triad.git'
+                    connection 'scm:git@github.com:nhaarman/Triad.git'
+                    developerConnection 'scm:git@github.com:nhaarman/Triad.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'nhaarman'
+                        name 'Niek Haarman'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+bintray {
+    user = hasProperty('bintray_username') ? bintray_username : System.getenv('BINTRAY_USER')
+    key = hasProperty('bintray_key') ? bintray_key : System.getenv('BINTRAY_KEY')
+
+    configurations = ['archives']
+
+    publish = true
+
+    pkg {
+        repo = 'maven'
+        name = 'Triad'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/nhaarman/Triad.git'
+
+        version {
+            name = versionName
+
+            gpg {
+                sign = true
+            }
+
+            mavenCentralSync {
+                sync = true
+                user = hasProperty('sonatype_username') ? sonatype_username : System.getenv('SONATYPE_USERNAME')
+                password = hasProperty('sonatype_password') ? sonatype_password : System.getenv('SONATYPE_PASSWORD')
+                close = '1'
+            }
+        }
+    }
+}
+

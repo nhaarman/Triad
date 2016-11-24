@@ -32,7 +32,7 @@ import static com.nhaarman.triad.Preconditions.checkState;
 /**
  * This class represents a delegate which can be used to use Triad in any
  * {@link Activity}.
- * <p/>
+ * <p>
  * When using the {@code TriadDelegate}, you must proxy the following Activity
  * lifecycle methods to it:
  * <ul>
@@ -104,10 +104,7 @@ public class TriadDelegate<ApplicationComponent> {
         triad.setListener(new MyTriadListener());
 
         if (triad.getBackstack().size() > 0 || triad.isTransitioning()) {
-            System.out.println("Showing current");
             triad.showCurrent();
-        } else {
-            System.out.println("No backstack");
         }
     }
 

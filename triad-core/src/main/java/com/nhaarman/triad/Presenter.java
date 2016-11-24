@@ -10,10 +10,10 @@ import android.support.annotation.NonNull;
  * {@code Model}, and formats it so the View ({@link Container}) can present it.
  *
  * The lifecycle of a Presenter consists of two methods:
- * <li>
- * <ul>{@link #acquire(Container, Object)}</ul>
- * <ul>{@link #releaseContainer(Container)}</ul>
- * </li>
+ * <p>
+ * {@link #acquire(Container, Object)}
+ * {@link #releaseContainer(Container)}
+ * <p>
  *
  * Control over the {@link Container} instance starts at {@link #acquire(Container, Object)},
  * and ends at {@link #releaseContainer(Container)}.

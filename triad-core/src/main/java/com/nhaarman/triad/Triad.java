@@ -217,7 +217,7 @@ public interface Triad {
 
         /**
          * Must be called exactly once to indicate that the corresponding transition has completed.
-         * <p/>
+         * <p>
          * If not called, the backstack will not be updated and further calls to Triad will not execute.
          * Calling more than once will result in an exception.
          */

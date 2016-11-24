@@ -1,12 +1,16 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka'
+apply from: "${rootProject.projectDir.absolutePath}/gradle/publishing.gradle"
 
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath kotlinGradlePlugin
+        classpath dokkaGradlePlugin
     }
 }
 
@@ -21,3 +25,10 @@ dependencies {
     testCompile hamcrest
     testCompile mockito
 }
+
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+}
+javadoc.dependsOn dokka
