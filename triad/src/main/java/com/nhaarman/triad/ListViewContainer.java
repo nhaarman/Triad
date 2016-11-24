@@ -21,14 +21,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ListView;
-import butterknife.ButterKnife;
 
 import static com.nhaarman.triad.TriadUtil.findActivityComponent;
 import static com.nhaarman.triad.TriadUtil.findPresenter;
 
 /**
- * An abstract ListView {@link Container} instance that handles {@link Presenter} management,
- * and uses Butter Knife to bind UI components in implementing classes.
+ * An abstract ListView {@link Container} instance that handles {@link Presenter} management.
  *
  * @param <P> The specialized {@link Presenter} type.
  */
@@ -37,11 +35,12 @@ public abstract class ListViewContainer
       extends ListView implements Container {
 
     @NonNull
-    private final ActivityComponent mActivityComponent;
+    private final ActivityComponent activityComponent;
+
     /* Use a raw type in favor of an easier API. */
     @SuppressWarnings("rawtypes")
     @Nullable
-    private Presenter mPresenter;
+    private Presenter presenter;
 
     public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
         this(context, attrs, 0);
@@ -50,7 +49,7 @@ public abstract class ListViewContainer
     public ListViewContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
 
-        mActivityComponent = findActivityComponent(context, this);
+        activityComponent = findActivityComponent(context, this);
     }
 
     /**
@@ -58,18 +57,11 @@ public abstract class ListViewContainer
      */
     @NonNull
     public P getPresenter() {
-        if (mPresenter == null) {
-            mPresenter = findPresenter(getContext(), this);
+        if (presenter == null) {
+            presenter = findPresenter(getContext(), this);
         }
 
-        return (P) mPresenter;
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-        ButterKnife.bind(this);
+        return (P) presenter;
     }
 
     @Override
@@ -81,7 +73,7 @@ public abstract class ListViewContainer
         }
 
         //noinspection rawtypes
-        ((Presenter) getPresenter()).acquire(this, mActivityComponent);
+        ((Presenter) getPresenter()).acquire(this, activityComponent);
     }
 
     @Override
@@ -90,11 +82,5 @@ public abstract class ListViewContainer
 
         //noinspection rawtypes
         ((Presenter) getPresenter()).releaseContainer(this);
-    }
-
-    @NonNull
-    @Override
-    public Context context() {
-        return getContext();
     }
 }

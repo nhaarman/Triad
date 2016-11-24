@@ -62,7 +62,7 @@ class TriadDelegateTest {
         /* Given */
         whenever(activity.isFinishing).thenReturn(true)
 
-        val delegate = TriadDelegate<Any>(activity, mock())
+        val delegate = TriadDelegate.createFor<Any>(activity, mock())
         whenever((mApplication as TriadProvider).triad).thenReturn(TriadFactory.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
         delegate.onCreate()
 
@@ -79,7 +79,7 @@ class TriadDelegateTest {
         /* Given */
         whenever(activity.isFinishing).thenReturn(false)
 
-        val delegate = TriadDelegate<Any>(activity, mock())
+        val delegate = TriadDelegate.createFor<Any>(activity, mock())
         whenever((mApplication as TriadProvider).triad).thenReturn(TriadFactory.newInstance(Backstack.of(mScreen1, mScreen2), mListener))
         delegate.onCreate()
 

@@ -22,7 +22,7 @@ import android.widget.RelativeLayout
 
 /**
  * An abstract [Container] instance that handles [Presenter] management
- * @param  The specialized [Presenter] type.
+ * @param P The specialized [Presenter] type.
  */
 abstract class RelativeLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
 @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) :
@@ -52,6 +52,4 @@ abstract class RelativeLayoutContainer<P : Presenter<*, ActivityComponent>, Acti
 
         (presenter as Presenter<Container, ActivityComponent>).releaseContainer(this)
     }
-
-    override final fun context() = context
 }

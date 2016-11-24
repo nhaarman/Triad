@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Niek Haarman
+ * Copyright 2015 Niek Haarman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,10 @@
 
 package com.nhaarman.triad;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import android.support.annotation.NonNull;
 
-public class TestRelativeLayoutContainer extends RelativeLayoutContainer<Presenter<? extends Container, ActivityComponent>, ActivityComponent> {
+public interface ActivityComponentProvider<ActivityComponent> {
 
-    public TestRelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-    }
+    @NonNull
+    ActivityComponent getActivityComponent();
 }

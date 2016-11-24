@@ -1,28 +1,32 @@
 language: android
-jdk: oraclejdk7
+jdk:
+  - oraclejdk8
 
 android:
   components:
-  - platform-tools
-  - tools
-  - android-23
-  - build-tools-23.0.2
-  - extra-android-support
-  - extra-android-m2repository
-
-env:
-  global:
-  - TERM=dumb
-  - GRADLE_OPTS="-Xmx2048m -XX:MaxPermSize=2048m"
+    - tools
+    - tools
+    - platform-tools
+    - build-tools-25.0.1
+    - android-25
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+  licenses:
+    - 'android-sdk-license-.+'
 
 before_install:
- - git fetch --tags
+  - echo 'android.builder.sdkDownload=false' > gradle.properties
+
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
 
 script:
- - ./gradlew build assemble test --stacktrace -PdisablePreDex
-
-after_success:
- - ./gradlew artifactoryPublish
+  - ./gradlew test connectedCheck -PisRelease=false
 
 notifications:
-  email: change
+  email: false

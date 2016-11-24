@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 public class ViewWaiter {
 
     public static void waitUntil(@NonNull final Condition condition) throws InterruptedException {
-        waitUntil(condition, 1000);
+        waitUntil(condition, 5000);
     }
 
     public static void waitUntil(@NonNull final Condition condition, final long timeoutMs) throws InterruptedException {

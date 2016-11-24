@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Niek Haarman
+ * Copyright 2015 Niek Haarman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,22 @@
 package com.nhaarman.triad;
 
 import android.content.Context;
-import android.util.AttributeSet;
+import android.support.annotation.NonNull;
 
-public class TestRelativeLayoutContainer extends RelativeLayoutContainer<Presenter<? extends Container, ActivityComponent>, ActivityComponent> {
+/**
+ * The View class in the MVP context.
+ *
+ * In the Model-View-Presenter pattern, the View displays data formatted by the
+ * {@link Presenter}, and notifies the {@code Presenter} of user input.
+ */
+public interface Container {
 
-    public TestRelativeLayoutContainer(final Context context, final AttributeSet attrs, final int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-    }
+    /**
+     * Returns the context the container is running in, through which it can
+     * access the current theme, resources, etc.
+     *
+     * @return The container's Context.
+     */
+    @NonNull
+    Context getContext();
 }

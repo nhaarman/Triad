@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Niek Haarman
+ * Copyright 2015 Niek Haarman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 
 package com.nhaarman.triad;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 /**
- * An {@link AppCompatActivity} which is the root of an application that uses Triad.
+ * An {@link Activity} which is the root of an application that uses Triad.
  *
  * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code BasePresenter} creation.
  * @param <ActivityComponent>    The {@code ActivityComponent} to supply to {@code Presenters}.
  */
-public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityComponent> extends AppCompatActivity
+public abstract class TriadActivity<ApplicationComponent, ActivityComponent> extends Activity
       implements ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
 
     @NonNull
@@ -37,7 +37,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
     @Nullable
     private ActivityComponent activityComponent;
 
-    public TriadAppCompatActivity() {
+    public TriadActivity() {
         delegate = TriadDelegate.createFor(this);
     }
 
@@ -64,9 +64,7 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
     }
 
     /**
-     * Creates the {@code ActivityComponent} which is used to retrieve dependencies from that are needed to create {@link BasePresenter}s.
-     *
-     * @return The created {@code ActivityComponent}.
+     * Creates the {@code ActivityComponent}.
      */
     @NonNull
     protected abstract ActivityComponent createActivityComponent();
@@ -91,8 +89,8 @@ public abstract class TriadAppCompatActivity<ApplicationComponent, ActivityCompo
 
     @Override
     protected void onPause() {
-        super.onPause();
         delegate.onPause();
+        super.onPause();
     }
 
     @Override

@@ -1,8 +1,8 @@
-project.android.compileSdkVersion 23
-project.android.buildToolsVersion "23.0.2"
+project.android.compileSdkVersion 25
+project.android.buildToolsVersion "25.0.1"
 
 project.android.defaultConfig.minSdkVersion 16
-project.android.defaultConfig.targetSdkVersion 23
+project.android.defaultConfig.targetSdkVersion 25
 
 project.android.testOptions.unitTests.returnDefaultValues = true
 
@@ -11,3 +11,6 @@ project.android.lintOptions.textReport true
 project.android.lintOptions.textOutput 'stdout'
 project.android.lintOptions.warningsAsErrors true
 project.android.lintOptions.abortOnError true
+
+project.android.sourceSets.main.java.srcDirs += 'src/main/kotlin'
+project.android.sourceSets.test.java.srcDirs += 'src/test/kotlin'

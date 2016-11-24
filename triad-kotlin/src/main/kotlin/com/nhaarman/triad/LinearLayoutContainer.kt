@@ -20,7 +20,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 
-abstract class LinearLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent> @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : LinearLayout(context, attrs, defStyle), Container {
+abstract class LinearLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
+@JvmOverloads constructor(
+      context: Context,
+      attrs: AttributeSet?,
+      defStyle: Int = 0
+) : LinearLayout(context, attrs, defStyle), Container {
 
     val presenter: P by lazy { findPresenter<P>(context, this) }
 
@@ -43,6 +48,4 @@ abstract class LinearLayoutContainer<P : Presenter<*, ActivityComponent>, Activi
 
         (presenter as Presenter<Container, ActivityComponent>).releaseContainer(this)
     }
-
-    override final fun context() = context
 }

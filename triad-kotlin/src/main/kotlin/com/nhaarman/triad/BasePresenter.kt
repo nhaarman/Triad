@@ -21,23 +21,20 @@ import android.support.annotation.MainThread
 
 /**
  * A default base implementation of the [Presenter] interface.
-
  * This class handles acquiring and releasing of the [Container] instance,
  * and forwards these calls to one of the following lifecycle methods:
-
- * [.onControlGained]
- * [.onControlLost]
  *
-
- * Control over the `Container` instance starts at [.onControlGained],
- * and ends at [.onControlLost].
-
- * An [Optional] reference to the `Container` instance can be obtained using [.container],
- * which returns an empty reference when the `Presenter` does not have control over the instance.
-
- * @param The activity component.
+ * [onControlGained]
+ * [onControlLost]
  *
- * @param The specialized type of the [Container].
+ * Control over the `Container` instance starts at [onControlGained],
+ * and ends at [onControlLost].
+ *
+ * A nullable reference to the `Container` instance can be obtained using [.container],
+ * which returns `null` when the `Presenter` does not have control over the instance.
+ *
+ * @param C The specialized type of the [Container].
+ * @param ActivityComponent The activity component.
  */
 open class BasePresenter<C : Container, ActivityComponent> : Presenter<C, ActivityComponent> {
 
@@ -47,7 +44,7 @@ open class BasePresenter<C : Container, ActivityComponent> : Presenter<C, Activi
     var container: C? = null
         set(value) {
             field = value
-            resources = value?.context()?.resources
+            resources = value?.context?.resources
         }
 
     var resources: Resources? = null
@@ -55,9 +52,9 @@ open class BasePresenter<C : Container, ActivityComponent> : Presenter<C, Activi
     var activityComponent: ActivityComponent? = null
 
     /**
-     * Sets the [C] this `BasePresenter` controls, and calls [.onControlGained] )}
+     * Sets the [C] this `BasePresenter` controls, and calls [onControlGained]
      * to notify implementers of this class that the [C] is available.
-
+     *
      * @param container The [C] to gain control over.
      */
     @MainThread
@@ -77,7 +74,7 @@ open class BasePresenter<C : Container, ActivityComponent> : Presenter<C, Activi
     }
 
     /**
-     * Releases the [C] this `BasePresenter` controls, and calls [.onControlLost]
+     * Releases the [C] this `BasePresenter` controls, and calls [onControlLost]
      * to notify implementers of this class that the [C] is no longer available.
      */
     @MainThread
@@ -94,20 +91,20 @@ open class BasePresenter<C : Container, ActivityComponent> : Presenter<C, Activi
     /**
      * Called when the [Container] for this `BasePresenter` is attached to the window and ready to display the state.
 
-     * From this point on, [.container] will return the [Container] instance, until [.onControlLost] is called.
+     * From this point on, `container` will return the [Container] instance, until [onControlLost] is called.
 
      * @param container The [Container] to gain control over.
      */
     @MainThread
-    protected open fun onControlGained(container: C, activityComponent: ActivityComponent) {
+    open fun onControlGained(container: C, activityComponent: ActivityComponent) {
     }
 
     /**
      * Called when this `BasePresenter` no longer controls the [Container] instance.
 
-     * From this point on, [.container] will return an empty [Optional].
+     * From this point on, [container] will return `null`.
      */
     @MainThread
-    protected open fun onControlLost() {
+    open fun onControlLost() {
     }
 }

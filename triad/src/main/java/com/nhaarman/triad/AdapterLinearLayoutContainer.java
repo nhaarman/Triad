@@ -21,7 +21,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
-import butterknife.ButterKnife;
 
 import static com.nhaarman.triad.Preconditions.checkState;
 import static com.nhaarman.triad.TriadUtil.findActivityComponent;
@@ -37,14 +36,14 @@ public abstract class AdapterLinearLayoutContainer
       extends LinearLayout implements AdapterContainer<P> {
 
     @NonNull
-    private final ActivityComponent mActivityComponent;
+    private final ActivityComponent activityComponent;
 
     /* Use a raw type in favor of an easier API. */
     @SuppressWarnings("rawtypes")
     @Nullable
-    private Presenter mPresenter;
+    private Presenter presenter;
 
-    private boolean mIsAttachedToWindow;
+    private boolean isAttachedToWindow;
 
     public AdapterLinearLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs) {
         this(context, attrs, 0);
@@ -53,7 +52,7 @@ public abstract class AdapterLinearLayoutContainer
     public AdapterLinearLayoutContainer(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
 
-        mActivityComponent = findActivityComponent(context, this);
+        activityComponent = findActivityComponent(context, this);
     }
 
     /**
@@ -61,50 +60,43 @@ public abstract class AdapterLinearLayoutContainer
      */
     @NonNull
     public P getPresenter() {
-        checkState(mPresenter != null, "Presenter is null");
+        checkState(presenter != null, "Presenter is null");
 
-        return (P) mPresenter;
+        return (P) presenter;
     }
 
     @Override
     public void setPresenter(@NonNull final P presenter) {
-        if (mPresenter != null) {
-            mPresenter.releaseContainer(this);
+        if (this.presenter != null) {
+            this.presenter.releaseContainer(this);
         }
 
-        mPresenter = presenter;
+        this.presenter = presenter;
 
-        if (mIsAttachedToWindow) {
-            mPresenter.acquire(this, mActivityComponent);
+        if (isAttachedToWindow) {
+            this.presenter.acquire(this, activityComponent);
         }
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-        ButterKnife.bind(this);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if (mPresenter != null) {
-            mPresenter.acquire(this, mActivityComponent);
+        if (presenter != null) {
+            presenter.acquire(this, activityComponent);
         }
 
-        mIsAttachedToWindow = true;
+        isAttachedToWindow = true;
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        if (mPresenter != null) {
-            mPresenter.releaseContainer(this);
+        if (presenter != null) {
+            presenter.releaseContainer(this);
         }
 
-        mIsAttachedToWindow = false;
+        isAttachedToWindow = false;
     }
 }

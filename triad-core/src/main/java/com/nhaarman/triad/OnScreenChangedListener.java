@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Niek Haarman
+ * Copyright 2015 Niek Haarman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package com.nhaarman.triad
+package com.nhaarman.triad;
+
+import android.support.annotation.NonNull;
 
 /**
- * A [Container] implementation for use in an adapter View, such as [ListView] or `RecyclerView`.
-
- * @param P The specialized [Presenter] type for this `Container`.
+ * An interface to provide a callback when a new screen is presented.
  */
-interface AdapterContainer<P : Presenter<*, *>> : Container {
+public interface OnScreenChangedListener<ApplicationComponent> {
 
-    var presenter: P?
+    /**
+     * Callback method which is called when a new screen is presented.
+     *
+     * @param screen The newly added screen.
+     */
+    void onScreenChanged(@NonNull Screen<ApplicationComponent> screen);
 }

@@ -23,7 +23,7 @@ import android.widget.ListView
 /**
  * An abstract ListView [Container] instance that handles [Presenter] management.
 
- * @param  The specialized [Presenter] type.
+ * @param P The specialized [Presenter] type.
  */
 abstract class ListViewContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
 @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : ListView(context, attrs, defStyle), Container {
@@ -46,6 +46,4 @@ abstract class ListViewContainer<P : Presenter<*, ActivityComponent>, ActivityCo
 
         (presenter as Presenter<Container, ActivityComponent>).releaseContainer(this)
     }
-
-    override final fun context() = context
 }

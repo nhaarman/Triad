@@ -22,17 +22,14 @@ import android.support.v7.app.AppCompatActivity
 
 /**
  * An [AppCompatActivity] which is the root of an application that uses Triad.
-
- * @param  The `ApplicationComponent` to use for `BasePresenter` creation.
- * *
- * @param     The `ActivityComponent` to supply to `Presenters`.
+ *
+ * @param ApplicationComponent The `ApplicationComponent` to use for `Presenter` creation.
+ * @param ActivityComponent The `ActivityComponent` to supply to `Presenters`.
  */
 abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityComponent> :
       AppCompatActivity(), ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
 
     private val delegate: TriadDelegate<ApplicationComponent> by lazy { TriadDelegate.createFor<ApplicationComponent>(this) }
-
-    override val activityComponent: ActivityComponent by lazy { createActivityComponent() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,14 +42,19 @@ abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityCompon
     }
 
     /**
-     * Creates the `ActivityComponent` which is used to retrieve dependencies from that are needed to create [BasePresenter]s.
-
+     * Creates the `ActivityComponent` which is used to retrieve dependencies from that are needed to create [Presenter]s.
      * @return The created `ActivityComponent`.
      */
     protected abstract fun createActivityComponent(): ActivityComponent
 
-    override val currentScreen: Screen<ApplicationComponent>
-        get() = delegate.currentScreen
+    private val _activityComponent: ActivityComponent by lazy { createActivityComponent() }
+    override fun getActivityComponent(): ActivityComponent {
+        return _activityComponent
+    }
+
+    override fun getCurrentScreen(): Screen<ApplicationComponent> {
+        return delegate.currentScreen
+    }
 
     override fun onBackPressed() {
         if (!delegate.onBackPressed()) {
@@ -80,6 +82,6 @@ abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityCompon
     protected val triad: Triad by lazy { delegate.triad }
 
     protected fun setOnScreenChangedListener(onScreenChangedListener: OnScreenChangedListener<ApplicationComponent>?) {
-        delegate.onScreenChangedListener = onScreenChangedListener
+        delegate.setOnScreenChangedListener(onScreenChangedListener)
     }
 }

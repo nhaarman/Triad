@@ -27,53 +27,39 @@ import android.view.View;
  */
 public class TriadUtil {
 
-    private TriadUtil() {
-    }
-
     @NonNull
     public static <ActivityComponent> ActivityComponent findActivityComponent(@NonNull final Context context, @NonNull final View view) {
-        if(view.isInEditMode()) return null;
+        //noinspection ConstantConditions
+        if (view.isInEditMode()) return null;
 
         Context baseContext = context;
         while (!(baseContext instanceof Activity) && baseContext instanceof ContextWrapper) {
             baseContext = ((ContextWrapper) baseContext).getBaseContext();
         }
 
-        if (baseContext instanceof ActivityComponentProvider) {
-            //noinspection unchecked
-            return ((ActivityComponentProvider<ActivityComponent>) baseContext).getActivityComponent();
-        } else {
-            /* We return null, since the layout editor can not return the Activity Component. */
-            //noinspection ConstantConditions
-            return null;
-        }
+        //noinspection unchecked
+        return ((ActivityComponentProvider<ActivityComponent>) baseContext).getActivityComponent();
     }
 
     @NonNull
     public static <P extends Presenter<?, ?>> P findPresenter(@NonNull final Context context, final View view) {
-        if(view.isInEditMode()) return null;
+        //noinspection ConstantConditions
+        if (view.isInEditMode()) return null;
 
         Context baseContext = context;
         while (!(baseContext instanceof Activity) && baseContext instanceof ContextWrapper) {
             baseContext = ((ContextWrapper) baseContext).getBaseContext();
         }
 
-        if (baseContext instanceof ScreenProvider) {
-            try {
+        try {
             return (P) ((ScreenProvider<?>) baseContext).getCurrentScreen().getPresenter(view.getId());
-            } catch(Throwable t) {
-                PresenterCreationFailedError error =
-                      new PresenterCreationFailedError(String.format("Could not create presenter for:\n    %s\nCaused by: %s", view, t), t);
-                error.setStackTrace(t.getStackTrace());
-                throw error;
-            }
-        } else {
-            /* We return null, since the layout editor can not return the ScreenProvider. */
-            //noinspection ConstantConditions
-            return null;
+        } catch (Throwable t) {
+            PresenterCreationFailedError error =
+                  new PresenterCreationFailedError(String.format("Could not create presenter for:\n    %s\nCaused by: %s", view, t), t);
+            error.setStackTrace(t.getStackTrace());
+            throw error;
         }
     }
-
 
     private static class PresenterCreationFailedError extends Error {
 

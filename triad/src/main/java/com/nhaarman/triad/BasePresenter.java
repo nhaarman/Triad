@@ -48,13 +48,13 @@ public class BasePresenter<C extends Container, ActivityComponent> implements Pr
      * The {@link Container} this {@link BasePresenter} controls.
      */
     @NonNull
-    private Optional<C> mCurrentContainer = Optional.empty();
+    private Optional<C> currentContainer = Optional.empty();
 
     @NonNull
-    private Optional<Resources> mResources = Optional.empty();
+    private Optional<Resources> resources = Optional.empty();
 
     @Nullable
-    private ActivityComponent mActivityComponent;
+    private ActivityComponent activityComponent;
 
     /**
      * Sets the {@link C} this {@code BasePresenter} controls, and calls {@link #onControlGained(Container, Object)} )}
@@ -65,17 +65,17 @@ public class BasePresenter<C extends Container, ActivityComponent> implements Pr
     @Override
     @MainThread
     public final void acquire(@NonNull final C container, @NonNull final ActivityComponent activityComponent) {
-        if (mCurrentContainer.isPresent() && container.equals(mCurrentContainer.get())) {
+        if (currentContainer.isPresent() && container.equals(currentContainer.get())) {
             return;
         }
 
-        if (mCurrentContainer.isPresent()) {
+        if (currentContainer.isPresent()) {
             onControlLost();
         }
 
-        mCurrentContainer = Optional.of(container);
-        mResources = resources(container);
-        mActivityComponent = activityComponent;
+        currentContainer = Optional.of(container);
+        resources = resources(container);
+        this.activityComponent = activityComponent;
         onControlGained(container, activityComponent);
     }
 
@@ -87,15 +87,15 @@ public class BasePresenter<C extends Container, ActivityComponent> implements Pr
      */
     @VisibleForTesting
     public final void setContainer(@NonNull final C container) {
-        mCurrentContainer = Optional.of(container);
-        mResources = resources(container);
+        currentContainer = Optional.of(container);
+        resources = resources(container);
     }
 
     /* Perform null checks to avoid unit tests from failing. */
     private Optional<Resources> resources(@NonNull final C container) {
         //noinspection ConstantConditions
-        if (container.context() != null && container.context().getResources() != null) {
-            return Optional.of(container.context().getResources());
+        if (container.getContext() != null && container.getContext().getResources() != null) {
+            return Optional.of(container.getContext().getResources());
         }
 
         return Optional.empty();
@@ -108,13 +108,13 @@ public class BasePresenter<C extends Container, ActivityComponent> implements Pr
     @Override
     @MainThread
     public final void releaseContainer(@NonNull final C container) {
-        if (!mCurrentContainer.isPresent() || !mCurrentContainer.get().equals(container)) {
+        if (!currentContainer.isPresent() || !currentContainer.get().equals(container)) {
             return;
         }
 
-        mCurrentContainer = Optional.empty();
-        mResources = Optional.empty();
-        mActivityComponent = null;
+        currentContainer = Optional.empty();
+        resources = Optional.empty();
+        activityComponent = null;
         onControlLost();
     }
 
@@ -150,7 +150,7 @@ public class BasePresenter<C extends Container, ActivityComponent> implements Pr
      */
     @NonNull
     public Optional<C> container() {
-        return mCurrentContainer;
+        return currentContainer;
     }
 
     /**
@@ -164,7 +164,7 @@ public class BasePresenter<C extends Container, ActivityComponent> implements Pr
      */
     @NonNull
     public Optional<ActivityComponent> activityComponent() {
-        return Optional.of(mActivityComponent);
+        return Optional.of(activityComponent);
     }
 
     /**
@@ -178,6 +178,6 @@ public class BasePresenter<C extends Container, ActivityComponent> implements Pr
      */
     @NonNull
     public Optional<Resources> resources() {
-        return mResources;
+        return resources;
     }
 }

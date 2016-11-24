@@ -44,6 +44,7 @@ public class RotationStateTest extends TestActivityInstrumentationTestCase {
 
     @Test
     public void test_afterIncrement_theCounterTextIsOne() throws InterruptedException {
+        getInstrumentation().waitForIdleSync();
         onView(withId(R.id.view_screen_first_button)).perform(click());
         getInstrumentation().waitForIdleSync();
         assertThat(getCounterTV()).hasText("1");
