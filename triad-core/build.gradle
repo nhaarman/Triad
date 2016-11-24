@@ -11,6 +11,12 @@ buildscript {
     }
 }
 
+android {
+    defaultConfig {
+        consumerProguardFiles '../proguard-rules.pro'
+    }
+}
+
 dependencies {
     provided androidSupportAnnotations
     provided jetbrainsAnnotations

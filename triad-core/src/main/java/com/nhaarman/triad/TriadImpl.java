@@ -79,6 +79,15 @@ class TriadImpl implements Triad {
     }
 
     @Override
+    public void reset() {
+        if (transition != null) {
+            transition.cancel();
+            transition = null;
+        }
+        backstack = Backstack.emptyBuilder().build();
+    }
+
+    @Override
     @NonNull
     public Backstack getBackstack() {
         return backstack;

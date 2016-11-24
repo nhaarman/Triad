@@ -33,7 +33,7 @@ abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityCompon
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        delegate.onCreate()
+        delegate.onCreate(intent)
     }
 
     override fun onResume() {
