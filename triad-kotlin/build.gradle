@@ -29,6 +29,8 @@ dependencies {
 }
 
 dokka {
+    sourceDirs = files('src/main/kotlin')
+
     outputFormat = 'html'
     outputDirectory = "$buildDir/javadoc"
 }

@@ -1,5 +1,12 @@
+apply plugin: 'signing'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.nhaarman'
+version = rootProject.ext.versionName
+def sonatypeUsername = hasProperty('sonatype_username') ? sonatype_username : System.getenv('SONATYPE_USERNAME')
+def sonatypePassword = hasProperty('sonatype_password') ? sonatype_password : System.getenv('SONATYPE_PASSWORD')
+
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -26,7 +33,11 @@ artifacts {
     archives sourcesJar
 }
 
-project.version = versionName
+signing {
+    if (hasProperty('signing.keyid')) {
+        sign configurations.archives
+    }
+}
 
 install {
     repositories.mavenInstaller {
@@ -81,10 +92,6 @@ bintray {
         version {
             name = versionName
 
-            gpg {
-                sign = true
-            }
-
             mavenCentralSync {
                 sync = true
                 user = hasProperty('sonatype_username') ? sonatype_username : System.getenv('SONATYPE_USERNAME')
@@ -94,4 +101,3 @@ bintray {
         }
     }
 }
-
