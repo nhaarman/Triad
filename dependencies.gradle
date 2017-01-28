@@ -3,6 +3,7 @@ ext {
 
     androidBuildToolsPlugin = "com.android.tools.build:gradle:2.2.2"
     androidSupportAnnotations = "com.android.support:support-annotations:25.0.1"
+    androidMavenPlugin = "com.github.dcendents:android-maven-gradle-plugin:1.5"
     dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:0.9.9"
     gradleBintrayPlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3"
     gradleVersionsPlugin = "com.github.ben-manes:gradle-versions-plugin:0.13.0"

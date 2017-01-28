@@ -14,3 +14,7 @@ project.android.lintOptions.abortOnError true
 
 project.android.sourceSets.main.java.srcDirs += 'src/main/kotlin'
 project.android.sourceSets.test.java.srcDirs += 'src/test/kotlin'
+
+if (project.android.hasProperty("libraryVariants")) {
+    project.android.variantFilter { variant -> variant.ignore = variant.buildType.name == "debug" }
+}

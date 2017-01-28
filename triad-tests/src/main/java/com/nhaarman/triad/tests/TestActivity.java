@@ -27,8 +27,6 @@ public class TestActivity extends TriadActivity<ApplicationComponent, ActivityCo
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("onCreate " + getTriad());
-        System.out.println(getTriad().getBackstack());
         getTriad().startWith(new FirstScreen());
     }
 
