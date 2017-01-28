@@ -214,8 +214,8 @@ public class TriadDelegate<ApplicationComponent> {
                     public void onComplete() {
                         if (oldView != null && oldView.getParent() != null) {
                             ((ViewManager) oldView.getParent()).removeView(oldView);
-                            callback.onComplete();
                         }
+                        callback.onComplete();
                     }
                 });
             }
