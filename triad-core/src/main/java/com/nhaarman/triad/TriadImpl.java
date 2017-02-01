@@ -263,11 +263,6 @@ class TriadImpl implements Triad {
      */
     @Override
     public void replace(@NonNull final Backstack newBackstack) {
-        replace(newBackstack, null);
-    }
-
-    @Override
-    public void replace(@NonNull final Backstack newBackstack, @Nullable final TransitionAnimator animator) {
         checkState(backstack.size() > 0 || transition != null, "Use startWith(Screen) to show your first Screen.");
 
         move(new ReplaceTransition(newBackstack));

@@ -142,15 +142,6 @@ public interface Triad {
     void replace(@NonNull Backstack newBackstack);
 
     /**
-     * Replaces the entire backstack with given backstack, in a replace manner.
-     *
-     * One must first initialize this instance with [.startWith] before this method is called.
-     *
-     * @param newBackstack The new backstack.
-     */
-    void replace(@NonNull Backstack newBackstack, @Nullable TransitionAnimator animator);
-
-    /**
      * Returns whether the given Intent can be launched.
      */
     boolean canStart(@NonNull Intent intent);
