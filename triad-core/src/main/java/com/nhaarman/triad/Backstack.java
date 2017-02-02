@@ -113,6 +113,14 @@ public class Backstack implements Iterable<Screen<?>> {
             this.screen = screen;
             this.animator = animator;
         }
+
+        @Override
+        public String toString() {
+            return "Entry(" +
+                  "screen=" + screen +
+                  ", animator=" + animator +
+                  ')';
+        }
     }
 
     public static final class Builder {
