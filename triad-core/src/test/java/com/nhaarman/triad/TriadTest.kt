@@ -271,7 +271,7 @@ class TriadTest {
     }
 
     @Test
-    fun goBack_withSingleBackstackEntry_doesNotPopScreen() {
+    fun goBack_withSingleBackstackEntry_popsScreen() {
         /* Given */
         val triad = TriadFactory.newInstance(Backstack.single(mScreen1), mListener)
 
@@ -279,9 +279,9 @@ class TriadTest {
         val result = triad.goBack()
 
         /* Then */
-        verify(mListener, never()).screenPopped(mScreen1)
-        assertThat(result, `is`(false))
-        assertBackstackHasEntries(triad.backstack, mScreen1)
+        verify(mListener).screenPopped(mScreen1)
+        assertThat(result, `is`(true))
+        assertThat(triad.backstack.size(), `is`(0))
     }
 
     @Test

@@ -118,7 +118,11 @@ public class TriadDelegate<ApplicationComponent> {
     public boolean onBackPressed() {
         checkState(triad != null, "Triad is null. Make sure to call TriadDelegate.onCreate().");
 
-        return currentScreen != null && currentScreen.onBackPressed() || triad.goBack();
+        boolean handledByScreen = currentScreen != null && currentScreen.onBackPressed();
+        boolean handledByTriad = triad.goBack();
+        boolean backstackIsEmpty = triad.getBackstack().size() < 1;
+
+        return handledByScreen || handledByTriad && !backstackIsEmpty;
     }
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {

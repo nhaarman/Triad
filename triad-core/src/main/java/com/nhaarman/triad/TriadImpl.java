@@ -102,14 +102,14 @@ class TriadImpl implements Triad {
 
     @Override
     public void startWith(@NonNull final Screen<?> screen, @Nullable final TransitionAnimator animator) {
-        if (backstack.size() == 0 && transition == null) {
+        if (backstack.size() == 0 && (transition == null || transition.isFinished())) {
             move(new StartWithTransition(screen, animator));
         }
     }
 
     @Override
     public void startWith(@NonNull final Backstack backstack) {
-        if (this.backstack.size() == 0 && transition == null) {
+        if (this.backstack.size() == 0 && (transition == null || transition.isFinished())) {
             move(new StartWithBackstackTransition(backstack));
         }
     }
@@ -211,7 +211,6 @@ class TriadImpl implements Triad {
 
     /**
      * Pops the current screen off the backstack.
-     * Does nothing if the backstack would be empty afterwards.
      *
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
@@ -221,7 +220,7 @@ class TriadImpl implements Triad {
     public boolean goBack() {
         checkState(backstack.size() > 0 || transition != null, "Use startWith(Screen) to show your first Screen.");
 
-        boolean canGoBack = backstack.size() > 1 || transition != null && !transition.isFinished();
+        boolean canGoBack = backstack.size() > 0 || transition != null && transition.isFinished();
         move(new GoBackTransition());
         return canGoBack;
     }
@@ -263,11 +262,6 @@ class TriadImpl implements Triad {
      */
     @Override
     public void replace(@NonNull final Backstack newBackstack) {
-        replace(newBackstack, null);
-    }
-
-    @Override
-    public void replace(@NonNull final Backstack newBackstack, @Nullable final TransitionAnimator animator) {
         checkState(backstack.size() > 0 || transition != null, "Use startWith(Screen) to show your first Screen.");
 
         move(new ReplaceTransition(newBackstack));
@@ -389,7 +383,11 @@ class TriadImpl implements Triad {
             checkState(listener != null, "Listener is null. Be sure to call setListener(Listener).");
 
             this.nextBackstack = nextBackstack;
-            listener.backward(nextBackstack.current().screen, animator, this);
+            if (nextBackstack.size() > 0) {
+                listener.backward(nextBackstack.current().screen, animator, this);
+            } else {
+                onComplete();
+            }
         }
 
         protected void notifyReplace(@NonNull final Backstack nextBackstack) {
@@ -443,17 +441,12 @@ class TriadImpl implements Triad {
 
         @Override
         public void execute() {
-            if (backstack.size() == 1) {
-                // We are not calling the listener, so we must complete this noop transition ourselves.
-                onComplete();
-            } else {
-                Backstack.Builder builder = backstack.buildUpon();
-                Backstack.Entry<?> entry = checkNotNull(builder.pop(), "Popped entry is null.");
-                Backstack newBackstack = builder.build();
+            Backstack.Builder builder = backstack.buildUpon();
+            Backstack.Entry<?> entry = checkNotNull(builder.pop(), "Popped entry is null.");
+            Backstack newBackstack = builder.build();
 
-                notifyScreenPopped(entry.screen);
-                notifyBackward(newBackstack, entry.animator);
-            }
+            notifyScreenPopped(entry.screen);
+            notifyBackward(newBackstack, entry.animator);
         }
 
         @Override
