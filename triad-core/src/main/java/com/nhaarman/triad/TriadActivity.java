@@ -44,7 +44,7 @@ public abstract class TriadActivity<ApplicationComponent, ActivityComponent> ext
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        delegate.onCreate();
+        delegate.onCreate(getIntent());
     }
 
     @Override

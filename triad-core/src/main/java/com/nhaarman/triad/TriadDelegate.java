@@ -28,6 +28,8 @@ import java.util.Iterator;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
 import static com.nhaarman.triad.Preconditions.checkState;
+import static com.nhaarman.triad.TriadIntents.createBackstack;
+import static com.nhaarman.triad.TriadIntents.createScreen;
 
 /**
  * This class represents a delegate which can be used to use Triad in any
@@ -36,7 +38,7 @@ import static com.nhaarman.triad.Preconditions.checkState;
  * When using the {@code TriadDelegate}, you must proxy the following Activity
  * lifecycle methods to it:
  * <ul>
- * <li>{@link #onCreate()}</li>
+ * <li>{@link #onCreate(Intent)}</li>
  * <li>{@link #onResume()}</li>
  * <li>{@link #onDestroy()}</li>
  * <li>{@link #onBackPressed()}</li>
@@ -92,7 +94,7 @@ public class TriadDelegate<ApplicationComponent> {
         return checkNotNull(currentScreen, "Current screen is null.");
     }
 
-    public void onCreate() {
+    public void onCreate(@Nullable final Intent intent) {
         checkState(activity.getApplication() instanceof TriadProvider, "Make sure your Application class implements TriadProvider.");
         checkState(activity.getApplication() instanceof ApplicationComponentProvider, "Make sure your Application class implements ApplicationComponentProvider.");
 
@@ -105,6 +107,16 @@ public class TriadDelegate<ApplicationComponent> {
 
         if (triad.getBackstack().size() > 0 || triad.isTransitioning()) {
             triad.showCurrent();
+        } else if (intent != null) {
+            Screen<?> screen = createScreen(intent);
+            if (screen != null) {
+                triad.startWith(screen);
+            } else {
+                Backstack backstack = createBackstack(intent);
+                if (backstack != null) {
+                    triad.startWith(backstack);
+                }
+            }
         }
     }
 

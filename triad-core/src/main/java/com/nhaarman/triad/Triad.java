@@ -20,6 +20,11 @@ public interface Triad {
     void setActivity(@Nullable Activity activity);
 
     /**
+     * Resets Triad to an empty backstack.
+     */
+    void reset();
+
+    /**
      * Initializes the backstack with given Screen. If the backstack is not empty, this call is ignored.
      * This method must be called before any other backstack operation.
      *
