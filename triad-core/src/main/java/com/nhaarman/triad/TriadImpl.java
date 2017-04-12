@@ -370,6 +370,14 @@ class TriadImpl implements Triad {
             listener.screenPushed(screen);
         }
 
+        protected void notifyShow(@NonNull final Backstack backstack) {
+            if (cancelled) return;
+            checkState(listener != null, "Listener is null. Be sure to call setListener(Listener).");
+
+            this.nextBackstack = backstack;
+            listener.forward(nextBackstack.current().screen, null, this);
+        }
+
         protected void notifyForward(@NonNull final Backstack nextBackstack) {
             if (cancelled) return;
             checkState(listener != null, "Listener is null. Be sure to call setListener(Listener).");
@@ -586,7 +594,7 @@ class TriadImpl implements Triad {
 
         @Override
         public void execute() {
-            notifyForward(backstack);
+            notifyShow(backstack);
         }
 
         @Override
