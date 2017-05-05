@@ -18,13 +18,12 @@ package com.nhaarman.triad;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
+
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
-import java.util.List;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
 import static com.nhaarman.triad.Preconditions.checkState;
@@ -63,6 +62,16 @@ class TriadImpl implements Triad {
         activityResultListeners = new SparseArray<>();
 
         activity = new WeakReference<>(null);
+    }
+
+    @NonNull
+    public static Triad emptyInstance() {
+        return new TriadImpl(Backstack.emptyBuilder().build());
+    }
+
+    @NonNull
+    public static Triad newInstance(@NonNull final Backstack backstack, @NonNull final Listener<?> listener) {
+        return new TriadImpl(backstack, listener);
     }
 
     /**
@@ -125,7 +134,7 @@ class TriadImpl implements Triad {
 
     /**
      * Pushes given Screen onto the backstack.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param screen The screen to push onto the backstack.
@@ -137,7 +146,7 @@ class TriadImpl implements Triad {
 
     /**
      * Pushes given Screen onto the backstack.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param screen The screen to push onto the backstack.
@@ -166,7 +175,7 @@ class TriadImpl implements Triad {
      * Pops the backstack until given Screen is found.
      * If the Screen is not found, the Screen is pushed onto the current backstack.
      * Does nothing if the Screen is already on top of the stack.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param screen The Screen to pop to.
@@ -180,7 +189,7 @@ class TriadImpl implements Triad {
      * Pops the backstack until given Screen is found.
      * If the Screen is not found, the Screen is pushed onto the current backstack.
      * Does nothing if the Screen is already on top of the stack.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param screen The Screen to pop to.
@@ -194,7 +203,7 @@ class TriadImpl implements Triad {
 
     /**
      * Replaces the current Screen with given Screen.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param screen The Screen to replace the current Screen.
@@ -206,7 +215,7 @@ class TriadImpl implements Triad {
 
     /**
      * Replaces the current Screen with given Screen.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param screen The Screen to replace the current Screen.
@@ -220,7 +229,7 @@ class TriadImpl implements Triad {
 
     /**
      * Pops the current screen off the backstack.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @return true if the transition will execute.
@@ -236,7 +245,7 @@ class TriadImpl implements Triad {
 
     /**
      * Replaces the entire backstack with given backstack, in a forward manner.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param newBackstack The new backstack.
@@ -250,7 +259,7 @@ class TriadImpl implements Triad {
 
     /**
      * Replaces the entire backstack with given backstack, in a backward manner.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param newBackstack The new backstack.
@@ -264,7 +273,7 @@ class TriadImpl implements Triad {
 
     /**
      * Replaces the entire backstack with given backstack, in a replace manner.
-     *
+     * <p>
      * One must first initialize this instance with {@link #startWith(Screen)} before this method is called.
      *
      * @param newBackstack The new backstack.
@@ -280,8 +289,7 @@ class TriadImpl implements Triad {
     public boolean canStart(@NonNull final Intent intent) {
         Activity activity = this.activity.get();
         if (activity != null) {
-            List<ResolveInfo> infoList = activity.getPackageManager().queryIntentActivities(intent, 0);
-            return !infoList.isEmpty();
+            return intent.resolveActivity(activity.getPackageManager()) != null;
         }
 
         return false;
@@ -334,16 +342,6 @@ class TriadImpl implements Triad {
         } else {
             this.transition.enqueue(transition);
         }
-    }
-
-    @NonNull
-    public static Triad emptyInstance() {
-        return new TriadImpl(Backstack.emptyBuilder().build());
-    }
-
-    @NonNull
-    public static Triad newInstance(@NonNull final Backstack backstack, @NonNull final Listener<?> listener) {
-        return new TriadImpl(backstack, listener);
     }
 
     private abstract class Transition implements Callback {
