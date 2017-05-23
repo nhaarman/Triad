@@ -23,7 +23,9 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
+
 import com.nhaarman.triad.Triad.Callback;
+
 import java.util.Iterator;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
@@ -90,6 +92,16 @@ public class TriadDelegate<ApplicationComponent> {
     }
 
     @NonNull
+    public static <T> TriadDelegate<T> createFor(@NonNull final Activity activity) {
+        return new TriadDelegate(activity, DefaultTransitionAnimator.INSTANCE);
+    }
+
+    @NonNull
+    public static <T> TriadDelegate<T> createFor(@NonNull final Activity activity, @NonNull final TransitionAnimator defaultTransitionAnimator) {
+        return new TriadDelegate(activity, defaultTransitionAnimator);
+    }
+
+    @NonNull
     public Screen<ApplicationComponent> getCurrentScreen() {
         return checkNotNull(currentScreen, "Current screen is null.");
     }
@@ -131,10 +143,13 @@ public class TriadDelegate<ApplicationComponent> {
         checkState(triad != null, "Triad is null. Make sure to call TriadDelegate.onCreate().");
 
         boolean handledByScreen = currentScreen != null && currentScreen.onBackPressed();
-        boolean handledByTriad = triad.goBack();
-        boolean backstackIsEmpty = triad.getBackstack().size() < 1;
+        if (handledByScreen) return true;
 
-        return handledByScreen || handledByTriad && !backstackIsEmpty;
+        boolean handledByTriad = triad.goBack();
+        if (handledByTriad) return true;
+
+        boolean backstackIsEmpty = triad.getBackstack().size() < 1;
+        return !backstackIsEmpty;
     }
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
@@ -182,16 +197,6 @@ public class TriadDelegate<ApplicationComponent> {
         if (onScreenChangedListener != null) {
             onScreenChangedListener.onScreenChanged(screen);
         }
-    }
-
-    @NonNull
-    public static <T> TriadDelegate<T> createFor(@NonNull final Activity activity) {
-        return new TriadDelegate(activity, DefaultTransitionAnimator.INSTANCE);
-    }
-
-    @NonNull
-    public static <T> TriadDelegate<T> createFor(@NonNull final Activity activity, @NonNull final TransitionAnimator defaultTransitionAnimator) {
-        return new TriadDelegate(activity, defaultTransitionAnimator);
     }
 
     private class MyTriadListener implements Triad.Listener<ApplicationComponent> {
