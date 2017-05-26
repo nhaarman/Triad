@@ -148,7 +148,7 @@ public class TriadDelegate<ApplicationComponent> {
         boolean handledByTriad = triad.goBack();
         if (handledByTriad) return true;
 
-        boolean backstackIsEmpty = triad.getBackstack().size() < 1;
+        boolean backstackIsEmpty = triad.getBackstack().size() == 0;
         return !backstackIsEmpty;
     }
 

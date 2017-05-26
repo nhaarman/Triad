@@ -261,15 +261,6 @@ class TriadTest {
         assertBackstackHasEntries(triad.backstack, mScreen2)
     }
 
-    @Test(expected = IllegalStateException::class)
-    fun goBack_withAnEmptyBackstack_throwsIllegalStateException() {
-        /* Given */
-        val triad = TriadFactory.emptyInstance()
-
-        /* When */
-        triad.goBack()
-    }
-
     @Test
     fun goBack_withSingleBackstackEntry_popsScreen() {
         /* Given */
