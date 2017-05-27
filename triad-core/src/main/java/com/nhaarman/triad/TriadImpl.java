@@ -236,10 +236,10 @@ class TriadImpl implements Triad {
      */
     @Override
     public boolean goBack() {
-        checkState(backstack.size() > 0 || transition != null, "Use startWith(Screen) to show your first Screen.");
-
-        boolean canGoBack = backstack.size() > 0 || transition != null && transition.isFinished();
-        move(new GoBackTransition());
+        boolean canGoBack = backstack.size() > 0 || transition != null && !transition.isFinished();
+        if (canGoBack) {
+            move(new GoBackTransition());
+        }
         return canGoBack;
     }
 
@@ -314,7 +314,8 @@ class TriadImpl implements Triad {
      * @param listener The callback to notify for the result.
      */
     @Override
-    public void startActivityForResult(@NonNull final Intent intent, @NonNull final ActivityResultListener listener) {
+    public void startActivityForResult(@NonNull final Intent intent,
+                                       @NonNull final ActivityResultListener listener) {
         checkState(activity.get() != null, "Activity reference is null.");
 
         activity.get().startActivityForResult(intent, requestCodeCounter);
@@ -330,7 +331,8 @@ class TriadImpl implements Triad {
      * @param data        The result data of the returning Activity.
      */
     @Override
-    public void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
+    public void onActivityResult(final int requestCode, final int resultCode,
+                                 @Nullable final Intent data) {
         activityResultListeners.get(requestCode).onActivityResult(resultCode, data);
         activityResultListeners.remove(requestCode);
     }
@@ -456,12 +458,16 @@ class TriadImpl implements Triad {
 
         @Override
         public void execute() {
-            Backstack.Builder builder = backstack.buildUpon();
-            Backstack.Entry<?> entry = checkNotNull(builder.pop(), "Popped entry is null.");
-            Backstack newBackstack = builder.build();
+            if (backstack.size() > 0) {
+                Backstack.Builder builder = backstack.buildUpon();
+                Backstack.Entry<?> entry = checkNotNull(builder.pop(), "Popped entry is null.");
+                Backstack newBackstack = builder.build();
 
-            notifyScreenPopped(entry.screen);
-            notifyBackward(newBackstack, entry.animator);
+                notifyScreenPopped(entry.screen);
+                notifyBackward(newBackstack, entry.animator);
+            } else {
+                onComplete();
+            }
         }
 
         @Override
