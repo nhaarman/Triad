@@ -271,7 +271,7 @@ class TriadTest {
 
         /* Then */
         verify(mListener).screenPopped(mScreen1)
-        assertThat(result, `is`(true))
+        assertThat(result, `is`(false))
         assertThat(triad.backstack.size(), `is`(0))
     }
 

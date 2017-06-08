@@ -236,11 +236,16 @@ class TriadImpl implements Triad {
      */
     @Override
     public boolean goBack() {
-        boolean canGoBack = backstack.size() > 0 || transition != null && !transition.isFinished();
-        if (canGoBack) {
-            move(new GoBackTransition());
+        int backstackSize = backstack.size();
+        boolean transitionActive = transition != null && !transition.isFinished();
+
+        if (transitionActive || backstackSize == 0) {
+            return false;
         }
-        return canGoBack;
+
+        move(new GoBackTransition());
+
+        return backstackSize > 1;
     }
 
     /**
