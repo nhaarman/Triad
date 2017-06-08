@@ -207,12 +207,10 @@ public class TriadDelegate<ApplicationComponent> {
 
             pushedScreen.setApplicationComponent(applicationComponent);
             pushedScreen.onCreate();
-            if (resumed) pushedScreen.onAttach(activity);
         }
 
         @Override
         public void screenPopped(@NonNull final Screen<ApplicationComponent> poppedScreen) {
-            if (resumed) poppedScreen.onDetach(activity);
             poppedScreen.onDestroy();
         }
 
@@ -221,8 +219,9 @@ public class TriadDelegate<ApplicationComponent> {
             checkState(rootView != null, "Root view is null. Make sure to call TriadDelegate.onCreate().");
 
             final View oldView = rootView.getChildAt(0);
-            if (oldView != null && currentScreen != null) {
-                currentScreen.saveState(oldView);
+            final Screen<ApplicationComponent> oldScreen = currentScreen;
+            if (oldView != null && oldScreen != null) {
+                oldScreen.saveState(oldView);
             }
 
             currentScreen = newScreen;
@@ -233,16 +232,34 @@ public class TriadDelegate<ApplicationComponent> {
                 handled = animator.forward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
+                        newScreen.onAttach(activity);
+
                         if (oldView != null && oldView.getParent() != null) {
                             ((ViewManager) oldView.getParent()).removeView(oldView);
                         }
+
+                        if (oldScreen != null) {
+                            oldScreen.onDetach(activity);
+                        }
+
                         callback.onComplete();
                     }
                 });
             }
 
             if (!handled) {
-                defaultTransitionAnimator.forward(oldView, newView, rootView, callback);
+                defaultTransitionAnimator.forward(oldView, newView, rootView, new Callback() {
+                    @Override
+                    public void onComplete() {
+                        newScreen.onAttach(activity);
+
+                        if (oldScreen != null) {
+                            oldScreen.onDetach(activity);
+                        }
+
+                        callback.onComplete();
+                    }
+                });
             }
 
             onScreenChanged(newScreen);
@@ -251,27 +268,48 @@ public class TriadDelegate<ApplicationComponent> {
         @Override
         public void backward(@NonNull final Screen<ApplicationComponent> newScreen, @Nullable final TransitionAnimator animator, @NonNull final Triad.Callback callback) {
             checkState(rootView != null, "Root view is null. Make sure to call TriadDelegate.onCreate().");
+
+            final Screen<ApplicationComponent> oldScreen = currentScreen;
             currentScreen = newScreen;
 
             final View oldView = rootView.getChildAt(0);
             final View newView = newScreen.createView(rootView);
             newScreen.restoreState(newView);
 
+
             boolean handled = false;
             if (animator != null) {
                 handled = animator.backward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
+                        newScreen.onAttach(activity);
+
                         if (oldView != null && oldView.getParent() != null) {
                             ((ViewManager) oldView.getParent()).removeView(oldView);
                         }
+
+                        if (oldScreen != null) {
+                            oldScreen.onDetach(activity);
+                        }
+
                         callback.onComplete();
                     }
                 });
             }
 
             if (!handled) {
-                defaultTransitionAnimator.backward(oldView, newView, rootView, callback);
+                defaultTransitionAnimator.backward(oldView, newView, rootView, new Callback() {
+                    @Override
+                    public void onComplete() {
+                        newScreen.onAttach(activity);
+
+                        if (oldScreen != null) {
+                            oldScreen.onDetach(activity);
+                        }
+
+                        callback.onComplete();
+                    }
+                });
             }
 
             onScreenChanged(newScreen);
@@ -280,6 +318,8 @@ public class TriadDelegate<ApplicationComponent> {
         @Override
         public void replace(@NonNull final Screen<ApplicationComponent> newScreen, @Nullable final TransitionAnimator animator, @NonNull final Triad.Callback callback) {
             checkState(rootView != null, "Root view is null. Make sure to call TriadDelegate.onCreate().");
+
+            final Screen<ApplicationComponent> oldScreen = currentScreen;
             currentScreen = newScreen;
 
             final View oldView = rootView.getChildAt(0);
@@ -290,16 +330,34 @@ public class TriadDelegate<ApplicationComponent> {
                 handled = animator.forward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
+                        newScreen.onAttach(activity);
+
                         if (oldView != null && oldView.getParent() != null) {
                             ((ViewManager) oldView.getParent()).removeView(oldView);
                         }
+
+                        if (oldScreen != null) {
+                            oldScreen.onDetach(activity);
+                        }
+
                         callback.onComplete();
                     }
                 });
             }
 
             if (!handled) {
-                defaultTransitionAnimator.forward(oldView, newView, rootView, callback);
+                defaultTransitionAnimator.forward(oldView, newView, rootView, new Callback() {
+                    @Override
+                    public void onComplete() {
+                        newScreen.onAttach(activity);
+
+                        if (oldScreen != null) {
+                            oldScreen.onDetach(activity);
+                        }
+
+                        callback.onComplete();
+                    }
+                });
             }
 
             onScreenChanged(newScreen);
