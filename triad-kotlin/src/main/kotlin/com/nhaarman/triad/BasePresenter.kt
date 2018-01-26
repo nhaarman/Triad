@@ -40,7 +40,6 @@ open class BasePresenter<C : Container> : Presenter<C> {
      * The [Container] this [BasePresenter] controls.
      */
     var currentContainer: C? = null
-        private set
 
     /**
      * Sets the [C] this `BasePresenter` controls, and calls [onControlGained]
