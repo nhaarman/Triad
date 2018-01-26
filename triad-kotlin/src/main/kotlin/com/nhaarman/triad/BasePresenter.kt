@@ -16,7 +16,6 @@
 
 package com.nhaarman.triad
 
-import android.content.res.Resources
 import android.support.annotation.MainThread
 
 /**
@@ -30,26 +29,18 @@ import android.support.annotation.MainThread
  * Control over the `Container` instance starts at [onControlGained],
  * and ends at [onControlLost].
  *
- * A nullable reference to the `Container` instance can be obtained using [.container],
+ * A nullable reference to the `Container` instance can be obtained using [.currentContainer],
  * which returns `null` when the `Presenter` does not have control over the instance.
  *
  * @param C The specialized type of the [Container].
- * @param ActivityComponent The activity component.
  */
-open class BasePresenter<C : Container, ActivityComponent> : Presenter<C, ActivityComponent> {
+open class BasePresenter<C : Container> : Presenter<C> {
 
     /**
      * The [Container] this [BasePresenter] controls.
      */
-    var container: C? = null
-        set(value) {
-            field = value
-            resources = value?.context?.resources
-        }
-
-    var resources: Resources? = null
-
-    var activityComponent: ActivityComponent? = null
+    var currentContainer: C? = null
+        private set
 
     /**
      * Sets the [C] this `BasePresenter` controls, and calls [onControlGained]
@@ -58,19 +49,18 @@ open class BasePresenter<C : Container, ActivityComponent> : Presenter<C, Activi
      * @param container The [C] to gain control over.
      */
     @MainThread
-    override fun acquire(container: C, activityComponent: ActivityComponent) {
-        if (container == this.container) {
+    override fun acquire(container: C) {
+        if (container == this.currentContainer) {
             return
         }
 
-        this.container?.apply {
+        this.currentContainer?.apply {
             onControlLost()
         }
 
-        this.container = container
+        this.currentContainer = container
 
-        this.activityComponent = activityComponent
-        onControlGained(container, activityComponent)
+        onControlGained(container)
     }
 
     /**
@@ -79,30 +69,29 @@ open class BasePresenter<C : Container, ActivityComponent> : Presenter<C, Activi
      */
     @MainThread
     override fun releaseContainer(container: C) {
-        if (this.container != container) {
+        if (this.currentContainer != container) {
             return
         }
 
-        this.container = null
-        activityComponent = null
+        this.currentContainer = null
         onControlLost()
     }
 
     /**
      * Called when the [Container] for this `BasePresenter` is attached to the window and ready to display the state.
 
-     * From this point on, `container` will return the [Container] instance, until [onControlLost] is called.
+     * From this point on, `currentContainer` will return the [Container] instance, until [onControlLost] is called.
 
      * @param container The [Container] to gain control over.
      */
     @MainThread
-    open fun onControlGained(container: C, activityComponent: ActivityComponent) {
+    open fun onControlGained(container: C) {
     }
 
     /**
      * Called when this `BasePresenter` no longer controls the [Container] instance.
 
-     * From this point on, [container] will return `null`.
+     * From this point on, [currentContainer] will return `null`.
      */
     @MainThread
     open fun onControlLost() {

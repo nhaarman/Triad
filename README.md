@@ -24,8 +24,6 @@ repositories {
 
 dependencies {
   // Pick one of the following:
-  compile 'com.nhaarman:triad:x.x.x'                        // For Java
-  compile 'com.nhaarman:triad-appcompat-v7:x.x.x'           // For Java and using the AppCompat-v7 library
   compile 'com.nhaarman:triad-kotlin:x.x.x'                 // For Kotlin
   compile 'com.nhaarman:triad-kotlin-appcompat-v7:x.x.x'    // For Kotlin and using the AppCompat-v7 library
 }
@@ -62,7 +60,7 @@ public class CounterScreen extends Screen<ApplicationComponent> {
 The `CounterView` extends a `ViewGroup`, and reacts on user input of its children. The view notifies the presenter that something happened.
 
 ```java
-public class CounterView extends RelativeLayoutContainer<CounterPresenter, ActivityComponent> implements CounterContainer {
+public class CounterView extends RelativeLayoutContainer<CounterPresenter> implements CounterContainer {
 
   @Bind(R.id.countertv)
   protected TextView mCounterTV;
@@ -128,7 +126,7 @@ interface CounterContainer extends Container {
 Finally, the `CounterPresenter` handles any logic, and formats the data to display in the view. Presenters survive orientation changes, so our counter variable will not get lost on a configuration change.
 
 ```java
-class MyPresenter extends BasePresenter<MyContainer, ActivityComponent> {
+class MyPresenter extends BasePresenter<MyContainer> {
 
   private int mCounter;
 
@@ -137,7 +135,7 @@ class MyPresenter extends BasePresenter<MyContainer, ActivityComponent> {
   }
 
   @Override
-  protected void onControlGained(@NonNull final CounterContainer container, @NonNull final ActivityComponent activityComponent) {
+  protected void onControlGained(@NonNull final CounterContainer container) {
     container.setCounterText(formatCounterText());
   }
 

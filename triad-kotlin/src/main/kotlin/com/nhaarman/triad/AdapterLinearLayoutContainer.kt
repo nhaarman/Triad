@@ -23,39 +23,37 @@ import android.widget.LinearLayout
 /**
  * An abstract LinearLayout [Container] instance that handles [Presenter] management
  * for use in an adapter View.
-
- * @param  The specialized [Presenter] type.
  */
-abstract class AdapterLinearLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
-@JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : LinearLayout(context, attrs, defStyle),
-      AdapterContainer<P> {
-
-    private val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
+abstract class AdapterLinearLayoutContainer @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyle: Int = 0
+) : LinearLayout(context, attrs, defStyle),
+    AdapterContainer {
 
     private var attachedToWindow: Boolean = false
 
-    /**
-     * Returns the [P] instance that is tied to this `LinearLayoutContainer`.
-     */
-    @Suppress("UNCHECKED_CAST")
-    override var presenter: P? = null
+    private var _presenter: Presenter<AdapterContainer>? = null
         set(value) {
-            field?.let { (it as Presenter<Container, ActivityComponent>).releaseContainer(this) }
+            field?.releaseContainer(this)
             field = value
             value?.let {
                 if (attachedToWindow) {
-                    (it as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
+                    it.acquire(this)
                 }
             }
         }
 
     @Suppress("UNCHECKED_CAST")
+    override fun setPresenter(presenter: Presenter<*>?) {
+        _presenter = presenter as Presenter<AdapterContainer>
+    }
+
+    @Suppress("UNCHECKED_CAST")
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        presenter?.let {
-            (it as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
-        }
+        _presenter?.acquire(this)
 
         attachedToWindow = true
     }
@@ -64,9 +62,7 @@ abstract class AdapterLinearLayoutContainer<P : Presenter<*, ActivityComponent>,
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
 
-        presenter?.let {
-            (it as Presenter<Container, ActivityComponent>).releaseContainer(this)
-        }
+        _presenter?.releaseContainer(this)
 
         attachedToWindow = false
     }

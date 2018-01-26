@@ -21,26 +21,9 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.view.View
 
-
-@Suppress("UNCHECKED_CAST")
-fun <ActivityComponent> findActivityComponent(context: Context, view: View): ActivityComponent {
-    if (view.isInEditMode) return null as ActivityComponent
-
-    var baseContext = context
-    while (baseContext !is Activity && baseContext is ContextWrapper) {
-        baseContext = baseContext.baseContext
-    }
-
-    if (baseContext is ActivityComponentProvider<*>) {
-        return (baseContext as ActivityComponentProvider<ActivityComponent>).activityComponent
-    } else {
-        throw Error("Make sure ${baseContext.javaClass.canonicalName} implements ActivityComponentProvider.")
-    }
-}
-
 @Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
-fun <P : Presenter<*, *>> findPresenter(context: Context, view: View): P {
-    if (view.isInEditMode) return null as P
+fun findPresenter(context: Context, view: View): Presenter<Container> {
+    if (view.isInEditMode) return null as Presenter<Container>
 
     var baseContext = context
     while (baseContext !is Activity && baseContext is ContextWrapper) {
@@ -49,9 +32,12 @@ fun <P : Presenter<*, *>> findPresenter(context: Context, view: View): P {
 
     if (baseContext is ScreenProvider<*>) {
         try {
-            return baseContext.currentScreen.getPresenter(view.id) as P
-        } catch(t: Throwable) {
-            val e = PresenterCreationFailedError("Could not create presenter for:\n    $view\nCaused by: $t", t.cause)
+            return baseContext.currentScreen.getPresenter(view.id) as Presenter<Container>
+        } catch (t: Throwable) {
+            val e = PresenterCreationFailedError(
+                "Could not create presenter for:\n    $view\nCaused by: $t",
+                t.cause
+            )
             (e as java.lang.Throwable).stackTrace = t.stackTrace
             throw e
         }
@@ -60,5 +46,8 @@ fun <P : Presenter<*, *>> findPresenter(context: Context, view: View): P {
     }
 }
 
-private class PresenterCreationFailedError @JvmOverloads constructor(message: String, cause: Throwable? = null) :
-      Error(message, cause)
+private class PresenterCreationFailedError @JvmOverloads constructor(
+    message: String,
+    cause: Throwable? = null
+) :
+    Error(message, cause)

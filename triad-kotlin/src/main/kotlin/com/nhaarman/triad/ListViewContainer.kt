@@ -22,28 +22,28 @@ import android.widget.ListView
 
 /**
  * An abstract ListView [Container] instance that handles [Presenter] management.
-
- * @param P The specialized [Presenter] type.
  */
-abstract class ListViewContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
-@JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : ListView(context, attrs, defStyle), Container {
+abstract class ListViewContainer @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyle: Int = 0
+) : ListView(context, attrs, defStyle), Container {
 
-    val presenter: P by lazy { findPresenter<P>(context, this) }
-    val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
+    private val presenter: Presenter<Container> by lazy { findPresenter(context, this) }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        if (isInEditMode) return
+        if (isInEditMode) {
+            return
+        }
 
-        (presenter as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
+        presenter.acquire(this)
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
 
-        (presenter as Presenter<Container, ActivityComponent>).releaseContainer(this)
+        presenter.releaseContainer(this)
     }
 }

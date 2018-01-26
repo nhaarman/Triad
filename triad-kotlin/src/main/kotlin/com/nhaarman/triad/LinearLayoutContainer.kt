@@ -20,18 +20,14 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 
-abstract class LinearLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
-@JvmOverloads constructor(
-      context: Context,
-      attrs: AttributeSet?,
-      defStyle: Int = 0
+abstract class LinearLayoutContainer @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyle: Int = 0
 ) : LinearLayout(context, attrs, defStyle), Container {
 
-    val presenter: P by lazy { findPresenter<P>(context, this) }
+    private val presenter: Presenter<Container> by lazy { findPresenter(context, this) }
 
-    val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
-
-    @Suppress("UNCHECKED_CAST")
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
@@ -39,13 +35,12 @@ abstract class LinearLayoutContainer<P : Presenter<*, ActivityComponent>, Activi
             return
         }
 
-        (presenter as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
+        presenter.acquire(this)
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
 
-        (presenter as Presenter<Container, ActivityComponent>).releaseContainer(this)
+        presenter.releaseContainer(this)
     }
 }

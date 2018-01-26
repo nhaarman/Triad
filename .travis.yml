@@ -18,16 +18,8 @@ android:
 before_install:
   - echo 'android.builder.sdkDownload=false' > gradle.properties
 
-# Emulator Management: Create, Start and Wait
-before_script:
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
-
 script:
   - ./gradlew test -PisRelease=false dokka install
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-  - ./gradlew connectedCheck -PisRelease=false
 
 notifications:
   email: false

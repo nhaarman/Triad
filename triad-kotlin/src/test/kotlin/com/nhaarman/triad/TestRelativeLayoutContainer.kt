@@ -19,8 +19,11 @@ package com.nhaarman.triad
 import android.content.Context
 import android.util.AttributeSet
 
-open class TestRelativeLayoutContainer @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-      RelativeLayoutContainer<Presenter<out Container, ActivityComponent>, ActivityComponent>(context, attrs, defStyle) {
+open class TestRelativeLayoutContainer @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : RelativeLayoutContainer(context, attrs, defStyle) {
 
     public override fun onAttachedToWindow() {
         super.onAttachedToWindow()

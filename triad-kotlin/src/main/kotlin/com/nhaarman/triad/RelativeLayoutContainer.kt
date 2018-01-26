@@ -22,20 +22,15 @@ import android.widget.RelativeLayout
 
 /**
  * An abstract [Container] instance that handles [Presenter] management
- * @param P The specialized [Presenter] type.
  */
-abstract class RelativeLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
-@JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) :
-      RelativeLayout(context, attrs, defStyle), Container {
+abstract class RelativeLayoutContainer @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyle: Int = 0
+) : RelativeLayout(context, attrs, defStyle), Container {
 
-    /**
-     * Returns the [P] instance that is tied to this `RelativeLayoutContainer`.
-     */
-    val presenter: P by lazy { findPresenter<P>(context, this) }
+    private val presenter: Presenter<Container> by lazy { findPresenter(context, this) }
 
-    val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
-
-    @Suppress("UNCHECKED_CAST")
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
@@ -43,13 +38,12 @@ abstract class RelativeLayoutContainer<P : Presenter<*, ActivityComponent>, Acti
             return
         }
 
-        (presenter as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
+        presenter.acquire(this)
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
 
-        (presenter as Presenter<Container, ActivityComponent>).releaseContainer(this)
+        presenter.releaseContainer(this)
     }
 }

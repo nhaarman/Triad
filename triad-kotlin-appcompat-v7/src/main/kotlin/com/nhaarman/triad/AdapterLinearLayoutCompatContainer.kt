@@ -19,56 +19,33 @@ package com.nhaarman.triad
 import android.content.Context
 import android.support.v7.widget.LinearLayoutCompat
 import android.util.AttributeSet
-import android.widget.LinearLayout
 
 /**
  * An abstract LinearLayout [Container] instance that handles [Presenter] management
  * for use in an adapter View.
-
- * @param P The specialized [Presenter] type.
  */
-abstract class AdapterLinearLayoutCompatContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
-@JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : LinearLayoutCompat(context, attrs, defStyle),
-      AdapterContainer<P> {
+abstract class AdapterLinearLayoutCompatContainer @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyle: Int = 0
+) : LinearLayoutCompat(context, attrs, defStyle),
+    AdapterContainer {
 
-    private val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
+    private val presenter: Presenter<Container> by lazy { findPresenter(context, this) }
 
-    private var attachedToWindow: Boolean = false
-
-    /**
-     * Returns the [P] instance that is tied to this `LinearLayoutContainer`.
-     */
-    @Suppress("UNCHECKED_CAST")
-    override var presenter: P? = null
-        set(value) {
-            field?.let { (it as Presenter<Container, ActivityComponent>).releaseContainer(this) }
-            field = value
-            value?.let {
-                if (attachedToWindow) {
-                    (it as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
-                }
-            }
-        }
-
-    @Suppress("UNCHECKED_CAST")
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        presenter?.let {
-            (it as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
+        if (isInEditMode) {
+            return
         }
 
-        attachedToWindow = true
+        presenter.acquire(this)
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
 
-        presenter?.let {
-            (it as Presenter<Container, ActivityComponent>).releaseContainer(this)
-        }
-
-        attachedToWindow = false
+        presenter.releaseContainer(this)
     }
 }

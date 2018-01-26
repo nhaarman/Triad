@@ -18,10 +18,8 @@ package com.nhaarman.triad
 
 /**
  * A [Container] implementation for use in an adapter View, such as [ListView] or `RecyclerView`.
-
- * @param P The specialized [Presenter] type for this `Container`.
  */
-interface AdapterContainer<P : Presenter<*, *>> : Container {
+interface AdapterContainer : Container {
 
-    var presenter: P?
+    fun setPresenter(presenter: Presenter<*>?)
 }

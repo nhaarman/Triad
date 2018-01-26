@@ -31,7 +31,7 @@ import static com.nhaarman.triad.Preconditions.checkNotNull;
 public abstract class Screen<ApplicationComponent> {
 
     @NonNull
-    private final SparseArray<Presenter<?, ?>> presenters = new SparseArray<>();
+    private final SparseArray<Presenter<?>> presenters = new SparseArray<>();
 
     @NonNull
     private final SparseArray<Parcelable> state = new SparseArray<>();
@@ -48,8 +48,8 @@ public abstract class Screen<ApplicationComponent> {
     }
 
     @NonNull
-    public Presenter<?, ?> getPresenter(final int viewId) {
-        Presenter<?, ?> presenter = presenters.get(viewId);
+    public Presenter<?> getPresenter(final int viewId) {
+        Presenter<?> presenter = presenters.get(viewId);
 
         if (presenter == null) {
             presenter = createPresenter(viewId);
@@ -60,15 +60,15 @@ public abstract class Screen<ApplicationComponent> {
     }
 
     @NonNull
-    protected abstract Presenter<?, ?> createPresenter(int viewId);
-
-    final void setApplicationComponent(@Nullable final ApplicationComponent applicationComponent) {
-        this.applicationComponent = applicationComponent;
-    }
+    protected abstract Presenter<?> createPresenter(int viewId);
 
     @NonNull
     protected final ApplicationComponent getApplicationComponent() {
         return checkNotNull(applicationComponent, "Application component is null.");
+    }
+
+    final void setApplicationComponent(@Nullable final ApplicationComponent applicationComponent) {
+        this.applicationComponent = applicationComponent;
     }
 
     final void saveState(@NonNull final View view) {
@@ -83,7 +83,7 @@ public abstract class Screen<ApplicationComponent> {
     protected void onCreate() {
     }
 
-    @SuppressWarnings({ "NoopMethodInAbstractClass", "UnusedParameters" })
+    @SuppressWarnings({"NoopMethodInAbstractClass", "UnusedParameters"})
     protected void onAttach(@NonNull final Activity activity) {
     }
 
@@ -91,7 +91,7 @@ public abstract class Screen<ApplicationComponent> {
         return false;
     }
 
-    @SuppressWarnings({ "NoopMethodInAbstractClass", "UnusedParameters" })
+    @SuppressWarnings({"NoopMethodInAbstractClass", "UnusedParameters"})
     protected void onDetach(@NonNull final Activity activity) {
     }
 
