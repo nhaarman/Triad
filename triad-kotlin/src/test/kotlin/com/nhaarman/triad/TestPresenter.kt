@@ -16,13 +16,13 @@
 
 package com.nhaarman.triad
 
-class TestPresenter : BasePresenter<TestRelativeLayoutContainer, ActivityComponent>() {
+class TestPresenter : BasePresenter<TestRelativeLayoutContainer>() {
 
     var onControlGainedCalled: Boolean = false
 
     var onControlLostCalled: Boolean = false
 
-    override fun onControlGained(container: TestRelativeLayoutContainer, activityComponent: ActivityComponent) {
+    override fun onControlGained(container: TestRelativeLayoutContainer) {
         onControlGainedCalled = true
     }
 

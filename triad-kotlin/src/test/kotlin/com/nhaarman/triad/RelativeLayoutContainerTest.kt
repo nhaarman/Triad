@@ -18,7 +18,6 @@ package com.nhaarman.triad
 
 import android.app.Activity
 import android.app.Application
-import com.nhaarman.expect.expect
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.verify
@@ -33,14 +32,18 @@ class RelativeLayoutContainerTest {
 
     private lateinit var relativeLayoutContainer: TestRelativeLayoutContainer
 
-    private lateinit var presenterMock: Presenter<Container, ActivityComponent>
-
-    private lateinit var activityComponentMock: ActivityComponent
+    private lateinit var presenterMock: Presenter<Container>
 
     @Before
     fun setUp() {
-        val activity = Mockito.mock(Activity::class.java, withSettings().extraInterfaces(ActivityComponentProvider::class.java, ScreenProvider::class.java))
-        val application = Mockito.mock(Application::class.java, withSettings().extraInterfaces(TriadProvider::class.java))
+        val activity = Mockito.mock(
+            Activity::class.java,
+            withSettings().extraInterfaces(ScreenProvider::class.java)
+        )
+        val application = Mockito.mock(
+            Application::class.java,
+            withSettings().extraInterfaces(TriadProvider::class.java)
+        )
         whenever(activity.applicationContext).thenReturn(application)
 
         val screen = mock<Screen<ApplicationComponent>>()
@@ -48,17 +51,9 @@ class RelativeLayoutContainerTest {
         whenever(screen.getPresenter(anyInt())).thenReturn(presenterMock)
 
         whenever((activity as ScreenProvider<ApplicationComponent>).currentScreen).thenReturn(screen)
-        activityComponentMock = mock()
-        whenever((activity as ActivityComponentProvider<ActivityComponent>).activityComponent).thenReturn(activityComponentMock)
 
         relativeLayoutContainer = spy(TestRelativeLayoutContainer(activity))
         whenever(relativeLayoutContainer.context).thenReturn(activity)
-    }
-
-    @Test
-    fun getPresenter_returnsProperPresenter() {
-        /* Then */
-        expect(relativeLayoutContainer.presenter).toBe(presenterMock)
     }
 
     @Test
@@ -67,7 +62,7 @@ class RelativeLayoutContainerTest {
         relativeLayoutContainer.onAttachedToWindow()
 
         /* Then */
-        verify(presenterMock).acquire(relativeLayoutContainer, activityComponentMock)
+        verify(presenterMock).acquire(relativeLayoutContainer)
     }
 
     @Test

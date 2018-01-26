@@ -1,11 +1,3 @@
 include ':triad-core'
-include ':triad'
 include ':triad-kotlin'
-include ':triad-appcompat-v7'
 include ':triad-kotlin-appcompat-v7'
-
-//include ':triad-sample:business'
-//include ':triad-sample:app'
-//include ':triad-sample:app-kotlin'
-
-include ':triad-tests'

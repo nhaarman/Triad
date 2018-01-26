@@ -24,12 +24,15 @@ import android.support.v7.app.AppCompatActivity
  * An [AppCompatActivity] which is the root of an application that uses Triad.
  *
  * @param ApplicationComponent The `ApplicationComponent` to use for `Presenter` creation.
- * @param ActivityComponent The `ActivityComponent` to supply to `Presenters`.
  */
-abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityComponent> :
-      AppCompatActivity(), ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
+abstract class TriadAppCompatActivity<ApplicationComponent : Any> :
+    AppCompatActivity(), ScreenProvider<ApplicationComponent> {
 
-    private val delegate: TriadDelegate<ApplicationComponent> by lazy { TriadDelegate.createFor<ApplicationComponent>(this) }
+    private val delegate: TriadDelegate<ApplicationComponent> by lazy {
+        TriadDelegate.createFor<ApplicationComponent>(
+            this
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +42,6 @@ abstract class TriadAppCompatActivity<ApplicationComponent : Any, ActivityCompon
     override fun onResume() {
         super.onResume()
         delegate.onResume()
-    }
-
-    /**
-     * Creates the `ActivityComponent` which is used to retrieve dependencies from that are needed to create [Presenter]s.
-     * @return The created `ActivityComponent`.
-     */
-    protected abstract fun createActivityComponent(): ActivityComponent
-
-    private val _activityComponent: ActivityComponent by lazy { createActivityComponent() }
-    override fun getActivityComponent(): ActivityComponent {
-        return _activityComponent
     }
 
     override fun getCurrentScreen(): Screen<ApplicationComponent> {

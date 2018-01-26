@@ -33,12 +33,7 @@ class BasePresenterTest {
 
     @Test
     fun initially_theContainerIsNotPresent() {
-        expect(presenter.container).toBeNull()
-    }
-
-    @Test
-    fun initially_theActivityComponentIsNotPresent() {
-        expect(presenter.activityComponent).toBeNull()
+        expect(presenter.currentContainer).toBeNull()
     }
 
     @Test
@@ -47,48 +42,23 @@ class BasePresenterTest {
         val container = mock<TestRelativeLayoutContainer>()
 
         /* When */
-        presenter.acquire(container, mock())
+        presenter.acquire(container)
 
         /* Then */
-        expect(presenter.container).toBe(container)
-    }
-
-    @Test
-    fun afterAcquiringActivityComponent_theActivityComponentIsPresent() {
-        /* Given */
-        val activityComponent = mock<ActivityComponent>()
-
-        /* When */
-        presenter.acquire(mock(), activityComponent)
-
-        /* Then */
-        expect(presenter.activityComponent).toBe(activityComponent)
+        expect(presenter.currentContainer).toBe(container)
     }
 
     @Test
     fun afterReleasingContainer_theContainerIsNotPresent() {
         /* Given */
         val container = mock<TestRelativeLayoutContainer>()
-        presenter.acquire(container, mock())
+        presenter.acquire(container)
 
         /* When */
         presenter.releaseContainer(container)
 
         /* Then */
-        expect(presenter.container).toBeNull()
-    }
-
-    @Test
-    fun afterReleasingContainer_theActivityComponentIsNotPresent() {
-        /* Given */
-        val container = mock<TestRelativeLayoutContainer>()
-        presenter.acquire(container, mock())
-
-        /* When */
-        presenter.releaseContainer(container)
-
-        /* Then */
-        expect(presenter.activityComponent).toBeNull()
+        expect(presenter.currentContainer).toBeNull()
     }
 
     @Test
@@ -97,7 +67,7 @@ class BasePresenterTest {
         val container = mock<TestRelativeLayoutContainer>()
 
         /* When */
-        presenter.acquire(container, mock())
+        presenter.acquire(container)
 
         /* Then */
         expect(presenter.onControlGainedCalled).toBe(true)
@@ -108,7 +78,7 @@ class BasePresenterTest {
     fun afterReleasingContainer_onControlLostIsCalled() {
         /* Given */
         val container = mock<TestRelativeLayoutContainer>()
-        presenter.acquire(container, mock())
+        presenter.acquire(container)
         presenter.onControlGainedCalled = false
 
         /* When */
@@ -123,12 +93,12 @@ class BasePresenterTest {
     fun acquiringTheSameContainerTwice_doesNothing() {
         /* Given */
         val container = mock<TestRelativeLayoutContainer>()
-        presenter.acquire(container, mock())
+        presenter.acquire(container)
         presenter.onControlLostCalled = false
         presenter.onControlGainedCalled = false
 
         /* When */
-        presenter.acquire(container, mock())
+        presenter.acquire(container)
 
         /* Then */
         expect(presenter.onControlLostCalled).toBe(false)
@@ -141,12 +111,12 @@ class BasePresenterTest {
         val container1 = mock<TestRelativeLayoutContainer>()
         val container2 = mock<TestRelativeLayoutContainer>()
 
-        presenter.acquire(container1, mock())
+        presenter.acquire(container1)
         presenter.onControlLostCalled = false
         presenter.onControlGainedCalled = false
 
         /* When */
-        presenter.acquire(container2, mock())
+        presenter.acquire(container2)
 
         /* Then */
         expect(presenter.onControlLostCalled).toBe(true)
@@ -160,7 +130,7 @@ class BasePresenterTest {
         val container1 = mock<TestRelativeLayoutContainer>()
         val container2 = mock<TestRelativeLayoutContainer>()
 
-        presenter.acquire(container1, mock())
+        presenter.acquire(container1)
         presenter.onControlLostCalled = false
         presenter.onControlGainedCalled = false
 

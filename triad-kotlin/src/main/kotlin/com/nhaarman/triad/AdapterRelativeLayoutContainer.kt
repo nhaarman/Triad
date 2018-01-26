@@ -23,39 +23,37 @@ import android.widget.RelativeLayout
 /**
  * An abstract RelativeLayout [Container] instance that handles [Presenter] management
  * for use in an adapter View.
-
- * @param P The specialized [Presenter] type.
  */
-abstract class AdapterRelativeLayoutContainer<P : Presenter<*, ActivityComponent>, ActivityComponent>
-@JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : RelativeLayout(context, attrs, defStyle),
-      AdapterContainer<P> {
-
-    private val activityComponent: ActivityComponent by lazy { findActivityComponent<ActivityComponent>(context, this) }
+abstract class AdapterRelativeLayoutContainer @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyle: Int = 0
+) : RelativeLayout(context, attrs, defStyle),
+    AdapterContainer {
 
     private var attachedToWindow: Boolean = false
 
-    /**
-     * Returns the [P] instance that is tied to this `AdapterRelativeLayoutContainer`.
-     */
-    @Suppress("UNCHECKED_CAST")
-    override var presenter: P? = null
+    private var _presenter: Presenter<AdapterContainer>? = null
         set(value) {
-            field?.let { (it as Presenter<Container, ActivityComponent>).releaseContainer(this) }
+            field?.releaseContainer(this)
             field = value
             value?.let {
                 if (attachedToWindow) {
-                    (it as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
+                    it.acquire(this)
                 }
             }
         }
 
     @Suppress("UNCHECKED_CAST")
+    override fun setPresenter(presenter: Presenter<*>?) {
+        _presenter = presenter as Presenter<AdapterContainer>
+    }
+
+    @Suppress("UNCHECKED_CAST")
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        presenter?.let {
-            (it as Presenter<Container, ActivityComponent>).acquire(this, activityComponent)
-        }
+        _presenter?.acquire(this)
 
         attachedToWindow = true
     }
@@ -64,9 +62,7 @@ abstract class AdapterRelativeLayoutContainer<P : Presenter<*, ActivityComponent
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
 
-        presenter?.let {
-            (it as Presenter<Container, ActivityComponent>).releaseContainer(this)
-        }
+        _presenter?.releaseContainer(this)
 
         attachedToWindow = false
     }

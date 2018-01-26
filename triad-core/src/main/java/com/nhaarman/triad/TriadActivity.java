@@ -26,16 +26,12 @@ import android.support.annotation.Nullable;
  * An {@link Activity} which is the root of an application that uses Triad.
  *
  * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code BasePresenter} creation.
- * @param <ActivityComponent>    The {@code ActivityComponent} to supply to {@code Presenters}.
  */
-public abstract class TriadActivity<ApplicationComponent, ActivityComponent> extends Activity
-      implements ScreenProvider<ApplicationComponent>, ActivityComponentProvider<ActivityComponent> {
+public abstract class TriadActivity<ApplicationComponent> extends Activity
+      implements ScreenProvider<ApplicationComponent> {
 
     @NonNull
     private final TriadDelegate<ApplicationComponent> delegate;
-
-    @Nullable
-    private ActivityComponent activityComponent;
 
     public TriadActivity() {
         delegate = TriadDelegate.createFor(this);
@@ -52,22 +48,6 @@ public abstract class TriadActivity<ApplicationComponent, ActivityComponent> ext
         super.onResume();
         delegate.onResume();
     }
-
-    @Override
-    @NonNull
-    public synchronized ActivityComponent getActivityComponent() {
-        if (activityComponent == null) {
-            activityComponent = createActivityComponent();
-        }
-
-        return activityComponent;
-    }
-
-    /**
-     * Creates the {@code ActivityComponent}.
-     */
-    @NonNull
-    protected abstract ActivityComponent createActivityComponent();
 
     @NonNull
     @Override
