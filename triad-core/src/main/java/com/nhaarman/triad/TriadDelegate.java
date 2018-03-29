@@ -22,10 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
-
 import com.nhaarman.triad.Triad.Callback;
-
 import java.util.Iterator;
 
 import static com.nhaarman.triad.Preconditions.checkNotNull;
@@ -89,16 +86,6 @@ public class TriadDelegate<ApplicationComponent> {
     ) {
         this.activity = activity;
         defaultTransitionAnimator = transitionAnimator;
-    }
-
-    @NonNull
-    public static <T> TriadDelegate<T> createFor(@NonNull final Activity activity) {
-        return new TriadDelegate(activity, DefaultTransitionAnimator.INSTANCE);
-    }
-
-    @NonNull
-    public static <T> TriadDelegate<T> createFor(@NonNull final Activity activity, @NonNull final TransitionAnimator defaultTransitionAnimator) {
-        return new TriadDelegate(activity, defaultTransitionAnimator);
     }
 
     @NonNull
@@ -199,6 +186,16 @@ public class TriadDelegate<ApplicationComponent> {
         }
     }
 
+    @NonNull
+    public static <T> TriadDelegate<T> createFor(@NonNull final Activity activity) {
+        return new TriadDelegate(activity, DefaultTransitionAnimator.INSTANCE);
+    }
+
+    @NonNull
+    public static <T> TriadDelegate<T> createFor(@NonNull final Activity activity, @NonNull final TransitionAnimator defaultTransitionAnimator) {
+        return new TriadDelegate(activity, defaultTransitionAnimator);
+    }
+
     private class MyTriadListener implements Triad.Listener<ApplicationComponent> {
 
         @Override
@@ -233,10 +230,6 @@ public class TriadDelegate<ApplicationComponent> {
                     @Override
                     public void onComplete() {
                         newScreen.onAttach(activity);
-
-                        if (oldView != null && oldView.getParent() != null) {
-                            ((ViewManager) oldView.getParent()).removeView(oldView);
-                        }
 
                         if (oldScreen != null) {
                             oldScreen.onDetach(activity);
@@ -276,17 +269,12 @@ public class TriadDelegate<ApplicationComponent> {
             final View newView = newScreen.createView(rootView);
             newScreen.restoreState(newView);
 
-
             boolean handled = false;
             if (animator != null) {
                 handled = animator.backward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
                         newScreen.onAttach(activity);
-
-                        if (oldView != null && oldView.getParent() != null) {
-                            ((ViewManager) oldView.getParent()).removeView(oldView);
-                        }
 
                         if (oldScreen != null) {
                             oldScreen.onDetach(activity);
@@ -331,10 +319,6 @@ public class TriadDelegate<ApplicationComponent> {
                     @Override
                     public void onComplete() {
                         newScreen.onAttach(activity);
-
-                        if (oldView != null && oldView.getParent() != null) {
-                            ((ViewManager) oldView.getParent()).removeView(oldView);
-                        }
 
                         if (oldScreen != null) {
                             oldScreen.onDetach(activity);
