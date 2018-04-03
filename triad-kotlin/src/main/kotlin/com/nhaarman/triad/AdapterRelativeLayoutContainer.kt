@@ -25,17 +25,17 @@ import android.widget.RelativeLayout
  * for use in an adapter View.
  */
 abstract class AdapterRelativeLayoutContainer @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet?,
-    defStyle: Int = 0
+      context: Context,
+      attrs: AttributeSet?,
+      defStyle: Int = 0
 ) : RelativeLayout(context, attrs, defStyle),
-    AdapterContainer {
+      AdapterContainer {
 
     private var attachedToWindow: Boolean = false
 
     private var _presenter: Presenter<AdapterContainer>? = null
         set(value) {
-            field?.releaseContainer(this)
+            field?.release()
             field = value
             value?.let {
                 if (attachedToWindow) {
@@ -62,7 +62,7 @@ abstract class AdapterRelativeLayoutContainer @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
 
-        _presenter?.releaseContainer(this)
+        _presenter?.release()
 
         attachedToWindow = false
     }

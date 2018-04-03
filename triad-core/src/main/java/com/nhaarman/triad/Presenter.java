@@ -12,11 +12,11 @@ import android.support.annotation.NonNull;
  * The lifecycle of a Presenter consists of two methods:
  * <p>
  * {@link #acquire(Container)}
- * {@link #releaseContainer(Container)}
+ * {@link #release()}
  * <p>
  * <p>
  * Control over the {@link Container} instance starts at {@link #acquire(Container)},
- * and ends at {@link #releaseContainer(Container)}.
+ * and ends at {@link #release()}.
  * There are no guarantees on the order of calls to these two methods.
  * <p>
  * Presenters survive configuration changes, making it easy to manage data and
@@ -29,7 +29,7 @@ public interface Presenter<C extends Container> {
     /**
      * Binds the {@link Container} this {@code BasePresenter} controls.
      * From this point on, the {@code Presenter} may manipulate given {@link Container} instance,
-     * until {@link #releaseContainer(Container)} is called.
+     * until {@link #release()} is called.
      *
      * @param container The {@link Container} to gain control over.
      */
@@ -42,5 +42,5 @@ public interface Presenter<C extends Container> {
      * the {@link Container} instance supplied to {@link #acquire(Container)} anymore.
      */
     @MainThread
-    void releaseContainer(@NonNull C container);
+    void release();
 }

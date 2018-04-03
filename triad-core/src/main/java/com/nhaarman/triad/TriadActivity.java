@@ -27,8 +27,7 @@ import android.support.annotation.Nullable;
  *
  * @param <ApplicationComponent> The {@code ApplicationComponent} to use for {@code BasePresenter} creation.
  */
-public abstract class TriadActivity<ApplicationComponent> extends Activity
-      implements ScreenProvider<ApplicationComponent> {
+public abstract class TriadActivity<ApplicationComponent> extends Activity {
 
     @NonNull
     private final TriadDelegate<ApplicationComponent> delegate;
@@ -47,12 +46,6 @@ public abstract class TriadActivity<ApplicationComponent> extends Activity
     protected void onResume() {
         super.onResume();
         delegate.onResume();
-    }
-
-    @NonNull
-    @Override
-    public Screen<ApplicationComponent> getCurrentScreen() {
-        return delegate.getCurrentScreen();
     }
 
     @Override

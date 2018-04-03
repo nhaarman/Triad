@@ -25,8 +25,7 @@ import android.support.v7.app.AppCompatActivity
  *
  * @param ApplicationComponent The `ApplicationComponent` to use for `Presenter` creation.
  */
-abstract class TriadAppCompatActivity<ApplicationComponent : Any> :
-    AppCompatActivity(), ScreenProvider<ApplicationComponent> {
+abstract class TriadAppCompatActivity<ApplicationComponent : Any> : AppCompatActivity() {
 
     private val delegate: TriadDelegate<ApplicationComponent> by lazy {
         TriadDelegate.createFor<ApplicationComponent>(
@@ -42,10 +41,6 @@ abstract class TriadAppCompatActivity<ApplicationComponent : Any> :
     override fun onResume() {
         super.onResume()
         delegate.onResume()
-    }
-
-    override fun getCurrentScreen(): Screen<ApplicationComponent> {
-        return delegate.currentScreen
     }
 
     override fun onBackPressed() {

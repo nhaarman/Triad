@@ -16,23 +16,12 @@
 
 package com.nhaarman.triad;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
 /**
  * The View class in the MVP context.
- *
+ * <p>
  * In the Model-View-Presenter pattern, the View displays data formatted by the
  * {@link Presenter}, and notifies the {@code Presenter} of user input.
  */
 public interface Container {
 
-    /**
-     * Returns the context the container is running in, through which it can
-     * access the current theme, resources, etc.
-     *
-     * @return The container's Context.
-     */
-    @NonNull
-    Context getContext();
 }

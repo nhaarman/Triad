@@ -19,7 +19,6 @@ task javadoc(type: Javadoc) {
     failOnError = false
 
     apply from: '../android.gradle'
-    classpath += project.configurations.provided
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 

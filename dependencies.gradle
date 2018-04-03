@@ -1,7 +1,7 @@
 ext {
-    kotlinVersion = "1.0.5-2"
+    kotlinVersion = "1.2.31"
 
-    androidBuildToolsPlugin = "com.android.tools.build:gradle:2.2.2"
+    androidBuildToolsPlugin = "com.android.tools.build:gradle:3.0.1"
     androidSupportAnnotations = "com.android.support:support-annotations:25.0.1"
     androidMavenPlugin = "com.github.dcendents:android-maven-gradle-plugin:1.5"
     dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:0.9.9"

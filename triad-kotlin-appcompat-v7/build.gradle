@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'org.jetbrains.dokka'
 apply from: "${rootProject.projectDir.absolutePath}/gradle/publishing.gradle"
 
 buildscript {
@@ -10,7 +9,6 @@ buildscript {
     }
     dependencies {
         classpath kotlinGradlePlugin
-        classpath dokkaGradlePlugin
     }
 }
 
@@ -18,18 +16,10 @@ dependencies {
     compile project(':triad-kotlin')
 
     compile androidAppCompatV7
-    provided androidSupportAnnotations
+    compileOnly androidSupportAnnotations
 
     /* Tests */
     testCompile junit
     testCompile hamcrest
     testCompile mockito
 }
-
-dokka {
-    sourceDirs = files('src/main/kotlin')
-
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/javadoc"
-}
-javadoc.dependsOn dokka

@@ -67,11 +67,7 @@ open class BasePresenter<C : Container> : Presenter<C> {
      * to notify implementers of this class that the [C] is no longer available.
      */
     @MainThread
-    override fun releaseContainer(container: C) {
-        if (this.currentContainer != container) {
-            return
-        }
-
+    override fun release() {
         this.currentContainer = null
         onControlLost()
     }

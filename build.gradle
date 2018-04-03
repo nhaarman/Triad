@@ -1,6 +1,7 @@
 buildscript {
     apply from: './dependencies.gradle'
     repositories {
+        google()
         mavenCentral()
         jcenter()
     }
@@ -8,7 +9,6 @@ buildscript {
         classpath androidBuildToolsPlugin
         classpath gradleVersionsPlugin
         classpath gradleBintrayPlugin
-        classpath dokkaGradlePlugin
         classpath androidMavenPlugin
     }
 }
@@ -22,6 +22,7 @@ allprojects {
     apply from: "${rootProject.projectDir.absolutePath}/gradle/tagging.gradle"
 
     repositories {
+        google()
         mavenCentral()
         jcenter()
     }

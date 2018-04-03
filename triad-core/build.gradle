@@ -18,13 +18,15 @@ android {
 }
 
 dependencies {
-    provided androidSupportAnnotations
-    provided jetbrainsAnnotations
+    compileOnly androidSupportAnnotations
+    compileOnly jetbrainsAnnotations
+
+    implementation kotlinStdLib
 
     /* Tests */
-    testCompile junit
-    testCompile expectKt
-    testCompile mockitoKotlin
+    testImplementation junit
+    testImplementation expectKt
+    testImplementation mockitoKotlin
 
-    testCompile kotlinReflect
+    testImplementation kotlinReflect
 }

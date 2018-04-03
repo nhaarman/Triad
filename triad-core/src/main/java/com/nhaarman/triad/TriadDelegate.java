@@ -57,8 +57,6 @@ public class TriadDelegate<ApplicationComponent> {
     @NonNull
     private final TransitionAnimator defaultTransitionAnimator;
 
-    private boolean resumed = false;
-
     @Nullable
     private ApplicationComponent applicationComponent;
 
@@ -121,9 +119,8 @@ public class TriadDelegate<ApplicationComponent> {
 
     public void onResume() {
         if (currentScreen != null) {
-            currentScreen.onAttach(activity);
+            currentScreen.attach(rootView);
         }
-        resumed = true;
     }
 
     public boolean onBackPressed() {
@@ -146,9 +143,8 @@ public class TriadDelegate<ApplicationComponent> {
     }
 
     public void onPause() {
-        resumed = false;
         if (currentScreen != null) {
-            currentScreen.onDetach(activity);
+            currentScreen.detach();
         }
     }
 
@@ -229,10 +225,10 @@ public class TriadDelegate<ApplicationComponent> {
                 handled = animator.forward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
-                        newScreen.onAttach(activity);
+                        newScreen.attach(rootView);
 
                         if (oldScreen != null) {
-                            oldScreen.onDetach(activity);
+                            oldScreen.detach();
                         }
 
                         callback.onComplete();
@@ -244,10 +240,10 @@ public class TriadDelegate<ApplicationComponent> {
                 defaultTransitionAnimator.forward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
-                        newScreen.onAttach(activity);
+                        newScreen.attach(rootView);
 
                         if (oldScreen != null) {
-                            oldScreen.onDetach(activity);
+                            oldScreen.detach();
                         }
 
                         callback.onComplete();
@@ -274,10 +270,10 @@ public class TriadDelegate<ApplicationComponent> {
                 handled = animator.backward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
-                        newScreen.onAttach(activity);
+                        newScreen.attach(rootView);
 
                         if (oldScreen != null) {
-                            oldScreen.onDetach(activity);
+                            oldScreen.detach();
                         }
 
                         callback.onComplete();
@@ -289,10 +285,10 @@ public class TriadDelegate<ApplicationComponent> {
                 defaultTransitionAnimator.backward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
-                        newScreen.onAttach(activity);
+                        newScreen.attach(rootView);
 
                         if (oldScreen != null) {
-                            oldScreen.onDetach(activity);
+                            oldScreen.detach();
                         }
 
                         callback.onComplete();
@@ -318,10 +314,10 @@ public class TriadDelegate<ApplicationComponent> {
                 handled = animator.forward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
-                        newScreen.onAttach(activity);
+                        newScreen.attach(rootView);
 
                         if (oldScreen != null) {
-                            oldScreen.onDetach(activity);
+                            oldScreen.detach();
                         }
 
                         callback.onComplete();
@@ -333,10 +329,10 @@ public class TriadDelegate<ApplicationComponent> {
                 defaultTransitionAnimator.forward(oldView, newView, rootView, new Callback() {
                     @Override
                     public void onComplete() {
-                        newScreen.onAttach(activity);
+                        newScreen.attach(rootView);
 
                         if (oldScreen != null) {
-                            oldScreen.onDetach(activity);
+                            oldScreen.detach();
                         }
 
                         callback.onComplete();
