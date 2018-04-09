@@ -59,13 +59,13 @@ abstract class Screen<ApplicationComponent : Any> {
 
     open fun onCreate() {}
 
-    protected abstract fun attach(root: ViewGroup)
+    abstract fun attach(root: ViewGroup)
 
     open fun onBackPressed(): Boolean {
         return false
     }
 
-    protected abstract fun detach()
+    abstract fun detach()
 
     open fun onDestroy() {}
 }
